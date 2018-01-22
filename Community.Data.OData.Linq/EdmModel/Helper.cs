@@ -3,8 +3,7 @@
     using System;
     using System.Reflection;
 
-    using Microsoft.Data.Edm;
-    using Microsoft.Data.Edm.Library;
+    using Microsoft.OData.Edm;
 
     public static class Helper
     {

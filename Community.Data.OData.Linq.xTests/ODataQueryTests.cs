@@ -1,10 +1,9 @@
 ﻿namespace Community.Data.OData.Linq.Tests
 {
     using System;
-    using Microsoft.Data.Edm.Library;
 
     using Xunit;
-
+    using Microsoft.OData.Edm;
     public class ODataQueryTests
     {
         [Fact]

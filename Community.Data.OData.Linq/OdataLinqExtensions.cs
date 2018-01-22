@@ -1,13 +1,14 @@
-﻿using System;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Web.OData;
+using System.Web.OData.Query;
 
 namespace Community.Data.OData.Linq
 {
+    using System;
+    using System.Linq;
     using Community.Data.OData.Linq.EdmModel;
-
-    using Microsoft.Data.Edm;
-    using Microsoft.Data.OData.Query;
-    using Microsoft.Data.OData.Query.SemanticAst;
+    using Microsoft.OData.Edm;
+    using Microsoft.OData.UriParser;
 
     public static class ODataLinqExtensions
     {
@@ -16,19 +17,22 @@ namespace Community.Data.OData.Linq
         {
             IEdmModel edmModel = query.EdmModel;
             
-            ODataUriParser parser = new ODataUriParser(edmModel, Root);
-            IEdmEntityContainer container =
-                (IEdmEntityContainer)edmModel.SchemaElements.Single(
-                    e => e.SchemaElementKind == EdmSchemaElementKind.EntityContainer);
-
             if (entitySetName == null)
             {
                 entitySetName = typeof(T).Name;
             }
 
-            IEdmEntitySet entitySet = container.FindEntitySet(entitySetName);
+            IEdmEntityContainer container =
+                (IEdmEntityContainer)edmModel.SchemaElements.Single(
+                    e => e.SchemaElementKind == EdmSchemaElementKind.EntityContainer);
 
-            FilterClause filterClause = parser.ParseFilter(filterText, entitySet.ElementType, entitySet);
+            IEdmEntitySet entitySet = container.FindEntitySet(entitySetName);
+            ODataPath path = new ODataPath(new EntitySetSegment(entitySet));
+
+            ODataQueryOptionParser queryOptionParser = new ODataQueryOptionParser(edmModel,
+                path, new Dictionary<string, string>());
+
+           
 
             return query;
         }

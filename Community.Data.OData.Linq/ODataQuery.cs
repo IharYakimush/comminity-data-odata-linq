@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using Microsoft.OData.Edm;
 
 namespace Community.Data.OData.Linq
 {
-    using Microsoft.Data.Edm;
-
     public class ODataQuery<T> : IQueryable<T>, IQueryable
     {
         public ODataQuery(IQueryable inner, IEdmModel edmModel)
