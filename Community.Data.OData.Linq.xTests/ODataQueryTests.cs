@@ -1,4 +1,6 @@
-﻿namespace Community.Data.OData.Linq.Tests
+﻿using System.ComponentModel.Design;
+
+namespace Community.Data.OData.Linq.Tests
 {
     using System;
 
@@ -9,7 +11,7 @@
         [Fact]
         public void Constructor()
         {
-            ODataQuery<TestClass> query = new ODataQuery<TestClass>(TestClass.CreateQuery(), new EdmModel());
+            ODataQuery<TestClass> query = new ODataQuery<TestClass>(TestClass.CreateQuery(), new ServiceContainer());
 
             Assert.Throws<ArgumentNullException>(() => new ODataQuery<TestClass>(null, null));
         }
