@@ -4,7 +4,7 @@
     using Xunit;
 
 
-    public class ODataLinqExtensionsTests
+    public class WhereTests
     {
         [Fact]
         public void WhereSimple1()
