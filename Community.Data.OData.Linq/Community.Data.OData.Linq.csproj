@@ -11,9 +11,6 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="..\..\WebApi\src\Common\Error.cs" Link="Common\Error.cs" />
-    <Compile Include="..\..\WebApi\src\Common\PropertyHelper.cs" Link="Common\PropertyHelper.cs" />
-    <Compile Include="..\..\WebApi\src\Common\TaskHelpers.cs" Link="Common\TaskHelpers.cs" />
-    <Compile Include="..\..\WebApi\src\Common\TaskHelpersExtensions.cs" Link="Common\TaskHelpersExtensions.cs" />
     <Compile Include="..\..\WebApi\src\Common\TypeExtensions.cs" Link="Common\TypeExtensions.cs" />
   </ItemGroup>
 

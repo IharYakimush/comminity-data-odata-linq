@@ -183,11 +183,6 @@ namespace System.Web.OData
             get { return _queryableSelectMethod; }
         }
 
-        public static MethodInfo EnumerableSelectGeneric
-        {
-            get { return _enumerableSelectMethod; }
-        }
-
         public static MethodInfo QueryableEmptyAnyGeneric
         {
             get { return _queryableEmptyAnyMethod; }
@@ -241,11 +236,6 @@ namespace System.Web.OData
         public static IQueryable ToQueryable<T>(T value)
         {
             return (new List<T> { value }).AsQueryable();
-        }
-
-        public static MethodInfo EnumerableCountGeneric
-        {
-            get { return _enumerableCountMethod; }
         }
 
         private static MethodInfo GenericMethodOf<TReturn>(Expression<Func<object, TReturn>> expression)

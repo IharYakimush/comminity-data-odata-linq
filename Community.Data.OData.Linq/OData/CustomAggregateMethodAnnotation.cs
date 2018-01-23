@@ -19,25 +19,6 @@ namespace System.Web.OData
             = new Dictionary<string, IDictionary<Type, MethodInfo>>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomAggregateMethodAnnotation"/> class.
-        /// </summary>
-        public CustomAggregateMethodAnnotation()
-        {
-        }
-
-        /// <summary>
-        /// Adds all implementations of a method that share the same methodToken.
-        /// </summary>
-        /// <param name="methodToken">The given method token.</param>
-        /// <param name="methods">The given method dictionary.</param>
-        /// <returns></returns>
-        public CustomAggregateMethodAnnotation AddMethod(string methodToken, IDictionary<Type, MethodInfo> methods)
-        {
-            _tokenToMethodMap.Add(methodToken, methods);
-            return this;
-        }
-
-        /// <summary>
         /// Get an implementation of a method with the specifies returnType and methodToken.
         /// If there's no method that matches the requirements, returns null.
         /// </summary>
