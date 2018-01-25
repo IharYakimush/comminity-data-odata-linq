@@ -3,6 +3,7 @@ using System.ComponentModel.Design;
 using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Web.OData;
+using System.Web.OData.Builder;
 using System.Web.OData.Query;
 using System.Web.OData.Query.Expressions;
 

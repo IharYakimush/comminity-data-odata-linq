@@ -1,0 +1,89 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Community.Data.OData.Linq\DefaultAssembliesResolver.cs" Link="DefaultAssembliesResolver.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\IAssembliesResolver.cs" Link="IAssembliesResolver.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\ClrPropertyInfoAnnotation.cs" Link="OData\ClrPropertyInfoAnnotation.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\ClrTypeAnnotation.cs" Link="OData\ClrTypeAnnotation.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\CustomAggregateMethodAnnotation.cs" Link="OData\CustomAggregateMethodAnnotation.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\ExpressionHelperMethods.cs" Link="OData\ExpressionHelperMethods.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\ExpressionHelpers.cs" Link="OData\ExpressionHelpers.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Formatter\EdmLibHelpers.cs" Link="Formatter\EdmLibHelpers.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Formatter\EdmPrimitiveHelpers.cs" Link="Formatter\EdmPrimitiveHelpers.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Formatter\EdmTypeReferenceEqualityComparer.cs" Link="Formatter\EdmTypeReferenceEqualityComparer.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\AllowedArithmeticOperators.cs" Link="Query\AllowedArithmeticOperators.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\AllowedFunctions.cs" Link="Query\AllowedFunctions.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\AllowedLogicalOperators.cs" Link="Query\AllowedLogicalOperators.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\AllowedQueryOptions.cs" Link="Query\AllowedQueryOptions.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\DefaultQuerySettings.cs" Link="Query\DefaultQuerySettings.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\ExpandConfiguration.cs" Link="Query\ExpandConfiguration.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\Expressions\AggregationPropertyContainer.cs" Link="Expressions\AggregationPropertyContainer.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\Expressions\ClrCanonicalFunctions.cs" Link="Expressions\ClrCanonicalFunctions.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\Expressions\ClrSafeFunctions.cs" Link="Expressions\ClrSafeFunctions.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\Expressions\DynamicTypeWrapper.cs" Link="Expressions\DynamicTypeWrapper.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\Expressions\IdentityPropertyMapper.cs" Link="Expressions\IdentityPropertyMapper.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\Expressions\Linq2ObjectsComparisonMethods.cs" Link="Expressions\Linq2ObjectsComparisonMethods.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\Expressions\LinqParameterContainer.cs" Link="Expressions\LinqParameterContainer.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\Expressions\NamedPropertyExpression.cs" Link="Expressions\NamedPropertyExpression.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\Expressions\PropertyContainer.cs" Link="Expressions\PropertyContainer.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\HandleNullPropagationOption.cs" Link="Query\HandleNullPropagationOption.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\HandleNullPropagationOptionHelper.cs" Link="Query\HandleNullPropagationOptionHelper.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\ICountOptionCollection.cs" Link="Query\ICountOptionCollection.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\IPropertyMapper.cs" Link="Query\IPropertyMapper.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\ITruncatedCollection.cs" Link="Query\ITruncatedCollection.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\ModelBoundQuerySettings.cs" Link="Query\ModelBoundQuerySettings.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\ODataQuerySettings.cs" Link="Query\ODataQuerySettings.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\ODataValidationSettings.cs" Link="Query\ODataValidationSettings.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\OrderByItNode.cs" Link="Query\OrderByItNode.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\OrderByNode.cs" Link="Query\OrderByNode.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\OrderByOpenPropertyNode.cs" Link="Query\OrderByOpenPropertyNode.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\OrderByPropertyNode.cs" Link="Query\OrderByPropertyNode.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\ParameterAliasNodeTranslator.cs" Link="Query\ParameterAliasNodeTranslator.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\SelectExpandType.cs" Link="Query\SelectExpandType.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Query\TruncatedCollectionOfT.cs" Link="Query\TruncatedCollectionOfT.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\Routing\ODataPathSegmentTranslator.cs" Link="Routing\ODataPathSegmentTranslator.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\TimeZoneInfoHelper.cs" Link="OData\TimeZoneInfoHelper.cs" />
+    <Compile Include="..\Community.Data.OData.Linq\OData\TypeHelper.cs" Link="OData\TypeHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.OData.Core" Version="7.4.0" />
+    <PackageReference Include="Microsoft.OData.Edm" Version="7.4.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Formatter\" />
+    <Folder Include="Expressions\" />
+    <Folder Include="Routing\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\CommonWebApiResources.Designer.cs">
+      <DependentUpon>CommonWebApiResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Properties\SRResources.Designer.cs">
+      <DependentUpon>SRResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\CommonWebApiResources.resx">
+      <LastGenOutput>CommonWebApiResources.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\SRResources.resx">
+      <LastGenOutput>SRResources.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

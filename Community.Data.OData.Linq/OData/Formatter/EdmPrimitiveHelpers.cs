@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Web.Http;
 using System.Xml.Linq;
 using Community.Data.OData.Linq.Properties;
+using Community.OData.Edm.Bulder.Properties;
 using Microsoft.OData.Edm;
 
 namespace System.Web.OData.Formatter

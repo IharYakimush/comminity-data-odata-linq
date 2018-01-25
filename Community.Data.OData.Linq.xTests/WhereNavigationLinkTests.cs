@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Linq;
+using System.Web.OData.Builder;
 using Xunit;
 
 namespace Community.Data.OData.Linq.Tests
@@ -8,8 +9,8 @@ namespace Community.Data.OData.Linq.Tests
     {
         [Fact]
         public void WhereNav1()
-        {
-            var result = TestClass2.CreateQuery().OData().Where("Id eq 21").ToArray();
+        {                        
+            var result = TestClass2.CreateQuery().OData().Where("Link1/Id eq 211").ToArray();
 
             Assert.Single((IEnumerable) result);
             Assert.Equal(21, result[0].Id);

@@ -16,6 +16,7 @@ using System.Web.OData.Formatter;
 using System.Xml.Linq;
 using Community.Data.OData.Linq;
 using Community.Data.OData.Linq.Properties;
+using Community.OData.Edm.Bulder.Properties;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OData;
 using Microsoft.OData.Edm;

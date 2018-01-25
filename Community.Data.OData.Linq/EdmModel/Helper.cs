@@ -1,4 +1,7 @@
-﻿namespace Community.Data.OData.Linq.EdmModel
+﻿using System.Collections.Generic;
+using System.Web.OData.Builder;
+
+namespace Community.Data.OData.Linq.EdmModel
 {
     using System;
     using System.Reflection;
@@ -9,27 +12,16 @@
     {
         public static IEdmModel Build(Type type)
         {
-            EdmModel edmModel = new EdmModel();
-            EdmEntityType edmEntityType = new EdmEntityType(type.Namespace, type.Name);
-            foreach (PropertyInfo property in type.GetProperties(BindingFlags.Instance | BindingFlags.Public))
-            {
-                if (property.PropertyType.IsPrimitive || property.PropertyType == typeof(string))
-                {
-                    string name = GetPropertyName(property);
-                    EdmPrimitiveTypeKind kind = GetEdmPrimitiveTypeKind(property);
-                    edmEntityType.AddStructuralProperty(name, kind);
-                }
-                else
-                {
-                    throw new NotImplementedException("Building model with non primitive properties currently not supported");
-                }
-            }
-            edmModel.AddElement(edmEntityType);
-            EdmEntityContainer edmEntityContainer = new EdmEntityContainer(type.Namespace, type.Name);
-            edmEntityContainer.AddEntitySet(type.Name, edmEntityType);
-            edmModel.AddElement(edmEntityContainer);
+            ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+            AddTypes(builder, type);
+            
+            return builder.GetEdmModel();
+        }
 
-            return edmModel;
+        public static void AddTypes(ODataConventionModelBuilder builder, Type type)
+        {
+            builder.AddEntityType(type);
+            builder.AddEntitySet(type.Name, new EntityTypeConfiguration(new ODataModelBuilder(), type));
         }
 
         public static EdmPrimitiveTypeKind GetEdmPrimitiveTypeKind(PropertyInfo property)

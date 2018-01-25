@@ -5,26 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\WebApi\src\Common\CommonWebApiResources.Designer.cs" Link="Properties\CommonWebApiResources.Designer.cs">
-      <DependentUpon>CommonWebApiResources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="..\..\WebApi\src\Common\Error.cs" Link="Common\Error.cs" />
-    <Compile Include="..\..\WebApi\src\Common\TypeExtensions.cs" Link="Common\TypeExtensions.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="..\..\WebApi\src\Common\CommonWebApiResources.resx" Link="Properties\CommonWebApiResources.resx" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="Microsoft.OData.Core" Version="7.4.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\CommonWebApiResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CommonWebApiResources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Properties\SRResources.Designer.cs">
       <DependentUpon>SRResources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -33,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Properties\CommonWebApiResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommonWebApiResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Properties\SRResources.resx">
       <LastGenOutput>SRResources.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -40,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\" />
+    <ProjectReference Include="..\Community.OData.Edm.Bulder\Community.OData.Edm.Bulder.csproj" />
   </ItemGroup>
 
 </Project>

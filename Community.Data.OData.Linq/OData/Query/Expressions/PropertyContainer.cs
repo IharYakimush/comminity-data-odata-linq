@@ -6,6 +6,7 @@ using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Web.Http;
 using Community.Data.OData.Linq.Properties;
+using Community.OData.Edm.Bulder.Properties;
 
 
 namespace System.Web.OData.Query.Expressions

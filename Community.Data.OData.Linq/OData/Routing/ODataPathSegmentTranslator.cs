@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Web.Http;
-
 using Community.Data.OData.Linq.Properties;
+using Community.OData.Edm.Bulder.Properties;
 using Microsoft.OData;
 using Microsoft.OData.Edm;
 using Microsoft.OData.UriParser;
