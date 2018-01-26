@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Community.OData.Linq.xTests.SampleData;
+using Microsoft.OData;
 using Xunit;
 
 namespace Community.OData.Linq.xTests
@@ -28,6 +29,13 @@ namespace Community.OData.Linq.xTests
             var result = SimpleClass.CreateQuery().OData().OrderBy("Id,Name").First();
 
             Assert.Equal(1, result.Id);
+        }
+
+        [Fact]
+        public void OrderByNotSortable()
+        {
+            Assert.Throws<ODataException>(() =>
+                SimpleClass.CreateQuery().OData().OrderBy($"{nameof(SimpleClass.NotOrderable)}"));
         }
     }
 }

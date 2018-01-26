@@ -1,4 +1,5 @@
-﻿using Community.OData.Linq.Builder.Validators;
+﻿using System.Web.OData.Query.Validators;
+using Community.OData.Linq.Builder.Validators;
 using Community.OData.Linq.Common;
 using Community.OData.Linq.Properties;
 
@@ -25,6 +26,9 @@ namespace Community.OData.Linq
     {
         private static readonly FilterQueryValidator FilterValidator =
             new FilterQueryValidator(new DefaultQuerySettings {EnableFilter = true});
+
+        private static readonly OrderByQueryValidator OrderValidator =
+            new OrderByQueryValidator(new DefaultQuerySettings { EnableOrderBy = true });
 
         /// <summary>
         /// The simplified options.
@@ -117,14 +121,18 @@ namespace Community.OData.Linq
 
             ODataSettings settings = query.ServiceProvider.GetRequiredService<ODataSettings>();
 
-            IOrderedQueryable<T> result = (IOrderedQueryable<T>) OrderApplyToCore<T>(query, settings.QuerySettings, orderByClause, edmModel);
+            ICollection<OrderByNode> nodes = OrderByNode.CreateCollection(orderByClause);
+
+            OrderValidator.Validate(nodes, settings.ValidationSettings, edmModel);
+
+            IOrderedQueryable<T> result = (IOrderedQueryable<T>) OrderApplyToCore<T>(query, settings.QuerySettings, nodes, edmModel);
 
             return new ODataQueryOrdered<T>(result,query.ServiceProvider);
         }
 
-        private static IOrderedQueryable OrderApplyToCore<T>(ODataQuery<T> query, ODataQuerySettings querySettings, OrderByClause orderByClause, IEdmModel model)
+        private static IOrderedQueryable OrderApplyToCore<T>(ODataQuery<T> query, ODataQuerySettings querySettings, ICollection<OrderByNode> nodes, IEdmModel model)
         {            
-            ICollection<OrderByNode> nodes = OrderByNode.CreateCollection(orderByClause);
+            
 
             bool alreadyOrdered = false;
             IQueryable querySoFar = query;

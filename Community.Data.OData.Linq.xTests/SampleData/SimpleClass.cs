@@ -32,5 +32,8 @@ namespace Community.OData.Linq.xTests.SampleData
 
         [NonFilterable]
         public string NameNotFilter { get; set; }
+
+        [NotSortable]
+        public int NotOrderable { get; set; }
     }    
 }
