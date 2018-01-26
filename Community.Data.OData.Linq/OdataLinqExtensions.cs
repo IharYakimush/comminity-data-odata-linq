@@ -55,12 +55,22 @@ namespace Community.OData.Linq
         /// </returns>
         public static ODataQuery<T> OData<T>(this IQueryable<T> query, Action<ODataSettings> configuration = null, IEdmModel edmModel = null)
         {
+            if (query == null) throw new ArgumentNullException(nameof(query));
+
             if (edmModel == null)
-            {
+            {                
                 ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
                 builder.AddEntityType(typeof(T));
                 builder.AddEntitySet(typeof(T).Name, new EntityTypeConfiguration(new ODataModelBuilder(), typeof(T)));
                 edmModel = builder.GetEdmModel();
+            }
+            else
+            {
+                if (edmModel.SchemaElements.Count(e => e.SchemaElementKind == EdmSchemaElementKind.EntityContainer) == 0)
+                {
+                    throw new ArgumentException("Provided Entity Model have no IEdmEntityContainer", nameof(edmModel));
+
+                }
             }
 
             ODataSettings settings = new ODataSettings();
@@ -83,6 +93,9 @@ namespace Community.OData.Linq
 
         public static ODataQuery<T> Filter<T>(this ODataQuery<T> query, string filterText, string entitySetName = null)
         {
+            if (query == null) throw new ArgumentNullException(nameof(query));
+            if (filterText == null) throw new ArgumentNullException(nameof(filterText));
+
             IEdmModel edmModel = query.EdmModel;
 
             ODataQueryOptionParser queryOptionParser = GetParser(query, entitySetName,
@@ -110,6 +123,9 @@ namespace Community.OData.Linq
 
         public static IOrderedQueryable<T> OrderBy<T>(this ODataQuery<T> query, string orderbyText, string entitySetName = null)
         {
+            if (query == null) throw new ArgumentNullException(nameof(query));
+            if (orderbyText == null) throw new ArgumentNullException(nameof(orderbyText));
+
             IEdmModel edmModel = query.EdmModel;
             
             ODataQueryOptionParser queryOptionParser = GetParser(query, entitySetName,
@@ -132,8 +148,6 @@ namespace Community.OData.Linq
 
         private static IOrderedQueryable OrderApplyToCore<T>(ODataQuery<T> query, ODataQuerySettings querySettings, ICollection<OrderByNode> nodes, IEdmModel model)
         {            
-            
-
             bool alreadyOrdered = false;
             IQueryable querySoFar = query;
 
@@ -240,11 +254,32 @@ namespace Community.OData.Linq
                 entitySetName = typeof(T).Name;
             }
 
-            IEdmEntityContainer container =
-                (IEdmEntityContainer)edmModel.SchemaElements.Single(
-                    e => e.SchemaElementKind == EdmSchemaElementKind.EntityContainer);
+            IEdmEntityContainer[] containers =
+                edmModel.SchemaElements.Where(
+                        e => e.SchemaElementKind == EdmSchemaElementKind.EntityContainer &&
+                             (e as IEdmEntityContainer).FindEntitySet(entitySetName) != null)
+                    .OfType<IEdmEntityContainer>()
+                    .ToArray();
 
-            IEdmEntitySet entitySet = container.FindEntitySet(entitySetName);
+            if (containers.Length == 0)
+            {
+                throw new ArgumentException($"Unable to find {entitySetName} entity set in the model.",
+                    nameof(entitySetName));
+            }
+
+            if (containers.Length > 1)
+            {
+                throw new ArgumentException($"Entity Set {entitySetName} found more that 1 time",
+                    nameof(entitySetName));
+            }
+
+            IEdmEntitySet entitySet = containers.Single().FindEntitySet(entitySetName);
+
+            if (entitySet == null)
+            {
+                
+            }
+
             ODataPath path = new ODataPath(new EntitySetSegment(entitySet));
 
             return new ODataQueryOptionParser(

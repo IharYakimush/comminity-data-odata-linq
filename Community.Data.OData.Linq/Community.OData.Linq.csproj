@@ -2,6 +2,19 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Sign.pfx</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>IharYakimush</Authors>
+    <PackageLicenseUrl>https://github.com/IharYakimush/comminity-data-odata-linq/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
+    <RepositoryType></RepositoryType>
+    <PackageTags>odata linq filter</PackageTags>
+    <PackageReleaseNotes />
+    <Description>Use OData text filter in LINQ for any IQuerable without ASP.NET dependency</Description>
+    <Company />
+    <RepositoryUrl></RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
