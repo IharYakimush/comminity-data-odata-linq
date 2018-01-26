@@ -2,16 +2,16 @@
 using System.ComponentModel.Design;
 using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
-using System.Web.OData;
-using System.Web.OData.Builder;
-using System.Web.OData.Query;
-using System.Web.OData.Query.Expressions;
 
 namespace Community.Data.OData.Linq
 {
     using System;
     using System.Linq;
     using Community.Data.OData.Linq.EdmModel;
+    using Community.Data.OData.Linq.OData;
+    using Community.Data.OData.Linq.OData.Query;
+    using Community.Data.OData.Linq.OData.Query.Expressions;
+
     using Microsoft.OData.Edm;
     using Microsoft.OData.UriParser;
 

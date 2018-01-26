@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Linq;
-using System.Web.OData.Builder;
+
 using Xunit;
 
 namespace Community.Data.OData.Linq.Tests

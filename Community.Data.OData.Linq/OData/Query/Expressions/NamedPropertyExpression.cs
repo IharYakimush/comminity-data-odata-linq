@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Diagnostics.Contracts;
-using System.Linq.Expressions;
-
-namespace System.Web.OData.Query.Expressions
+namespace Community.Data.OData.Linq.OData.Query.Expressions
 {
+    using System.Diagnostics.Contracts;
+    using System.Linq.Expressions;
+
     /// <summary>
     /// Represents a container that captures a named property that is a part of the select expand query.
     /// </summary>
@@ -16,8 +16,8 @@ namespace System.Web.OData.Query.Expressions
             Contract.Assert(name != null);
             Contract.Assert(value != null);
 
-            Name = name;
-            Value = value;
+            this.Name = name;
+            this.Value = value;
         }
 
         public Expression Name { get; private set; }

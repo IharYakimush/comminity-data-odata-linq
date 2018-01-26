@@ -1,11 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using System.Web.Http;
-
-namespace System.Web.OData.Query
+namespace Community.Data.OData.Linq.OData.Query
 {
+    using System.Collections.Generic;
+
+    using Community.Data.OData.Linq.Common;
+
     /// <summary>
     /// This class describes the model bound settings to use during query composition.
     /// </summary>
@@ -35,18 +36,18 @@ namespace System.Web.OData.Query
         /// </summary>
         public ModelBoundQuerySettings(ModelBoundQuerySettings querySettings)
         {
-            _maxTop = querySettings.MaxTop;
-            PageSize = querySettings.PageSize;
-            Countable = querySettings.Countable;
-            DefaultEnableFilter = querySettings.DefaultEnableFilter;
-            DefaultEnableOrderBy = querySettings.DefaultEnableOrderBy;
-            DefaultExpandType = querySettings.DefaultExpandType;
-            DefaultMaxDepth = querySettings.DefaultMaxDepth;
-            DefaultSelectType = querySettings.DefaultSelectType;
-            CopyOrderByConfigurations(querySettings.OrderByConfigurations);
-            CopyFilterConfigurations(querySettings.FilterConfigurations);
-            CopyExpandConfigurations(querySettings.ExpandConfigurations);
-            CopySelectConfigurations(querySettings.SelectConfigurations);
+            this._maxTop = querySettings.MaxTop;
+            this.PageSize = querySettings.PageSize;
+            this.Countable = querySettings.Countable;
+            this.DefaultEnableFilter = querySettings.DefaultEnableFilter;
+            this.DefaultEnableOrderBy = querySettings.DefaultEnableOrderBy;
+            this.DefaultExpandType = querySettings.DefaultExpandType;
+            this.DefaultMaxDepth = querySettings.DefaultMaxDepth;
+            this.DefaultSelectType = querySettings.DefaultSelectType;
+            this.CopyOrderByConfigurations(querySettings.OrderByConfigurations);
+            this.CopyFilterConfigurations(querySettings.FilterConfigurations);
+            this.CopyExpandConfigurations(querySettings.ExpandConfigurations);
+            this.CopySelectConfigurations(querySettings.SelectConfigurations);
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _maxTop;
+                return this._maxTop;
             }
             set
             {
@@ -68,7 +69,7 @@ namespace System.Web.OData.Query
                     throw Error.ArgumentMustBeGreaterThanOrEqualTo("value", value, 0);
                 }
 
-                _maxTop = value;
+                this._maxTop = value;
             }
         }
 
@@ -82,7 +83,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _pageSize;
+                return this._pageSize;
             }
             set
             {
@@ -91,7 +92,7 @@ namespace System.Web.OData.Query
                     throw Error.ArgumentMustBeGreaterThanOrEqualTo("value", value, 1);
                 }
 
-                _pageSize = value;
+                this._pageSize = value;
             }
         }
 
@@ -107,7 +108,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _expandConfigurations;
+                return this._expandConfigurations;
             }
         }
 
@@ -143,7 +144,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _orderByConfigurations;
+                return this._orderByConfigurations;
             }
         }
 
@@ -154,7 +155,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _filterConfigurations;
+                return this._filterConfigurations;
             }
         }
 
@@ -165,7 +166,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _selectConfigurations;
+                return this._selectConfigurations;
             }
         }
 
@@ -174,10 +175,10 @@ namespace System.Web.OData.Query
         /// </summary>
         internal void CopyExpandConfigurations(Dictionary<string, ExpandConfiguration> expandConfigurations)
         {
-            _expandConfigurations.Clear();
+            this._expandConfigurations.Clear();
             foreach (var expandConfiguration in expandConfigurations)
             {
-                _expandConfigurations.Add(expandConfiguration.Key, expandConfiguration.Value);
+                this._expandConfigurations.Add(expandConfiguration.Key, expandConfiguration.Value);
             }
         }
 
@@ -186,10 +187,10 @@ namespace System.Web.OData.Query
         /// </summary>
         internal void CopyOrderByConfigurations(Dictionary<string, bool> orderByConfigurations)
         {
-            _orderByConfigurations.Clear();
+            this._orderByConfigurations.Clear();
             foreach (var orderByConfiguration in orderByConfigurations)
             {
-                _orderByConfigurations.Add(orderByConfiguration.Key, orderByConfiguration.Value);
+                this._orderByConfigurations.Add(orderByConfiguration.Key, orderByConfiguration.Value);
             }
         }
 
@@ -198,10 +199,10 @@ namespace System.Web.OData.Query
         /// </summary>
         internal void CopySelectConfigurations(Dictionary<string, SelectExpandType> selectConfigurations)
         {
-            _selectConfigurations.Clear();
+            this._selectConfigurations.Clear();
             foreach (var selectConfiguration in selectConfigurations)
             {
-                _selectConfigurations.Add(selectConfiguration.Key, selectConfiguration.Value);
+                this._selectConfigurations.Add(selectConfiguration.Key, selectConfiguration.Value);
             }
         }
 
@@ -210,88 +211,88 @@ namespace System.Web.OData.Query
         /// </summary>
         internal void CopyFilterConfigurations(Dictionary<string, bool> filterConfigurations)
         {
-            _filterConfigurations.Clear();
+            this._filterConfigurations.Clear();
             foreach (var filterConfiguration in filterConfigurations)
             {
-                _filterConfigurations.Add(filterConfiguration.Key, filterConfiguration.Value);
+                this._filterConfigurations.Add(filterConfiguration.Key, filterConfiguration.Value);
             }
         }
 
         internal bool Expandable(string propertyName)
         {
             ExpandConfiguration expandConfiguration;
-            if (ExpandConfigurations.TryGetValue(propertyName, out expandConfiguration))
+            if (this.ExpandConfigurations.TryGetValue(propertyName, out expandConfiguration))
             {
                 return expandConfiguration.ExpandType != SelectExpandType.Disabled;
             }
             else
             {
-                return DefaultExpandType.HasValue && DefaultExpandType != SelectExpandType.Disabled;
+                return this.DefaultExpandType.HasValue && this.DefaultExpandType != SelectExpandType.Disabled;
             }
         }
 
         internal bool Selectable(string propertyName)
         {
             SelectExpandType selectExpandType;
-            if (SelectConfigurations.TryGetValue(propertyName, out selectExpandType))
+            if (this.SelectConfigurations.TryGetValue(propertyName, out selectExpandType))
             {
                 return selectExpandType != SelectExpandType.Disabled;
             }
             else
             {
-                return DefaultSelectType.HasValue && DefaultSelectType != SelectExpandType.Disabled;
+                return this.DefaultSelectType.HasValue && this.DefaultSelectType != SelectExpandType.Disabled;
             }
         }
 
         internal bool Sortable(string propertyName)
         {
             bool enable;
-            if (OrderByConfigurations.TryGetValue(propertyName, out enable))
+            if (this.OrderByConfigurations.TryGetValue(propertyName, out enable))
             {
                 return enable;
             }
             else
             {
-                return DefaultEnableOrderBy == true;
+                return this.DefaultEnableOrderBy == true;
             }
         }
 
         internal bool Filterable(string propertyName)
         {
             bool enable;
-            if (FilterConfigurations.TryGetValue(propertyName, out enable))
+            if (this.FilterConfigurations.TryGetValue(propertyName, out enable))
             {
                 return enable;
             }
             else
             {
-                return DefaultEnableFilter == true;
+                return this.DefaultEnableFilter == true;
             }
         }
 
         internal bool IsAutomaticExpand(string propertyName)
         {
             ExpandConfiguration expandConfiguration;
-            if (ExpandConfigurations.TryGetValue(propertyName, out expandConfiguration))
+            if (this.ExpandConfigurations.TryGetValue(propertyName, out expandConfiguration))
             {
                 return expandConfiguration.ExpandType == SelectExpandType.Automatic;
             }
             else
             {
-                return DefaultExpandType.HasValue && DefaultExpandType == SelectExpandType.Automatic;
+                return this.DefaultExpandType.HasValue && this.DefaultExpandType == SelectExpandType.Automatic;
             }
         }
         
         internal bool IsAutomaticSelect(string propertyName)
         {
             SelectExpandType selectExpandType;
-            if (SelectConfigurations.TryGetValue(propertyName, out selectExpandType))
+            if (this.SelectConfigurations.TryGetValue(propertyName, out selectExpandType))
             {
                 return selectExpandType == SelectExpandType.Automatic;
             }
             else
             {
-                return DefaultSelectType.HasValue && DefaultSelectType == SelectExpandType.Automatic;
+                return this.DefaultSelectType.HasValue && this.DefaultSelectType == SelectExpandType.Automatic;
             }
         }
     }

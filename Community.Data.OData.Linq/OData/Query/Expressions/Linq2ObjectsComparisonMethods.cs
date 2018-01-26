@@ -1,10 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Reflection;
-
-namespace System.Web.OData.Query.Expressions
+namespace Community.Data.OData.Linq.OData.Query.Expressions
 {
+    using System;
+    using System.Reflection;
+
     internal static class Linq2ObjectsComparisonMethods
     {
         /// <summary>Method info for byte array comparison.</summary>

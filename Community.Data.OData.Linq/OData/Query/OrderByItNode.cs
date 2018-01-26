@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using Microsoft.OData.UriParser;
-
-namespace System.Web.OData.Query
+namespace Community.Data.OData.Linq.OData.Query
 {
+    using Microsoft.OData.UriParser;
+
     /// <summary>
     /// Represents the order by expression '$it' in the $orderby clause.
     /// </summary>

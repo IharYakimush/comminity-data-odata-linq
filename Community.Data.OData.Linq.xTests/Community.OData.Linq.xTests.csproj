@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Community.Data.OData.Linq\Community.Data.OData.Linq.csproj" />
+    <ProjectReference Include="..\Community.Data.OData.Linq\Community.OData.Linq.csproj" />
   </ItemGroup>
 
 </Project>

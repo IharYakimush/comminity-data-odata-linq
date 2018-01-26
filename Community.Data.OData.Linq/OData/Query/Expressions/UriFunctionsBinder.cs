@@ -1,17 +1,20 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Web.Http;
-using Community.Data.OData.Linq.Properties;
-using Microsoft.OData;
-
-namespace System.Web.OData.Query.Expressions
+namespace Community.Data.OData.Linq.OData.Query.Expressions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text;
+
+    using Community.Data.OData.Linq.Common;
+    using Community.Data.OData.Linq.Properties;
+
+    using Microsoft.OData;
+
     /// <summary>
     /// This class helps to bind uri functions to CLR.
     /// For creating an Expression and apply it on a Queryable collection, we must get the CLR information,

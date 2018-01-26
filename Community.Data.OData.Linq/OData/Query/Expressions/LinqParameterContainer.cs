@@ -1,12 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Concurrent;
-using System.Linq.Expressions;
-using System.Reflection;
-
-namespace System.Web.OData.Query.Expressions
+namespace Community.Data.OData.Linq.OData.Query.Expressions
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Linq.Expressions;
+    using System.Reflection;
+
     // wraps a constant value so that EntityFramework paramterizes the constant.
     internal abstract class LinqParameterContainer
     {
@@ -52,14 +53,14 @@ namespace System.Web.OData.Query.Expressions
         {
             public TypedLinqParameterContainer(T value)
             {
-                TypedProperty = value;
+                this.TypedProperty = value;
             }
 
             public T TypedProperty { get; set; }
 
             public override object Property
             {
-                get { return TypedProperty; }
+                get { return this.TypedProperty; }
             }
         }
     }

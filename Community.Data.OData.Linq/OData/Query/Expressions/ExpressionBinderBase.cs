@@ -1,29 +1,28 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
-using System.Globalization;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Web.Http;
-
-using System.Web.OData.Formatter;
-
-using System.Xml.Linq;
-using Community.Data.OData.Linq;
-using Community.Data.OData.Linq.Properties;
-using Community.OData.Edm.Bulder.Properties;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OData;
-using Microsoft.OData.Edm;
-using Microsoft.OData.UriParser;
-
-namespace System.Web.OData.Query.Expressions
+namespace Community.Data.OData.Linq.OData.Query.Expressions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
+    using System.Xml.Linq;
+
+    using Community.Data.OData.Linq;
+    using Community.Data.OData.Linq.Common;
+    using Community.Data.OData.Linq.OData.Formatter;
+    using Community.Data.OData.Linq.Properties;
+
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.OData;
+    using Microsoft.OData.Edm;
+    using Microsoft.OData.UriParser;
+
     /// <summary>
     /// The base class for all expression binders.
     /// </summary>
@@ -81,15 +80,15 @@ namespace System.Web.OData.Query.Expressions
         {
             Contract.Assert(requestContainer != null);
 
-            QuerySettings = requestContainer.GetRequiredService<ODataQuerySettings>();
-            Model = requestContainer.GetRequiredService<IEdmModel>();
-            AssembliesResolver = requestContainer.GetRequiredService<IAssembliesResolver>();
+            this.QuerySettings = requestContainer.GetRequiredService<ODataQuerySettings>();
+            this.Model = requestContainer.GetRequiredService<IEdmModel>();
+            this.AssembliesResolver = requestContainer.GetRequiredService<IAssembliesResolver>();
         }
 
         internal ExpressionBinderBase(IEdmModel model, IAssembliesResolver assembliesResolver, ODataQuerySettings querySettings)
             : this(model, querySettings)
         {
-            AssembliesResolver = assembliesResolver;
+            this.AssembliesResolver = assembliesResolver;
         }
 
         internal ExpressionBinderBase(IEdmModel model, ODataQuerySettings querySettings)
@@ -98,8 +97,8 @@ namespace System.Web.OData.Query.Expressions
             Contract.Assert(querySettings != null);
             Contract.Assert(querySettings.HandleNullPropagation != HandleNullPropagationOption.Default);
 
-            QuerySettings = querySettings;
-            Model = model;
+            this.QuerySettings = querySettings;
+            this.Model = model;
         }
 
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "These are simple conversion function and cannot be split up.")]
@@ -133,8 +132,8 @@ namespace System.Web.OData.Query.Expressions
             if ((IsDateOrOffset(leftUnderlyingType) && IsDate(rightUnderlyingType)) ||
                 (IsDate(leftUnderlyingType) && IsDateOrOffset(rightUnderlyingType)))
             {
-                left = CreateDateBinaryExpression(left);
-                right = CreateDateBinaryExpression(right);
+                left = this.CreateDateBinaryExpression(left);
+                right = this.CreateDateBinaryExpression(right);
             }
 
             if ((IsDateOrOffset(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
@@ -142,8 +141,8 @@ namespace System.Web.OData.Query.Expressions
                 (IsTimeSpan(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
                 (IsTimeOfDay(leftUnderlyingType) && IsTimeSpan(rightUnderlyingType)))
             {
-                left = CreateTimeBinaryExpression(left);
-                right = CreateTimeBinaryExpression(right);
+                left = this.CreateTimeBinaryExpression(left);
+                right = this.CreateTimeBinaryExpression(right);
             }
 
             if (left.Type != right.Type)
@@ -204,7 +203,7 @@ namespace System.Web.OData.Query.Expressions
                 if (TypeHelper.IsEnum(left.Type) && TypeHelper.IsEnum(right.Type) && binaryOperator == BinaryOperatorKind.Has)
                 {
                     UnaryExpression flag = Expression.Convert(right, typeof(Enum));
-                    return BindHas(left, flag);
+                    return this.BindHas(left, flag);
                 }
                 else
                 {
@@ -215,7 +214,7 @@ namespace System.Web.OData.Query.Expressions
 
         internal Expression CreateConvertExpression(ConvertNode convertNode, Expression source)
         {
-            Type conversionType = EdmLibHelpers.GetClrType(convertNode.TypeReference, Model, AssembliesResolver);
+            Type conversionType = EdmLibHelpers.GetClrType(convertNode.TypeReference, this.Model, this.AssembliesResolver);
 
             if (conversionType == typeof(bool?) && source.Type == typeof(bool))
             {
@@ -251,7 +250,7 @@ namespace System.Web.OData.Query.Expressions
                 else
                 {
                     // if a cast is from Nullable<T> to Non-Nullable<T> we need to check if source is null
-                    if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True
+                    if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True
                         && IsNullable(source.Type) && !IsNullable(conversionType))
                     {
                         // source == null ? null : source.Value
@@ -326,7 +325,7 @@ namespace System.Web.OData.Query.Expressions
                     }
                 }
 
-                if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True && IsNullable(source.Type))
+                if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True && IsNullable(source.Type))
                 {
                     // source == null ? null : source
                     return Expression.Condition(
@@ -346,11 +345,11 @@ namespace System.Web.OData.Query.Expressions
         internal Expression MakePropertyAccess(PropertyInfo propertyInfo, Expression argument)
         {
             Expression propertyArgument = argument;
-            if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
+            if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
             {
                 // we don't have to check if the argument is null inside the function call as we do it already
                 // before calling the function. So remove the redundant null checks.
-                propertyArgument = RemoveInnerNullPropagation(argument);
+                propertyArgument = this.RemoveInnerNullPropagation(argument);
             }
 
             // if the argument is of type Nullable<T>, then translate the argument to Nullable<T>.Value as none
@@ -366,11 +365,11 @@ namespace System.Web.OData.Query.Expressions
             Contract.Assert(member.MemberType == MemberTypes.Property || member.MemberType == MemberTypes.Method);
 
             IEnumerable<Expression> functionCallArguments = arguments;
-            if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
+            if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
             {
                 // we don't have to check if the argument is null inside the function call as we do it already
                 // before calling the function. So remove the redundant null checks.
-                functionCallArguments = arguments.Select(a => RemoveInnerNullPropagation(a));
+                functionCallArguments = arguments.Select(a => this.RemoveInnerNullPropagation(a));
             }
 
             // if the argument is of type Nullable<T>, then translate the argument to Nullable<T>.Value as none
@@ -396,12 +395,12 @@ namespace System.Web.OData.Query.Expressions
                 functionCall = Expression.Property(functionCallArguments.First(), member as PropertyInfo);
             }
 
-            return CreateFunctionCallWithNullPropagation(functionCall, arguments);
+            return this.CreateFunctionCallWithNullPropagation(functionCall, arguments);
         }
 
         internal Expression CreateFunctionCallWithNullPropagation(Expression functionCall, Expression[] arguments)
         {
-            if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
+            if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
             {
                 Expression test = CheckIfArgumentsAreNull(arguments);
 
@@ -436,7 +435,7 @@ namespace System.Web.OData.Query.Expressions
         {
             Contract.Assert(expression != null);
 
-            if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
+            if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
             {
                 // only null propagation generates conditional expressions
                 if (expression.NodeType == ExpressionType.Conditional)
@@ -489,7 +488,7 @@ namespace System.Web.OData.Query.Expressions
 
             if (parent != null)
             {
-                var parentPath = GetFullPropertyPath(parent);
+                var parentPath = this.GetFullPropertyPath(parent);
                 if (parentPath != null)
                 {
                     path = parentPath + "\\" + path;
@@ -551,7 +550,7 @@ namespace System.Web.OData.Query.Expressions
             Contract.Assert(flag.Type == typeof(Enum));
 
             Expression[] arguments = new[] { left, flag };
-            return MakeFunctionCall(ClrCanonicalFunctions.HasFlag, arguments);
+            return this.MakeFunctionCall(ClrCanonicalFunctions.HasFlag, arguments);
         }
 
         /// <summary>
@@ -573,12 +572,12 @@ namespace System.Web.OData.Query.Expressions
                 return null;
             }
 
-            if (!typeof(GroupByWrapper).IsAssignableFrom(BaseQuery.ElementType))
+            if (!typeof(GroupByWrapper).IsAssignableFrom(this.BaseQuery.ElementType))
             {
                 return null;
             }
 
-            var expression = BaseQuery.Expression as MethodCallExpression;
+            var expression = this.BaseQuery.Expression as MethodCallExpression;
             if (expression == null)
             {
                 return null;
@@ -688,13 +687,13 @@ namespace System.Web.OData.Query.Expressions
         /// <returns>Returns null if no aggregations were used so far</returns>
         protected Expression GetFlattenedPropertyExpression(string propertyPath)
         {
-            if (FlattenedPropertyContainer == null)
+            if (this.FlattenedPropertyContainer == null)
             {
                 return null;
             }
 
             Expression expression;
-            if (FlattenedPropertyContainer.TryGetValue(propertyPath, out expression))
+            if (this.FlattenedPropertyContainer.TryGetValue(propertyPath, out expression))
             {
                 return expression;
             }
@@ -708,24 +707,24 @@ namespace System.Web.OData.Query.Expressions
             {
                 if (IsDateTime(source.Type))
                 {
-                    return MakePropertyAccess(ClrCanonicalFunctions.DateTimeProperties[propertyName], source);
+                    return this.MakePropertyAccess(ClrCanonicalFunctions.DateTimeProperties[propertyName], source);
                 }
                 else
                 {
-                    return MakePropertyAccess(ClrCanonicalFunctions.DateTimeOffsetProperties[propertyName], source);
+                    return this.MakePropertyAccess(ClrCanonicalFunctions.DateTimeOffsetProperties[propertyName], source);
                 }
             }
             else if (IsDate(source.Type))
             {
-                return MakePropertyAccess(ClrCanonicalFunctions.DateProperties[propertyName], source);
+                return this.MakePropertyAccess(ClrCanonicalFunctions.DateProperties[propertyName], source);
             }
             else if (IsTimeOfDay(source.Type))
             {
-                return MakePropertyAccess(ClrCanonicalFunctions.TimeOfDayProperties[propertyName], source);
+                return this.MakePropertyAccess(ClrCanonicalFunctions.TimeOfDayProperties[propertyName], source);
             }
             else if (IsTimeSpan(source.Type))
             {
-                return MakePropertyAccess(ClrCanonicalFunctions.TimeSpanProperties[propertyName], source);
+                return this.MakePropertyAccess(ClrCanonicalFunctions.TimeSpanProperties[propertyName], source);
             }
 
             return source;
@@ -736,9 +735,9 @@ namespace System.Web.OData.Query.Expressions
             source = ConvertToDateTimeRelatedConstExpression(source);
 
             // Year, Month, Day
-            Expression year = GetProperty(source, ClrCanonicalFunctions.YearFunctionName);
-            Expression month = GetProperty(source, ClrCanonicalFunctions.MonthFunctionName);
-            Expression day = GetProperty(source, ClrCanonicalFunctions.DayFunctionName);
+            Expression year = this.GetProperty(source, ClrCanonicalFunctions.YearFunctionName);
+            Expression month = this.GetProperty(source, ClrCanonicalFunctions.MonthFunctionName);
+            Expression day = this.GetProperty(source, ClrCanonicalFunctions.DayFunctionName);
 
             // return (year * 10000 + month * 100 + day)
             Expression result =
@@ -746,7 +745,7 @@ namespace System.Web.OData.Query.Expressions
                     Expression.Add(Expression.Multiply(year, Expression.Constant(10000)),
                         Expression.Multiply(month, Expression.Constant(100))), day);
 
-            return CreateFunctionCallWithNullPropagation(result, new[] { source });
+            return this.CreateFunctionCallWithNullPropagation(result, new[] { source });
         }
 
         private Expression CreateTimeBinaryExpression(Expression source)
@@ -754,10 +753,10 @@ namespace System.Web.OData.Query.Expressions
             source = ConvertToDateTimeRelatedConstExpression(source);
 
             // Hour, Minute, Second, Millisecond
-            Expression hour = GetProperty(source, ClrCanonicalFunctions.HourFunctionName);
-            Expression minute = GetProperty(source, ClrCanonicalFunctions.MinuteFunctionName);
-            Expression second = GetProperty(source, ClrCanonicalFunctions.SecondFunctionName);
-            Expression milliSecond = GetProperty(source, ClrCanonicalFunctions.MillisecondFunctionName);
+            Expression hour = this.GetProperty(source, ClrCanonicalFunctions.HourFunctionName);
+            Expression minute = this.GetProperty(source, ClrCanonicalFunctions.MinuteFunctionName);
+            Expression second = this.GetProperty(source, ClrCanonicalFunctions.SecondFunctionName);
+            Expression milliSecond = this.GetProperty(source, ClrCanonicalFunctions.MillisecondFunctionName);
 
             Expression hourTicks = Expression.Multiply(Expression.Convert(hour, typeof(long)), Expression.Constant(TimeOfDay.TicksPerHour));
             Expression minuteTicks = Expression.Multiply(Expression.Convert(minute, typeof(long)), Expression.Constant(TimeOfDay.TicksPerMinute));
@@ -766,7 +765,7 @@ namespace System.Web.OData.Query.Expressions
             // return (hour * TicksPerHour + minute * TicksPerMinute + second * TicksPerSecond + millisecond)
             Expression result = Expression.Add(hourTicks, Expression.Add(minuteTicks, Expression.Add(secondTicks, Expression.Convert(milliSecond, typeof(long)))));
 
-            return CreateFunctionCallWithNullPropagation(result, new[] { source });
+            return this.CreateFunctionCallWithNullPropagation(result, new[] { source });
         }
 
         private static Expression ConvertToDateTimeRelatedConstExpression(Expression source)

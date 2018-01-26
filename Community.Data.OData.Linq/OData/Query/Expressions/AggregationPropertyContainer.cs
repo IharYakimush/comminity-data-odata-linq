@@ -1,18 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.OData.Query;
-using System.Web.OData.Query.Expressions;
-
-namespace System.Web.OData.Query.Expressions
+namespace Community.Data.OData.Linq.OData.Query.Expressions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Linq.Expressions;
+
     /// <summary>
     /// Reperesent properties used in groupby and aggregate clauses to make them accessiable in further clauses/transformations
     /// </summary>
@@ -55,7 +50,7 @@ namespace System.Web.OData.Query.Expressions
             }
             set
             {
-                Value = value;
+                this.Value = value;
             }
         }
 
@@ -65,16 +60,16 @@ namespace System.Web.OData.Query.Expressions
             bool includeAutoSelected)
         {
             base.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
-            if (Next != null)
+            if (this.Next != null)
             {
-                Next.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
+                this.Next.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
             }
         }
 
         public override object GetValue()
         {
             // Value is object and when Value is populated form the DB by EF or other ORM, it will not auto converted to null as in case of real type
-            if (Value == DBNull.Value)
+            if (this.Value == DBNull.Value)
             {
                 return null;
             }

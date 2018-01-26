@@ -1,14 +1,14 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Web.Http;
-using Community.Data.OData.Linq.Properties;
-using Community.OData.Edm.Bulder.Properties;
-using Microsoft.OData;
-using Microsoft.OData.UriParser;
-
-namespace System.Web.OData.Query
+namespace Community.Data.OData.Linq.OData.Query
 {
+    using Community.Data.OData.Linq.Common;
+    using Community.Data.OData.Linq.Properties;
+
+    using Microsoft.OData;
+    using Microsoft.OData.UriParser;
+
     /// <summary>
     /// Represents ordering on a dynamic property
     /// </summary>
@@ -26,7 +26,7 @@ namespace System.Web.OData.Query
                 throw Error.ArgumentNull("orderByClause");
             }
 
-            OrderByClause = orderByClause;
+            this.OrderByClause = orderByClause;
 
             var openPropertyExpression = orderByClause.Expression as SingleValueOpenPropertyAccessNode;
             if (openPropertyExpression == null)
@@ -34,7 +34,7 @@ namespace System.Web.OData.Query
                 throw new ODataException(SRResources.OrderByClauseNotSupported);
             }
 
-            PropertyName = openPropertyExpression.Name;
+            this.PropertyName = openPropertyExpression.Name;
         }
 
         /// <summary>

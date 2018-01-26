@@ -1,11 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using Microsoft.OData.Edm;
-
-namespace System.Web.OData.Query
+namespace Community.Data.OData.Linq.OData.Query
 {
+    using System.Collections.Generic;
+
+    using Microsoft.OData.Edm;
+
     /// <summary>
     /// The result of a $select and $expand projection is represented as an <see cref="ISelectExpandWrapper"/>
     /// instance. That instance can be projected into an <see cref="IDictionary{TKey,TValue}"/> instance by calling

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Web.OData.Builder;
 
 namespace Community.Data.OData.Linq.EdmModel
 {
     using System;
     using System.Reflection;
+
+    using Community.Data.OData.Linq.Builder;
 
     using Microsoft.OData.Edm;
 

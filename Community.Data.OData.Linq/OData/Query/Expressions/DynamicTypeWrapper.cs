@@ -1,13 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+
 [module: SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Extra needed to workaorund EF issue with expression shape.")]
 
-namespace System.Web.OData.Query.Expressions
+namespace Community.Data.OData.Linq.OData.Query.Expressions
 {
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+
     /// <summary>
     /// Represents a container class that contains properties that are grouped by using $apply.
     /// </summary>
@@ -50,7 +53,7 @@ namespace System.Web.OData.Query.Expressions
         {
             get
             {
-                EnsureValues();
+                this.EnsureValues();
                 return this._values;
             }
         }
@@ -71,7 +74,7 @@ namespace System.Web.OData.Query.Expressions
         /// <inheritdoc />
         public override int GetHashCode()
         {
-            EnsureValues();
+            this.EnsureValues();
             long hash = 1870403278L; //Arbitrary number from Anonymous Type GetHashCode implementation
             foreach (var v in this.Values.Values)
             {
@@ -83,7 +86,7 @@ namespace System.Web.OData.Query.Expressions
 
         private void EnsureValues()
         {
-            if (_values == null)
+            if (this._values == null)
             {
                 if (this.GroupByContainer != null)
                 {
@@ -96,7 +99,7 @@ namespace System.Web.OData.Query.Expressions
 
                 if (this.Container != null)
                 {
-                    _values = _values.Concat(this.Container.ToDictionary(DefaultPropertyMapper)).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                    this._values = this._values.Concat(this.Container.ToDictionary(DefaultPropertyMapper)).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
                 }
             }
         }

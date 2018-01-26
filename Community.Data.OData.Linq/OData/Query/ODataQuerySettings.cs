@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Web.Http;
-
-namespace System.Web.OData.Query
+namespace Community.Data.OData.Linq.OData.Query
 {
+    using Community.Data.OData.Linq.Common;
+
     /// <summary>
     /// This class describes the settings to use during query composition.
     /// </summary>
@@ -20,8 +20,8 @@ namespace System.Web.OData.Query
         /// </summary>
         public ODataQuerySettings()
         {
-            EnsureStableOrdering = true;
-            EnableConstantParameterization = true;
+            this.EnsureStableOrdering = true;
+            this.EnableConstantParameterization = true;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _modelBoundPageSize;
+                return this._modelBoundPageSize;
             }
             set
             {
@@ -44,7 +44,7 @@ namespace System.Web.OData.Query
                     throw Error.ArgumentMustBeGreaterThanOrEqualTo("value", value, 1);
                 }
 
-                _modelBoundPageSize = value;
+                this._modelBoundPageSize = value;
             }
         }
 
@@ -71,12 +71,12 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _handleNullPropagationOption;
+                return this._handleNullPropagationOption;
             }
             set
             {
                 HandleNullPropagationOptionHelper.Validate(value, "value");
-                _handleNullPropagationOption = value;
+                this._handleNullPropagationOption = value;
             }
         }
 
@@ -97,7 +97,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _pageSize;
+                return this._pageSize;
             }
             set
             {
@@ -106,17 +106,17 @@ namespace System.Web.OData.Query
                     throw Error.ArgumentMustBeGreaterThanOrEqualTo("value", value, 1);
                 }
 
-                _pageSize = value;
+                this._pageSize = value;
             }
         }
 
         internal void CopyFrom(ODataQuerySettings settings)
         {
-            EnsureStableOrdering = settings.EnsureStableOrdering;
-            EnableConstantParameterization = settings.EnableConstantParameterization;
-            HandleNullPropagation = settings.HandleNullPropagation;
-            PageSize = settings.PageSize;
-            ModelBoundPageSize = settings.ModelBoundPageSize;
+            this.EnsureStableOrdering = settings.EnsureStableOrdering;
+            this.EnableConstantParameterization = settings.EnableConstantParameterization;
+            this.HandleNullPropagation = settings.HandleNullPropagation;
+            this.PageSize = settings.PageSize;
+            this.ModelBoundPageSize = settings.ModelBoundPageSize;
         }
     }
 }

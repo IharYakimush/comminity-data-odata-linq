@@ -1,12 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
-
-namespace System.Web.OData.Query
+namespace Community.Data.OData.Linq.OData.Query
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Community.Data.OData.Linq.Common;
+
     /// <summary>
     /// Represents a class that truncates a collection to a given page size.
     /// </summary>
@@ -27,7 +28,7 @@ namespace System.Web.OData.Query
         public TruncatedCollection(IEnumerable<T> source, int pageSize)
             : base(source.Take(checked(pageSize + 1)))
         {
-            Initialize(pageSize);
+            this.Initialize(pageSize);
         }
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace System.Web.OData.Query
         public TruncatedCollection(IQueryable<T> source, int pageSize)
             : base(source.Take(checked(pageSize + 1)))
         {
-            Initialize(pageSize);
+            this.Initialize(pageSize);
         }
 
         /// <summary>
@@ -54,10 +55,10 @@ namespace System.Web.OData.Query
         {
             if (pageSize > 0)
             {
-                Initialize(pageSize);
+                this.Initialize(pageSize);
             }
 
-            _totalCount = totalCount;
+            this._totalCount = totalCount;
         }
 
         /// <summary>
@@ -73,10 +74,10 @@ namespace System.Web.OData.Query
         {
             if (pageSize > 0)
             {
-                Initialize(pageSize);
+                this.Initialize(pageSize);
             }
 
-            _totalCount = totalCount;
+            this._totalCount = totalCount;
         }
 
         private void Initialize(int pageSize)
@@ -86,31 +87,31 @@ namespace System.Web.OData.Query
                 throw Error.ArgumentMustBeGreaterThanOrEqualTo("pageSize", pageSize, MinPageSize);
             }
 
-            _pageSize = pageSize;
+            this._pageSize = pageSize;
 
-            if (Count > pageSize)
+            if (this.Count > pageSize)
             {
-                _isTruncated = true;
-                RemoveAt(Count - 1);
+                this._isTruncated = true;
+                this.RemoveAt(this.Count - 1);
             }
         }
 
         /// <inheritdoc />
         public int PageSize
         {
-            get { return _pageSize; }
+            get { return this._pageSize; }
         }
 
         /// <inheritdoc />
         public bool IsTruncated
         {
-            get { return _isTruncated; }
+            get { return this._isTruncated; }
         }
 
         /// <inheritdoc />
         public long? TotalCount
         {
-            get { return _totalCount; }
+            get { return this._totalCount; }
         }
     }
 }

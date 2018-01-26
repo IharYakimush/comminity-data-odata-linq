@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-namespace System.Web.OData
+namespace Community.Data.OData.Linq.OData
 {
+    using System;
+
     internal class TimeZoneInfoHelper
     {
         private static TimeZoneInfo _defaultTimeZoneInfo;

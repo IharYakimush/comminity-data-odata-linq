@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Community.Data.OData.Linq
 {
-    public interface IAssembliesResolver
+    internal interface IAssembliesResolver
     {
         ICollection<Assembly> GetAssemblies();
     }

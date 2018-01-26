@@ -1,16 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq.Expressions;
-using System.Web.Http;
-using Community.Data.OData.Linq.Properties;
-using Community.OData.Edm.Bulder.Properties;
-
-
-namespace System.Web.OData.Query.Expressions
+namespace Community.Data.OData.Linq.OData.Query.Expressions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Linq.Expressions;
+
+    using Community.Data.OData.Linq.Common;
+    using Community.Data.OData.Linq.Properties;
+
     /// <summary>
     /// A container of property names and property values.
     /// </summary>
@@ -36,7 +36,7 @@ namespace System.Web.OData.Query.Expressions
         {
             Contract.Assert(propertyMapper != null);
             Dictionary<string, object> result = new Dictionary<string, object>();
-            ToDictionaryCore(result, propertyMapper, includeAutoSelected);
+            this.ToDictionaryCore(result, propertyMapper, includeAutoSelected);
             return result;
         }
 
@@ -177,21 +177,21 @@ namespace System.Web.OData.Query.Expressions
             {
                 Contract.Assert(dictionary != null);
 
-                if (Name != null && (includeAutoSelected || !AutoSelected))
+                if (this.Name != null && (includeAutoSelected || !this.AutoSelected))
                 {
-                    string mappedName = propertyMapper.MapProperty(Name);
+                    string mappedName = propertyMapper.MapProperty(this.Name);
                     if (String.IsNullOrEmpty(mappedName))
                     {
-                        throw Error.InvalidOperation(SRResources.InvalidPropertyMapping, Name);
+                        throw Error.InvalidOperation(SRResources.InvalidPropertyMapping, this.Name);
                     }
 
-                    dictionary.Add(mappedName, GetValue());
+                    dictionary.Add(mappedName, this.GetValue());
                 }
             }
 
             public virtual object GetValue()
             {
-                return Value;
+                return this.Value;
             }
         }
 
@@ -199,7 +199,7 @@ namespace System.Web.OData.Query.Expressions
         {
             public AutoSelectedNamedProperty()
             {
-                AutoSelected = true;
+                this.AutoSelected = true;
             }
         }
 
@@ -209,7 +209,7 @@ namespace System.Web.OData.Query.Expressions
 
             public override object GetValue()
             {
-                return IsNull ? (object)null : Value;
+                return this.IsNull ? (object)null : this.Value;
             }
         }
 
@@ -223,13 +223,13 @@ namespace System.Web.OData.Query.Expressions
 
             public override object GetValue()
             {
-                if (TotalCount == null)
+                if (this.TotalCount == null)
                 {
-                    return new TruncatedCollection<T>(Collection, PageSize);
+                    return new TruncatedCollection<T>(this.Collection, this.PageSize);
                 }
                 else
                 {
-                    return new TruncatedCollection<T>(Collection, PageSize, TotalCount);
+                    return new TruncatedCollection<T>(this.Collection, this.PageSize, this.TotalCount);
                 }
             }
         }
@@ -249,7 +249,7 @@ namespace System.Web.OData.Query.Expressions
                 bool includeAutoSelected)
             {
                 base.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
-                Next.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
+                this.Next.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
             }
         }
 
@@ -261,7 +261,7 @@ namespace System.Web.OData.Query.Expressions
                 bool includeAutoSelected)
             {
                 base.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
-                Next.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
+                this.Next.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
             }
         }
 
@@ -273,7 +273,7 @@ namespace System.Web.OData.Query.Expressions
                 bool includeAutoSelected)
             {
                 base.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
-                Next.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
+                this.Next.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
             }
         }
 
@@ -285,7 +285,7 @@ namespace System.Web.OData.Query.Expressions
                 bool includeAutoSelected)
             {
                 base.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
-                Next.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
+                this.Next.ToDictionaryCore(dictionary, propertyMapper, includeAutoSelected);
             }
         }
     }

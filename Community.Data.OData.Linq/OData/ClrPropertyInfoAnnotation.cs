@@ -1,12 +1,14 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Reflection;
-using System.Web.Http;
-using Microsoft.OData.Edm;
-
-namespace System.Web.OData
+namespace Community.Data.OData.Linq.OData
 {
+    using System.Reflection;
+
+    using Community.Data.OData.Linq.Common;
+
+    using Microsoft.OData.Edm;
+
     /// <summary>
     /// Represents a mapping from an <see cref="IEdmProperty"/> to a CLR property info.
     /// </summary>
@@ -23,7 +25,7 @@ namespace System.Web.OData
                 throw Error.ArgumentNull("clrPropertyInfo");
             }
 
-            ClrPropertyInfo = clrPropertyInfo;
+            this.ClrPropertyInfo = clrPropertyInfo;
         }
 
         /// <summary>

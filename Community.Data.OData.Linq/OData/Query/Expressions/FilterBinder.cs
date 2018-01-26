@@ -1,24 +1,27 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Web.Http;
-using System.Web.OData.Formatter;
-using Community.Data.OData.Linq;
-using Community.Data.OData.Linq.Properties;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OData;
-using Microsoft.OData.Edm;
-using Microsoft.OData.UriParser;
-
-namespace System.Web.OData.Query.Expressions
+namespace Community.Data.OData.Linq.OData.Query.Expressions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
+    using System.Runtime.CompilerServices;
+
+    using Community.Data.OData.Linq;
+    using Community.Data.OData.Linq.Common;
+    using Community.Data.OData.Linq.OData.Formatter;
+    using Community.Data.OData.Linq.Properties;
+
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.OData;
+    using Microsoft.OData.Edm;
+    using Microsoft.OData.UriParser;
+
     /// <summary>
     /// Translates an OData $filter parse tree represented by <see cref="FilterClause"/> to
     /// an <see cref="Expression"/> and applies it to an <see cref="IQueryable"/>.
@@ -87,7 +90,7 @@ namespace System.Web.OData.Query.Expressions
             Type filterType)
             : base(model, assembliesResolver, querySettings)
         {
-            _filterType = filterType;
+            this._filterType = filterType;
         }
 
         internal static Expression<Func<TEntityType, bool>> Bind<TEntityType>(FilterClause filterClause, IEdmModel model,
@@ -161,16 +164,16 @@ namespace System.Web.OData.Query.Expressions
                 {
                     case QueryNodeKind.CollectionNavigationNode:
                         CollectionNavigationNode navigationNode = node as CollectionNavigationNode;
-                        return BindNavigationPropertyNode(navigationNode.Source, navigationNode.NavigationProperty);
+                        return this.BindNavigationPropertyNode(navigationNode.Source, navigationNode.NavigationProperty);
 
                     case QueryNodeKind.CollectionPropertyAccess:
-                        return BindCollectionPropertyAccessNode(node as CollectionPropertyAccessNode);
+                        return this.BindCollectionPropertyAccessNode(node as CollectionPropertyAccessNode);
 
                     case QueryNodeKind.CollectionComplexNode:
-                        return BindCollectionComplexNode(node as CollectionComplexNode);
+                        return this.BindCollectionComplexNode(node as CollectionComplexNode);
 
                     case QueryNodeKind.CollectionResourceCast:
-                        return BindCollectionResourceCastNode(node as CollectionResourceCastNode);
+                        return this.BindCollectionResourceCastNode(node as CollectionResourceCastNode);
 
                     case QueryNodeKind.CollectionFunctionCall:
                     case QueryNodeKind.CollectionResourceFunctionCall:
@@ -185,50 +188,50 @@ namespace System.Web.OData.Query.Expressions
                 switch (node.Kind)
                 {
                     case QueryNodeKind.BinaryOperator:
-                        return BindBinaryOperatorNode(node as BinaryOperatorNode);
+                        return this.BindBinaryOperatorNode(node as BinaryOperatorNode);
 
                     case QueryNodeKind.Constant:
-                        return BindConstantNode(node as ConstantNode);
+                        return this.BindConstantNode(node as ConstantNode);
 
                     case QueryNodeKind.Convert:
-                        return BindConvertNode(node as ConvertNode);
+                        return this.BindConvertNode(node as ConvertNode);
 
                     case QueryNodeKind.ResourceRangeVariableReference:
-                        return BindRangeVariable((node as ResourceRangeVariableReferenceNode).RangeVariable);
+                        return this.BindRangeVariable((node as ResourceRangeVariableReferenceNode).RangeVariable);
 
                     case QueryNodeKind.NonResourceRangeVariableReference:
-                        return BindRangeVariable((node as NonResourceRangeVariableReferenceNode).RangeVariable);
+                        return this.BindRangeVariable((node as NonResourceRangeVariableReferenceNode).RangeVariable);
 
                     case QueryNodeKind.SingleValuePropertyAccess:
-                        return BindPropertyAccessQueryNode(node as SingleValuePropertyAccessNode);
+                        return this.BindPropertyAccessQueryNode(node as SingleValuePropertyAccessNode);
 
                     case QueryNodeKind.SingleComplexNode:
-                        return BindSingleComplexNode(node as SingleComplexNode);
+                        return this.BindSingleComplexNode(node as SingleComplexNode);
 
                     case QueryNodeKind.SingleValueOpenPropertyAccess:
-                        return BindDynamicPropertyAccessQueryNode(node as SingleValueOpenPropertyAccessNode);
+                        return this.BindDynamicPropertyAccessQueryNode(node as SingleValueOpenPropertyAccessNode);
 
                     case QueryNodeKind.UnaryOperator:
-                        return BindUnaryOperatorNode(node as UnaryOperatorNode);
+                        return this.BindUnaryOperatorNode(node as UnaryOperatorNode);
 
                     case QueryNodeKind.SingleValueFunctionCall:
-                        return BindSingleValueFunctionCallNode(node as SingleValueFunctionCallNode);
+                        return this.BindSingleValueFunctionCallNode(node as SingleValueFunctionCallNode);
 
                     case QueryNodeKind.SingleNavigationNode:
                         SingleNavigationNode navigationNode = node as SingleNavigationNode;
-                        return BindNavigationPropertyNode(navigationNode.Source, navigationNode.NavigationProperty);
+                        return this.BindNavigationPropertyNode(navigationNode.Source, navigationNode.NavigationProperty);
 
                     case QueryNodeKind.Any:
-                        return BindAnyNode(node as AnyNode);
+                        return this.BindAnyNode(node as AnyNode);
 
                     case QueryNodeKind.All:
-                        return BindAllNode(node as AllNode);
+                        return this.BindAllNode(node as AllNode);
 
                     case QueryNodeKind.SingleResourceCast:
-                        return BindSingleResourceCastNode(node as SingleResourceCastNode);
+                        return this.BindSingleResourceCastNode(node as SingleResourceCastNode);
 
                     case QueryNodeKind.SingleResourceFunctionCall:
-                        return BindSingleResourceFunctionCallNode(node as SingleResourceFunctionCallNode);
+                        return this.BindSingleResourceFunctionCallNode(node as SingleResourceFunctionCallNode);
 
                     case QueryNodeKind.NamedFunctionParameter:
                     case QueryNodeKind.ParameterAlias:
@@ -254,20 +257,20 @@ namespace System.Web.OData.Query.Expressions
         /// <returns>The LINQ <see cref="Expression"/> created.</returns>
         public virtual Expression BindDynamicPropertyAccessQueryNode(SingleValueOpenPropertyAccessNode openNode)
         {
-            if (EdmLibHelpers.IsDynamicTypeWrapper(_filterType))
+            if (EdmLibHelpers.IsDynamicTypeWrapper(this._filterType))
             {
-                return GetFlattenedPropertyExpression(openNode.Name) ?? Expression.Property(Bind(openNode.Source), openNode.Name);
+                return this.GetFlattenedPropertyExpression(openNode.Name) ?? Expression.Property(this.Bind(openNode.Source), openNode.Name);
             }
-            PropertyInfo prop = GetDynamicPropertyContainer(openNode);
+            PropertyInfo prop = this.GetDynamicPropertyContainer(openNode);
 
-            var propertyAccessExpression = BindPropertyAccessExpression(openNode, prop);
+            var propertyAccessExpression = this.BindPropertyAccessExpression(openNode, prop);
             var readDictionaryIndexerExpression = Expression.Property(propertyAccessExpression,
                 _dictionaryStringObjectIndexerName, Expression.Constant(openNode.Name));
             var containsKeyExpression = Expression.Call(propertyAccessExpression,
                 propertyAccessExpression.Type.GetMethod("ContainsKey"), Expression.Constant(openNode.Name));
             var nullExpression = Expression.Constant(null);
 
-            if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
+            if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
             {
                 var dynamicDictIsNotNull = Expression.NotEqual(propertyAccessExpression, Expression.Constant(null));
                 var dynamicDictIsNotNullAndContainsKey = Expression.AndAlso(dynamicDictIsNotNull, containsKeyExpression);
@@ -287,12 +290,12 @@ namespace System.Web.OData.Query.Expressions
 
         private Expression BindPropertyAccessExpression(SingleValueOpenPropertyAccessNode openNode, PropertyInfo prop)
         {
-            var source = Bind(openNode.Source);
+            var source = this.Bind(openNode.Source);
             Expression propertyAccessExpression;
-            if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True &&
-                IsNullable(source.Type) && source != _lambdaParameters[ODataItParameterName])
+            if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True &&
+                IsNullable(source.Type) && source != this._lambdaParameters[ODataItParameterName])
             {
-                propertyAccessExpression = Expression.Property(RemoveInnerNullPropagation(source), prop.Name);
+                propertyAccessExpression = Expression.Property(this.RemoveInnerNullPropagation(source), prop.Name);
             }
             else
             {
@@ -317,7 +320,7 @@ namespace System.Web.OData.Query.Expressions
             {
                 throw Error.NotSupported(SRResources.QueryNodeBindingNotSupported, openNode.Kind, typeof(FilterBinder).Name);
             }
-            var prop = EdmLibHelpers.GetDynamicPropertyDictionary(edmStructuredType, Model);
+            var prop = EdmLibHelpers.GetDynamicPropertyDictionary(edmStructuredType, this.Model);
             return prop;
         }
 
@@ -332,7 +335,7 @@ namespace System.Web.OData.Query.Expressions
             switch (node.Name)
             {
                 case ClrCanonicalFunctions.CastFunctionName:
-                    return BindSingleResourceCastFunctionCall(node);
+                    return this.BindSingleResourceCastFunctionCall(node);
                 default:
                     throw Error.NotSupported(SRResources.ODataFunctionNotSupported, node.Name);
             }
@@ -342,17 +345,17 @@ namespace System.Web.OData.Query.Expressions
         {
             Contract.Assert(ClrCanonicalFunctions.CastFunctionName == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
 
             Contract.Assert(arguments.Length == 2);
 
             string targetEdmTypeName = (string)((ConstantNode)node.Parameters.Last()).Value;
-            IEdmType targetEdmType = Model.FindType(targetEdmTypeName);
+            IEdmType targetEdmType = this.Model.FindType(targetEdmTypeName);
             Type targetClrType = null;
 
             if (targetEdmType != null)
             {
-                targetClrType = EdmLibHelpers.GetClrType(targetEdmType.ToEdmTypeReference(false), Model);
+                targetClrType = EdmLibHelpers.GetClrType(targetEdmType.ToEdmTypeReference(false), this.Model);
             }
 
             if (arguments[0].Type == targetClrType)
@@ -378,9 +381,9 @@ namespace System.Web.OData.Query.Expressions
             IEdmStructuredTypeReference structured = node.StructuredTypeReference;
             Contract.Assert(structured != null, "NS casts can contain only structured types");
 
-            Type clrType = EdmLibHelpers.GetClrType(structured, Model);
+            Type clrType = EdmLibHelpers.GetClrType(structured, this.Model);
 
-            Expression source = BindCastSourceNode(node.Source);
+            Expression source = this.BindCastSourceNode(node.Source);
             return Expression.TypeAs(source, clrType);
         }
 
@@ -395,9 +398,9 @@ namespace System.Web.OData.Query.Expressions
             IEdmStructuredTypeReference structured = node.ItemStructuredType;
             Contract.Assert(structured != null, "NS casts can contain only structured types");
 
-            Type clrType = EdmLibHelpers.GetClrType(structured, Model);
+            Type clrType = EdmLibHelpers.GetClrType(structured, this.Model);
 
-            Expression source = BindCastSourceNode(node.Source);
+            Expression source = this.BindCastSourceNode(node.Source);
             return OfType(source, clrType);
         }
 
@@ -408,11 +411,11 @@ namespace System.Web.OData.Query.Expressions
             {
                 // if the cast is on the root i.e $it (~/Products?$filter=NS.PopularProducts/.....),
                 // source would be null. So bind null to '$it'.
-                source = _lambdaParameters[ODataItParameterName];
+                source = this._lambdaParameters[ODataItParameterName];
             }
             else
             {
-                source = Bind(sourceNode);
+                source = this.Bind(sourceNode);
             }
 
             return source;
@@ -447,14 +450,14 @@ namespace System.Web.OData.Query.Expressions
             // TODO: bug in uri parser is causing this property to be null for the root property.
             if (sourceNode == null)
             {
-                source = _lambdaParameters[ODataItParameterName];
+                source = this._lambdaParameters[ODataItParameterName];
             }
             else
             {
-                source = Bind(sourceNode);
+                source = this.Bind(sourceNode);
             }
 
-            return CreatePropertyAccessExpression(source, navigationProperty);
+            return this.CreatePropertyAccessExpression(source, navigationProperty);
         }
 
         /// <summary>
@@ -465,11 +468,11 @@ namespace System.Web.OData.Query.Expressions
         /// <returns>The LINQ <see cref="Expression"/> created.</returns>
         public virtual Expression BindBinaryOperatorNode(BinaryOperatorNode binaryOperatorNode)
         {
-            Expression left = Bind(binaryOperatorNode.Left);
-            Expression right = Bind(binaryOperatorNode.Right);
+            Expression left = this.Bind(binaryOperatorNode.Left);
+            Expression right = this.Bind(binaryOperatorNode.Right);
 
             // handle null propagation only if either of the operands can be null
-            bool isNullPropagationRequired = QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True && (IsNullable(left.Type) || IsNullable(right.Type));
+            bool isNullPropagationRequired = this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True && (IsNullable(left.Type) || IsNullable(right.Type));
             if (isNullPropagationRequired)
             {
                 // |----------------------------------------------------------------|
@@ -499,11 +502,11 @@ namespace System.Web.OData.Query.Expressions
                 }
 
                 // Expression trees do a very good job of handling the 3VL truth table if we pass liftToNull true.
-                return CreateBinaryExpression(binaryOperatorNode.OperatorKind, left, right, liftToNull: liftToNull);
+                return this.CreateBinaryExpression(binaryOperatorNode.OperatorKind, left, right, liftToNull: liftToNull);
             }
             else
             {
-                return CreateBinaryExpression(binaryOperatorNode.OperatorKind, left, right, liftToNull: false);
+                return this.CreateBinaryExpression(binaryOperatorNode.OperatorKind, left, right, liftToNull: false);
             }
         }
 
@@ -523,7 +526,7 @@ namespace System.Web.OData.Query.Expressions
                 return NullConstant;
             }
 
-            Type constantType = EdmLibHelpers.GetClrType(constantNode.TypeReference, Model, AssembliesResolver);
+            Type constantType = EdmLibHelpers.GetClrType(constantNode.TypeReference, this.Model, this.AssembliesResolver);
             object value = constantNode.Value;
 
             if (constantNode.TypeReference != null && constantNode.TypeReference.IsEnum())
@@ -543,7 +546,7 @@ namespace System.Web.OData.Query.Expressions
                 constantType = Nullable.GetUnderlyingType(constantType) ?? constantType;
             }
 
-            if (QuerySettings.EnableConstantParameterization)
+            if (this.QuerySettings.EnableConstantParameterization)
             {
                 return LinqParameterContainer.Parameterize(constantType, value);
             }
@@ -564,20 +567,20 @@ namespace System.Web.OData.Query.Expressions
             Contract.Assert(convertNode != null);
             Contract.Assert(convertNode.TypeReference != null);
 
-            Expression source = Bind(convertNode.Source);
+            Expression source = this.Bind(convertNode.Source);
 
-            return CreateConvertExpression(convertNode, source);
+            return this.CreateConvertExpression(convertNode, source);
         }
 
         private LambdaExpression BindExpression(SingleValueNode expression, RangeVariable rangeVariable, Type elementType)
         {
             ParameterExpression filterParameter = Expression.Parameter(elementType, rangeVariable.Name);
-            _lambdaParameters = new Dictionary<string, ParameterExpression>();
-            _lambdaParameters.Add(rangeVariable.Name, filterParameter);
+            this._lambdaParameters = new Dictionary<string, ParameterExpression>();
+            this._lambdaParameters.Add(rangeVariable.Name, filterParameter);
 
-            EnsureFlattenedPropertyContainer(filterParameter);
+            this.EnsureFlattenedPropertyContainer(filterParameter);
 
-            Expression body = Bind(expression);
+            Expression body = this.Bind(expression);
             return Expression.Lambda(body, filterParameter);
         }
 
@@ -585,7 +588,7 @@ namespace System.Web.OData.Query.Expressions
         {
             if (IsNullable(body.Type))
             {
-                if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
+                if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
                 {
                     // handle null as false
                     // body => body == true. passing liftToNull:false would convert null to false.
@@ -608,8 +611,8 @@ namespace System.Web.OData.Query.Expressions
         /// <returns>The LINQ <see cref="Expression"/> created.</returns>
         public virtual Expression BindRangeVariable(RangeVariable rangeVariable)
         {
-            ParameterExpression parameter = _lambdaParameters[rangeVariable.Name];
-            return ConvertNonStandardPrimitives(parameter);
+            ParameterExpression parameter = this._lambdaParameters[rangeVariable.Name];
+            return this.ConvertNonStandardPrimitives(parameter);
         }
 
         /// <summary>
@@ -620,8 +623,8 @@ namespace System.Web.OData.Query.Expressions
         /// <returns>The LINQ <see cref="Expression"/> created.</returns>
         public virtual Expression BindCollectionPropertyAccessNode(CollectionPropertyAccessNode propertyAccessNode)
         {
-            Expression source = Bind(propertyAccessNode.Source);
-            return CreatePropertyAccessExpression(source, propertyAccessNode.Property);
+            Expression source = this.Bind(propertyAccessNode.Source);
+            return this.CreatePropertyAccessExpression(source, propertyAccessNode.Property);
         }
 
         /// <summary>
@@ -632,8 +635,8 @@ namespace System.Web.OData.Query.Expressions
         /// <returns>The LINQ <see cref="Expression"/> created.</returns>
         public virtual Expression BindCollectionComplexNode(CollectionComplexNode collectionComplexNode)
         {
-            Expression source = Bind(collectionComplexNode.Source);
-            return CreatePropertyAccessExpression(source, collectionComplexNode.Property);
+            Expression source = this.Bind(collectionComplexNode.Source);
+            return this.CreatePropertyAccessExpression(source, collectionComplexNode.Property);
         }
 
         /// <summary>
@@ -644,8 +647,8 @@ namespace System.Web.OData.Query.Expressions
         /// <returns>The LINQ <see cref="Expression"/> created.</returns>
         public virtual Expression BindPropertyAccessQueryNode(SingleValuePropertyAccessNode propertyAccessNode)
         {
-            Expression source = Bind(propertyAccessNode.Source);
-            return CreatePropertyAccessExpression(source, propertyAccessNode.Property, GetFullPropertyPath(propertyAccessNode));
+            Expression source = this.Bind(propertyAccessNode.Source);
+            return this.CreatePropertyAccessExpression(source, propertyAccessNode.Property, this.GetFullPropertyPath(propertyAccessNode));
         }
 
         /// <summary>
@@ -656,26 +659,26 @@ namespace System.Web.OData.Query.Expressions
         /// <returns>The LINQ <see cref="Expression"/> created.</returns>
         public virtual Expression BindSingleComplexNode(SingleComplexNode singleComplexNode)
         {
-            Expression source = Bind(singleComplexNode.Source);
-            return CreatePropertyAccessExpression(source, singleComplexNode.Property, GetFullPropertyPath(singleComplexNode));
+            Expression source = this.Bind(singleComplexNode.Source);
+            return this.CreatePropertyAccessExpression(source, singleComplexNode.Property, this.GetFullPropertyPath(singleComplexNode));
         }
 
         private Expression CreatePropertyAccessExpression(Expression source, IEdmProperty property, string propertyPath = null)
         {
-            string propertyName = EdmLibHelpers.GetClrPropertyName(property, Model);
+            string propertyName = EdmLibHelpers.GetClrPropertyName(property, this.Model);
             propertyPath = propertyPath ?? propertyName;
 
-            if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True && IsNullable(source.Type) && source != _lambdaParameters[ODataItParameterName])
+            if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True && IsNullable(source.Type) && source != this._lambdaParameters[ODataItParameterName])
             {
-                var cleanSource = RemoveInnerNullPropagation(source);
+                var cleanSource = this.RemoveInnerNullPropagation(source);
                 Expression propertyAccessExpression = null;
 
-                propertyAccessExpression = GetFlattenedPropertyExpression(propertyPath) ?? Expression.Property(cleanSource, propertyName);
+                propertyAccessExpression = this.GetFlattenedPropertyExpression(propertyPath) ?? Expression.Property(cleanSource, propertyName);
 
                 // source.property => source == null ? null : [CastToNullable]RemoveInnerNullPropagation(source).property
                 // Notice that we are checking if source is null already. so we can safely remove any null checks when doing source.Property
 
-                Expression ifFalse = ToNullable(ConvertNonStandardPrimitives(propertyAccessExpression));
+                Expression ifFalse = ToNullable(this.ConvertNonStandardPrimitives(propertyAccessExpression));
                 return
                     Expression.Condition(
                         test: Expression.Equal(source, NullConstant),
@@ -684,7 +687,7 @@ namespace System.Web.OData.Query.Expressions
             }
             else
             {
-                return GetFlattenedPropertyExpression(propertyPath) ?? ConvertNonStandardPrimitives(Expression.Property(source, propertyName));
+                return this.GetFlattenedPropertyExpression(propertyPath) ?? this.ConvertNonStandardPrimitives(Expression.Property(source, propertyName));
             }
         }
 
@@ -699,7 +702,7 @@ namespace System.Web.OData.Query.Expressions
             // No need to handle null-propagation here as CLR already handles it.
             // !(null) = null
             // -(null) = null
-            Expression inner = Bind(unaryOperatorNode.Operand);
+            Expression inner = this.Bind(unaryOperatorNode.Operand);
             switch (unaryOperatorNode.OperatorKind)
             {
                 case UnaryOperatorKind.Negate:
@@ -724,72 +727,72 @@ namespace System.Web.OData.Query.Expressions
             switch (node.Name)
             {
                 case ClrCanonicalFunctions.StartswithFunctionName:
-                    return BindStartsWith(node);
+                    return this.BindStartsWith(node);
 
                 case ClrCanonicalFunctions.EndswithFunctionName:
-                    return BindEndsWith(node);
+                    return this.BindEndsWith(node);
 
                 case ClrCanonicalFunctions.ContainsFunctionName:
-                    return BindContains(node);
+                    return this.BindContains(node);
 
                 case ClrCanonicalFunctions.SubstringFunctionName:
-                    return BindSubstring(node);
+                    return this.BindSubstring(node);
 
                 case ClrCanonicalFunctions.LengthFunctionName:
-                    return BindLength(node);
+                    return this.BindLength(node);
 
                 case ClrCanonicalFunctions.IndexofFunctionName:
-                    return BindIndexOf(node);
+                    return this.BindIndexOf(node);
 
                 case ClrCanonicalFunctions.TolowerFunctionName:
-                    return BindToLower(node);
+                    return this.BindToLower(node);
 
                 case ClrCanonicalFunctions.ToupperFunctionName:
-                    return BindToUpper(node);
+                    return this.BindToUpper(node);
 
                 case ClrCanonicalFunctions.TrimFunctionName:
-                    return BindTrim(node);
+                    return this.BindTrim(node);
 
                 case ClrCanonicalFunctions.ConcatFunctionName:
-                    return BindConcat(node);
+                    return this.BindConcat(node);
 
                 case ClrCanonicalFunctions.YearFunctionName:
                 case ClrCanonicalFunctions.MonthFunctionName:
                 case ClrCanonicalFunctions.DayFunctionName:
-                    return BindDateRelatedProperty(node); // Date & DateTime & DateTimeOffset
+                    return this.BindDateRelatedProperty(node); // Date & DateTime & DateTimeOffset
 
                 case ClrCanonicalFunctions.HourFunctionName:
                 case ClrCanonicalFunctions.MinuteFunctionName:
                 case ClrCanonicalFunctions.SecondFunctionName:
-                    return BindTimeRelatedProperty(node); // TimeOfDay & DateTime & DateTimeOffset
+                    return this.BindTimeRelatedProperty(node); // TimeOfDay & DateTime & DateTimeOffset
 
                 case ClrCanonicalFunctions.FractionalSecondsFunctionName:
-                    return BindFractionalSeconds(node);
+                    return this.BindFractionalSeconds(node);
 
                 case ClrCanonicalFunctions.RoundFunctionName:
-                    return BindRound(node);
+                    return this.BindRound(node);
 
                 case ClrCanonicalFunctions.FloorFunctionName:
-                    return BindFloor(node);
+                    return this.BindFloor(node);
 
                 case ClrCanonicalFunctions.CeilingFunctionName:
-                    return BindCeiling(node);
+                    return this.BindCeiling(node);
 
                 case ClrCanonicalFunctions.CastFunctionName:
-                    return BindCastSingleValue(node);
+                    return this.BindCastSingleValue(node);
 
                 case ClrCanonicalFunctions.IsofFunctionName:
-                    return BindIsOf(node);
+                    return this.BindIsOf(node);
 
                 case ClrCanonicalFunctions.DateFunctionName:
-                    return BindDate(node);
+                    return this.BindDate(node);
 
                 case ClrCanonicalFunctions.TimeFunctionName:
-                    return BindTime(node);
+                    return this.BindTime(node);
 
                 default:
                     // Get Expression of custom binded method.
-                    Expression expression = BindCustomMethodExpressionOrNull(node);
+                    Expression expression = this.BindCustomMethodExpressionOrNull(node);
                     if (expression != null)
                     {
                         return expression;
@@ -803,18 +806,18 @@ namespace System.Web.OData.Query.Expressions
         {
             Contract.Assert(ClrCanonicalFunctions.CastFunctionName == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             Contract.Assert(arguments.Length == 1 || arguments.Length == 2);
 
-            Expression source = arguments.Length == 1 ? _lambdaParameters[ODataItParameterName] : arguments[0];
+            Expression source = arguments.Length == 1 ? this._lambdaParameters[ODataItParameterName] : arguments[0];
             string targetTypeName = (string)((ConstantNode)node.Parameters.Last()).Value;
-            IEdmType targetEdmType = Model.FindType(targetTypeName);
+            IEdmType targetEdmType = this.Model.FindType(targetTypeName);
             Type targetClrType = null;
 
             if (targetEdmType != null)
             {
                 IEdmTypeReference targetEdmTypeReference = targetEdmType.ToEdmTypeReference(false);
-                targetClrType = EdmLibHelpers.GetClrType(targetEdmTypeReference, Model);
+                targetClrType = EdmLibHelpers.GetClrType(targetEdmTypeReference, this.Model);
 
                 if (source != NullConstant)
                 {
@@ -843,7 +846,7 @@ namespace System.Web.OData.Query.Expressions
             }
             else if (TypeHelper.IsEnum(targetClrType))
             {
-                return BindCastToEnumType(source.Type, targetClrType, node.Parameters.First(), arguments.Length);
+                return this.BindCastToEnumType(source.Type, targetClrType, node.Parameters.First(), arguments.Length);
             }
             else
             {
@@ -922,7 +925,7 @@ namespace System.Web.OData.Query.Expressions
 
                 if (isSuccessful)
                 {
-                    if (QuerySettings.EnableConstantParameterization)
+                    if (this.QuerySettings.EnableConstantParameterization)
                     {
                         return LinqParameterContainer.Parameterize(targetClrType, parameters[1]);
                     }
@@ -942,13 +945,13 @@ namespace System.Web.OData.Query.Expressions
         {
             Contract.Assert(ClrCanonicalFunctions.IsofFunctionName == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
 
             // Edm.Boolean isof(type)  or
             // Edm.Boolean isof(expression,type)
             Contract.Assert(arguments.Length == 1 || arguments.Length == 2);
 
-            Expression source = arguments.Length == 1 ? _lambdaParameters[ODataItParameterName] : arguments[0];
+            Expression source = arguments.Length == 1 ? this._lambdaParameters[ODataItParameterName] : arguments[0];
             if (source == NullConstant)
             {
                 return FalseConstant;
@@ -956,13 +959,13 @@ namespace System.Web.OData.Query.Expressions
 
             string typeName = (string)((ConstantNode)node.Parameters.Last()).Value;
 
-            IEdmType edmType = Model.FindType(typeName);
+            IEdmType edmType = this.Model.FindType(typeName);
             Type clrType = null;
             if (edmType != null)
             {
                 // bool nullable = source.Type.IsNullable();
                 IEdmTypeReference edmTypeReference = edmType.ToEdmTypeReference(false);
-                clrType = EdmLibHelpers.GetClrType(edmTypeReference, Model);
+                clrType = EdmLibHelpers.GetClrType(edmTypeReference, this.Model);
             }
 
             if (clrType == null)
@@ -992,49 +995,49 @@ namespace System.Web.OData.Query.Expressions
         {
             Contract.Assert("ceiling" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
 
             Contract.Assert(arguments.Length == 1 && IsDoubleOrDecimal(arguments[0].Type));
 
             MethodInfo ceiling = IsType<double>(arguments[0].Type)
                 ? ClrCanonicalFunctions.CeilingOfDouble
                 : ClrCanonicalFunctions.CeilingOfDecimal;
-            return MakeFunctionCall(ceiling, arguments);
+            return this.MakeFunctionCall(ceiling, arguments);
         }
 
         private Expression BindFloor(SingleValueFunctionCallNode node)
         {
             Contract.Assert("floor" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
 
             Contract.Assert(arguments.Length == 1 && IsDoubleOrDecimal(arguments[0].Type));
 
             MethodInfo floor = IsType<double>(arguments[0].Type)
                 ? ClrCanonicalFunctions.FloorOfDouble
                 : ClrCanonicalFunctions.FloorOfDecimal;
-            return MakeFunctionCall(floor, arguments);
+            return this.MakeFunctionCall(floor, arguments);
         }
 
         private Expression BindRound(SingleValueFunctionCallNode node)
         {
             Contract.Assert("round" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
 
             Contract.Assert(arguments.Length == 1 && IsDoubleOrDecimal(arguments[0].Type));
 
             MethodInfo round = IsType<double>(arguments[0].Type)
                 ? ClrCanonicalFunctions.RoundOfDouble
                 : ClrCanonicalFunctions.RoundOfDecimal;
-            return MakeFunctionCall(round, arguments);
+            return this.MakeFunctionCall(round, arguments);
         }
 
         private Expression BindDate(SingleValueFunctionCallNode node)
         {
             Contract.Assert("date" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
 
             // We should support DateTime & DateTimeOffset even though DateTime is not part of OData v4 Spec.
             Contract.Assert(arguments.Length == 1 && IsDateOrOffset(arguments[0].Type));
@@ -1048,7 +1051,7 @@ namespace System.Web.OData.Query.Expressions
         {
             Contract.Assert("time" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
 
             // We should support DateTime & DateTimeOffset even though DateTime is not part of OData v4 Spec.
             Contract.Assert(arguments.Length == 1 && IsDateOrOffset(arguments[0].Type));
@@ -1062,7 +1065,7 @@ namespace System.Web.OData.Query.Expressions
         {
             Contract.Assert("fractionalseconds" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             Contract.Assert(arguments.Length == 1 && (IsTimeRelated(arguments[0].Type)));
 
             // We should support DateTime & DateTimeOffset even though DateTime is not part of OData v4 Spec.
@@ -1087,16 +1090,16 @@ namespace System.Web.OData.Query.Expressions
             }
 
             // Millisecond
-            Expression milliSecond = MakePropertyAccess(property, parameter);
+            Expression milliSecond = this.MakePropertyAccess(property, parameter);
             Expression decimalMilliSecond = Expression.Convert(milliSecond, typeof(decimal));
             Expression fractionalSeconds = Expression.Divide(decimalMilliSecond, Expression.Constant(1000m, typeof(decimal)));
 
-            return CreateFunctionCallWithNullPropagation(fractionalSeconds, arguments);
+            return this.CreateFunctionCallWithNullPropagation(fractionalSeconds, arguments);
         }
 
         private Expression BindDateRelatedProperty(SingleValueFunctionCallNode node)
         {
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             Contract.Assert(arguments.Length == 1 && IsDateRelated(arguments[0].Type));
 
             // We should support DateTime & DateTimeOffset even though DateTime is not part of OData v4 Spec.
@@ -1119,12 +1122,12 @@ namespace System.Web.OData.Query.Expressions
                 property = ClrCanonicalFunctions.DateTimeOffsetProperties[node.Name];
             }
 
-            return MakeFunctionCall(property, parameter);
+            return this.MakeFunctionCall(property, parameter);
         }
 
         private Expression BindTimeRelatedProperty(SingleValueFunctionCallNode node)
         {
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             Contract.Assert(arguments.Length == 1 && (IsTimeRelated(arguments[0].Type)));
 
             // We should support DateTime & DateTimeOffset even though DateTime is not part of OData v4 Spec.
@@ -1152,74 +1155,74 @@ namespace System.Web.OData.Query.Expressions
                 property = ClrCanonicalFunctions.DateTimeOffsetProperties[node.Name];
             }
 
-            return MakeFunctionCall(property, parameter);
+            return this.MakeFunctionCall(property, parameter);
         }
 
         private Expression BindConcat(SingleValueFunctionCallNode node)
         {
             Contract.Assert("concat" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             ValidateAllStringArguments(node.Name, arguments);
 
             Contract.Assert(arguments.Length == 2 && arguments[0].Type == typeof(string) && arguments[1].Type == typeof(string));
 
-            return MakeFunctionCall(ClrCanonicalFunctions.Concat, arguments);
+            return this.MakeFunctionCall(ClrCanonicalFunctions.Concat, arguments);
         }
 
         private Expression BindTrim(SingleValueFunctionCallNode node)
         {
             Contract.Assert("trim" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             ValidateAllStringArguments(node.Name, arguments);
 
             Contract.Assert(arguments.Length == 1 && arguments[0].Type == typeof(string));
 
-            return MakeFunctionCall(ClrCanonicalFunctions.Trim, arguments);
+            return this.MakeFunctionCall(ClrCanonicalFunctions.Trim, arguments);
         }
 
         private Expression BindToUpper(SingleValueFunctionCallNode node)
         {
             Contract.Assert("toupper" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             ValidateAllStringArguments(node.Name, arguments);
 
             Contract.Assert(arguments.Length == 1 && arguments[0].Type == typeof(string));
 
-            return MakeFunctionCall(ClrCanonicalFunctions.ToUpper, arguments);
+            return this.MakeFunctionCall(ClrCanonicalFunctions.ToUpper, arguments);
         }
 
         private Expression BindToLower(SingleValueFunctionCallNode node)
         {
             Contract.Assert("tolower" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             ValidateAllStringArguments(node.Name, arguments);
 
             Contract.Assert(arguments.Length == 1 && arguments[0].Type == typeof(string));
 
-            return MakeFunctionCall(ClrCanonicalFunctions.ToLower, arguments);
+            return this.MakeFunctionCall(ClrCanonicalFunctions.ToLower, arguments);
         }
 
         private Expression BindIndexOf(SingleValueFunctionCallNode node)
         {
             Contract.Assert("indexof" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             ValidateAllStringArguments(node.Name, arguments);
 
             Contract.Assert(arguments.Length == 2 && arguments[0].Type == typeof(string) && arguments[1].Type == typeof(string));
 
-            return MakeFunctionCall(ClrCanonicalFunctions.IndexOf, arguments);
+            return this.MakeFunctionCall(ClrCanonicalFunctions.IndexOf, arguments);
         }
 
         private Expression BindSubstring(SingleValueFunctionCallNode node)
         {
             Contract.Assert("substring" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             if (arguments[0].Type != typeof(string))
             {
                 throw new ODataException(Error.Format(SRResources.FunctionNotSupportedOnEnum, node.Name));
@@ -1233,14 +1236,14 @@ namespace System.Web.OData.Query.Expressions
                 // When null propagation is allowed, we use a safe version of String.Substring(int).
                 // But for providers that would not recognize custom expressions like this, we map
                 // directly to String.Substring(int)
-                if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
+                if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
                 {
                     // Safe function is static and takes string "this" as first argument
-                    functionCall = MakeFunctionCall(ClrCanonicalFunctions.SubstringStartNoThrow, arguments);
+                    functionCall = this.MakeFunctionCall(ClrCanonicalFunctions.SubstringStartNoThrow, arguments);
                 }
                 else
                 {
-                    functionCall = MakeFunctionCall(ClrCanonicalFunctions.SubstringStart, arguments);
+                    functionCall = this.MakeFunctionCall(ClrCanonicalFunctions.SubstringStart, arguments);
                 }
             }
             else
@@ -1251,14 +1254,14 @@ namespace System.Web.OData.Query.Expressions
                 // When null propagation is allowed, we use a safe version of String.Substring(int, int).
                 // But for providers that would not recognize custom expressions like this, we map
                 // directly to String.Substring(int, int)
-                if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
+                if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True)
                 {
                     // Safe function is static and takes string "this" as first argument
-                    functionCall = MakeFunctionCall(ClrCanonicalFunctions.SubstringStartAndLengthNoThrow, arguments);
+                    functionCall = this.MakeFunctionCall(ClrCanonicalFunctions.SubstringStartAndLengthNoThrow, arguments);
                 }
                 else
                 {
-                    functionCall = MakeFunctionCall(ClrCanonicalFunctions.SubstringStartAndLength, arguments);
+                    functionCall = this.MakeFunctionCall(ClrCanonicalFunctions.SubstringStartAndLength, arguments);
                 }
             }
 
@@ -1269,53 +1272,53 @@ namespace System.Web.OData.Query.Expressions
         {
             Contract.Assert("length" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             ValidateAllStringArguments(node.Name, arguments);
 
             Contract.Assert(arguments.Length == 1 && arguments[0].Type == typeof(string));
 
-            return MakeFunctionCall(ClrCanonicalFunctions.Length, arguments);
+            return this.MakeFunctionCall(ClrCanonicalFunctions.Length, arguments);
         }
 
         private Expression BindContains(SingleValueFunctionCallNode node)
         {
             Contract.Assert("contains" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             ValidateAllStringArguments(node.Name, arguments);
 
             Contract.Assert(arguments.Length == 2 && arguments[0].Type == typeof(string) && arguments[1].Type == typeof(string));
 
-            return MakeFunctionCall(ClrCanonicalFunctions.Contains, arguments[0], arguments[1]);
+            return this.MakeFunctionCall(ClrCanonicalFunctions.Contains, arguments[0], arguments[1]);
         }
 
         private Expression BindStartsWith(SingleValueFunctionCallNode node)
         {
             Contract.Assert("startswith" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             ValidateAllStringArguments(node.Name, arguments);
 
             Contract.Assert(arguments.Length == 2 && arguments[0].Type == typeof(string) && arguments[1].Type == typeof(string));
 
-            return MakeFunctionCall(ClrCanonicalFunctions.StartsWith, arguments);
+            return this.MakeFunctionCall(ClrCanonicalFunctions.StartsWith, arguments);
         }
 
         private Expression BindEndsWith(SingleValueFunctionCallNode node)
         {
             Contract.Assert("endswith" == node.Name);
 
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             ValidateAllStringArguments(node.Name, arguments);
 
             Contract.Assert(arguments.Length == 2 && arguments[0].Type == typeof(string) && arguments[1].Type == typeof(string));
 
-            return MakeFunctionCall(ClrCanonicalFunctions.EndsWith, arguments);
+            return this.MakeFunctionCall(ClrCanonicalFunctions.EndsWith, arguments);
         }
 
         private Expression[] BindArguments(IEnumerable<QueryNode> nodes)
         {
-            return nodes.OfType<SingleValueNode>().Select(n => Bind(n)).ToArray();
+            return nodes.OfType<SingleValueNode>().Select(n => this.Bind(n)).ToArray();
         }
 
         private static void ValidateAllStringArguments(string functionName, Expression[] arguments)
@@ -1334,24 +1337,24 @@ namespace System.Web.OData.Query.Expressions
         /// <returns>The LINQ <see cref="Expression"/> created.</returns>
         public virtual Expression BindAllNode(AllNode allNode)
         {
-            ParameterExpression allIt = HandleLambdaParameters(allNode.RangeVariables);
+            ParameterExpression allIt = this.HandleLambdaParameters(allNode.RangeVariables);
 
             Expression source;
             Contract.Assert(allNode.Source != null);
-            source = Bind(allNode.Source);
+            source = this.Bind(allNode.Source);
 
             Expression body = source;
             Contract.Assert(allNode.Body != null);
 
-            body = Bind(allNode.Body);
-            body = ApplyNullPropagationForFilterBody(body);
+            body = this.Bind(allNode.Body);
+            body = this.ApplyNullPropagationForFilterBody(body);
             body = Expression.Lambda(body, allIt);
 
             Expression all = All(source, body);
 
-            ExitLamdbaScope();
+            this.ExitLamdbaScope();
 
-            if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True && IsNullable(source.Type))
+            if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True && IsNullable(source.Type))
             {
                 // IFF(source == null) null; else Any(body);
                 all = ToNullable(all);
@@ -1374,26 +1377,26 @@ namespace System.Web.OData.Query.Expressions
         /// <returns>The LINQ <see cref="Expression"/> created.</returns>
         public virtual Expression BindAnyNode(AnyNode anyNode)
         {
-            ParameterExpression anyIt = HandleLambdaParameters(anyNode.RangeVariables);
+            ParameterExpression anyIt = this.HandleLambdaParameters(anyNode.RangeVariables);
 
             Expression source;
             Contract.Assert(anyNode.Source != null);
-            source = Bind(anyNode.Source);
+            source = this.Bind(anyNode.Source);
 
             Expression body = null;
             // uri parser places an Constant node with value true for empty any() body
             if (anyNode.Body != null && anyNode.Body.Kind != QueryNodeKind.Constant)
             {
-                body = Bind(anyNode.Body);
-                body = ApplyNullPropagationForFilterBody(body);
+                body = this.Bind(anyNode.Body);
+                body = this.ApplyNullPropagationForFilterBody(body);
                 body = Expression.Lambda(body, anyIt);
             }
 
             Expression any = Any(source, body);
 
-            ExitLamdbaScope();
+            this.ExitLamdbaScope();
 
-            if (QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True && IsNullable(source.Type))
+            if (this.QuerySettings.HandleNullPropagation == HandleNullPropagationOption.True && IsNullable(source.Type))
             {
                 // IFF(source == null) null; else Any(body);
                 any = ToNullable(any);
@@ -1410,14 +1413,14 @@ namespace System.Web.OData.Query.Expressions
 
         private Expression BindCustomMethodExpressionOrNull(SingleValueFunctionCallNode node)
         {
-            Expression[] arguments = BindArguments(node.Parameters);
+            Expression[] arguments = this.BindArguments(node.Parameters);
             IEnumerable<Type> methodArgumentsType = arguments.Select(argument => argument.Type);
 
             // Search for custom method info that are binded to the node name
             MethodInfo methodInfo;
             if (UriFunctionsBinder.TryGetMethodInfo(node.Name, methodArgumentsType, out methodInfo))
             {
-                return MakeFunctionCall(methodInfo, arguments);
+                return this.MakeFunctionCall(methodInfo, arguments);
             }
 
             return null;
@@ -1427,13 +1430,13 @@ namespace System.Web.OData.Query.Expressions
         {
             ParameterExpression lambdaIt = null;
 
-            EnterLambdaScope();
+            this.EnterLambdaScope();
 
             Dictionary<string, ParameterExpression> newParameters = new Dictionary<string, ParameterExpression>();
             foreach (RangeVariable rangeVariable in rangeVariables)
             {
                 ParameterExpression parameter;
-                if (!_lambdaParameters.TryGetValue(rangeVariable.Name, out parameter))
+                if (!this._lambdaParameters.TryGetValue(rangeVariable.Name, out parameter))
                 {
                     // Work-around issue 481323 where UriParser yields a collection parameter type
                     // for primitive collections rather than the inner element type of the collection.
@@ -1449,32 +1452,32 @@ namespace System.Web.OData.Query.Expressions
                         }
                     }
 
-                    parameter = Expression.Parameter(EdmLibHelpers.GetClrType(edmTypeReference, Model, AssembliesResolver), rangeVariable.Name);
+                    parameter = Expression.Parameter(EdmLibHelpers.GetClrType(edmTypeReference, this.Model, this.AssembliesResolver), rangeVariable.Name);
                     Contract.Assert(lambdaIt == null, "There can be only one parameter in an Any/All lambda");
                     lambdaIt = parameter;
                 }
                 newParameters.Add(rangeVariable.Name, parameter);
             }
 
-            _lambdaParameters = newParameters;
+            this._lambdaParameters = newParameters;
             return lambdaIt;
         }
 
         private void EnterLambdaScope()
         {
-            Contract.Assert(_lambdaParameters != null);
-            _parametersStack.Push(_lambdaParameters);
+            Contract.Assert(this._lambdaParameters != null);
+            this._parametersStack.Push(this._lambdaParameters);
         }
 
         private void ExitLamdbaScope()
         {
-            if (_parametersStack.Count != 0)
+            if (this._parametersStack.Count != 0)
             {
-                _lambdaParameters = _parametersStack.Pop();
+                this._lambdaParameters = this._parametersStack.Pop();
             }
             else
             {
-                _lambdaParameters = null;
+                this._lambdaParameters = null;
             }
         }
 

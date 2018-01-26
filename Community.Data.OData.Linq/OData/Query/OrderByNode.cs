@@ -1,13 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using System.Globalization;
-using System.Web.Http;
-using Microsoft.OData.UriParser;
-
-namespace System.Web.OData.Query
+namespace Community.Data.OData.Linq.OData.Query
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+
+    using Community.Data.OData.Linq.Common;
+
+    using Microsoft.OData.UriParser;
+
     /// <summary>
     /// Represents a single order by expression in the $orderby clause.
     /// </summary>
@@ -19,8 +22,8 @@ namespace System.Web.OData.Query
         /// <param name="direction">The direction of the sort order.</param>
         protected OrderByNode(OrderByDirection direction)
         {
-            Direction = direction;
-            PropertyPath = String.Empty;
+            this.Direction = direction;
+            this.PropertyPath = String.Empty;
         }
 
         /// <summary>
@@ -34,8 +37,8 @@ namespace System.Web.OData.Query
                 throw Error.ArgumentNull("orderByClause");
             }
 
-            Direction = orderByClause.Direction;
-            PropertyPath = RestorePropertyPath(orderByClause.Expression);
+            this.Direction = orderByClause.Direction;
+            this.PropertyPath = RestorePropertyPath(orderByClause.Expression);
         }
 
         internal OrderByNode()

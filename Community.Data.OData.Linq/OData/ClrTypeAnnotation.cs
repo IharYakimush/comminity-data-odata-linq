@@ -1,10 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using Microsoft.OData.Edm;
-
-namespace System.Web.OData
+namespace Community.Data.OData.Linq.OData
 {
+    using System;
+
+    using Microsoft.OData.Edm;
+
     /// <summary>
     /// Represents a mapping from an <see cref="IEdmType"/> to a CLR type.
     /// </summary>
@@ -16,7 +18,7 @@ namespace System.Web.OData
         /// <param name="clrType">The backing CLR type for the EDM type.</param>
         public ClrTypeAnnotation(Type clrType)
         {
-            ClrType = clrType;
+            this.ClrType = clrType;
         }
 
         /// <summary>

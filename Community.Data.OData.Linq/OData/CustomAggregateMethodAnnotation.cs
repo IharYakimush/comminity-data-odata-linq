@@ -1,12 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-
-namespace System.Web.OData
+namespace Community.Data.OData.Linq.OData
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Reflection;
+
     /// <summary>
     /// Allows client to tell OData which are the custom aggregation methods defined.
     /// In order to do it, it must receive a methodToken - that is the full identifier
@@ -32,7 +33,7 @@ namespace System.Web.OData
             IDictionary<Type, MethodInfo> methodWrapper;
             methodInfo = null;
 
-            if (_tokenToMethodMap.TryGetValue(methodToken, out methodWrapper))
+            if (this._tokenToMethodMap.TryGetValue(methodToken, out methodWrapper))
             {
                 return methodWrapper.TryGetValue(returnType, out methodInfo);
             }

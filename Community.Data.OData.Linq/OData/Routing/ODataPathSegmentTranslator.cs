@@ -1,19 +1,21 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Web.Http;
-using Community.Data.OData.Linq.Properties;
-using Community.OData.Edm.Bulder.Properties;
-using Microsoft.OData;
-using Microsoft.OData.Edm;
-using Microsoft.OData.UriParser;
 using Semantic = Microsoft.OData.UriParser;
 
-namespace System.Web.OData.Routing
+namespace Community.Data.OData.Linq.OData.Routing
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Community.Data.OData.Linq.Common;
+    using Community.Data.OData.Linq.Properties;
+
+    using Microsoft.OData;
+    using Microsoft.OData.Edm;
+
+    using Semantic;
+
     /// <summary>
     /// Translator the parameter alias, convert node, returned entity set into OData path segment.
     /// </summary>
@@ -58,8 +60,8 @@ namespace System.Web.OData.Routing
                 throw Error.ArgumentNull("model");
             }
 
-            _model = model;
-            _parameterAliasNodes = parameterAliasNodes ?? new Dictionary<string, SingleValueNode>();
+            this._model = model;
+            this._parameterAliasNodes = parameterAliasNodes ?? new Dictionary<string, SingleValueNode>();
         }
 
         /// <summary>
@@ -232,7 +234,7 @@ namespace System.Web.OData.Routing
             if (segment.Parameters.Any(p => p.Value is ParameterAliasNode || p.Value is ConvertNode))
             {
                 var newParameters =
-                    segment.Parameters.Select(e => new OperationSegmentParameter(e.Name, TranslateNode(e.Value)));
+                    segment.Parameters.Select(e => new OperationSegmentParameter(e.Name, this.TranslateNode(e.Value)));
                 newSegment = new OperationImportSegment(segment.OperationImports, segment.EntitySet, newParameters);
             }
 
@@ -255,8 +257,8 @@ namespace System.Web.OData.Routing
             ConvertNode convertNode = node as ConvertNode;
             if (convertNode != null)
             {
-                object value = TranslateNode(convertNode.Source);
-                return ConvertNode(value, convertNode.TypeReference);
+                object value = this.TranslateNode(convertNode.Source);
+                return this.ConvertNode(value, convertNode.TypeReference);
             }
 
             ParameterAliasNode parameterAliasNode = node as ParameterAliasNode;
@@ -264,9 +266,9 @@ namespace System.Web.OData.Routing
             {
                 SingleValueNode singleValueNode;
 
-                if (_parameterAliasNodes.TryGetValue(parameterAliasNode.Alias, out singleValueNode) && singleValueNode != null)
+                if (this._parameterAliasNodes.TryGetValue(parameterAliasNode.Alias, out singleValueNode) && singleValueNode != null)
                 {
-                    return TranslateNode(singleValueNode);
+                    return this.TranslateNode(singleValueNode);
                 }
 
                 // if not found the parameter alias, return null
@@ -302,7 +304,7 @@ namespace System.Web.OData.Routing
             }
 
             string literal = constantNode.LiteralText;
-            object convertValue = ODataUriUtils.ConvertFromUriLiteral(literal, ODataVersion.V4, _model, typeReference);
+            object convertValue = ODataUriUtils.ConvertFromUriLiteral(literal, ODataVersion.V4, this._model, typeReference);
             return new ConstantNode(convertValue, literal, typeReference);
         }
 

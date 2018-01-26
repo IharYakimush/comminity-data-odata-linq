@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Web.Http;
-
-namespace System.Web.OData.Query
+namespace Community.Data.OData.Linq.OData.Query
 {
+    using Community.Data.OData.Linq.Common;
+
     /// <summary>
     /// This class describes the default settings to use during query composition.
     /// </summary>
@@ -24,11 +24,11 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _enableExpand;
+                return this._enableExpand;
             }
             set
             {
-                _enableExpand = value;
+                this._enableExpand = value;
             }
         }
 
@@ -39,11 +39,11 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _enableSelect;
+                return this._enableSelect;
             }
             set
             {
-                _enableSelect = value;
+                this._enableSelect = value;
             }
         }
 
@@ -54,11 +54,11 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _enableCount;
+                return this._enableCount;
             }
             set
             {
-                _enableCount = value;
+                this._enableCount = value;
             }
         }
 
@@ -69,11 +69,11 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _enableOrderBy;
+                return this._enableOrderBy;
             }
             set
             {
-                _enableOrderBy = value;
+                this._enableOrderBy = value;
             }
         }
 
@@ -84,11 +84,11 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _enableFilter;
+                return this._enableFilter;
             }
             set
             {
-                _enableFilter = value;
+                this._enableFilter = value;
             }
         }
 
@@ -102,7 +102,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _maxTop;
+                return this._maxTop;
             }
             set
             {
@@ -111,7 +111,7 @@ namespace System.Web.OData.Query
                     throw Error.ArgumentMustBeGreaterThanOrEqualTo("value", value, 0);
                 }
 
-                _maxTop = value;
+                this._maxTop = value;
             }
         }
     }

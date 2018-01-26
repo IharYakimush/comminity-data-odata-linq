@@ -1,17 +1,19 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Contracts;
-using System.Globalization;
-using System.Web.Http;
-using System.Xml.Linq;
-using Community.Data.OData.Linq.Properties;
-using Community.OData.Edm.Bulder.Properties;
-using Microsoft.OData.Edm;
-
-namespace System.Web.OData.Formatter
+namespace Community.Data.OData.Linq.OData.Formatter
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Xml.Linq;
+
+    using Community.Data.OData.Linq.Common;
+    using Community.Data.OData.Linq.Properties;
+
+    using Microsoft.OData.Edm;
+
     internal static class EdmPrimitiveHelpers
     {
         public static object ConvertPrimitiveValue(object value, Type type)

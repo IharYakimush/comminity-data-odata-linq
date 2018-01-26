@@ -1,12 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using Microsoft.OData.Edm;
-
-namespace System.Web.OData
+namespace Community.Data.OData.Linq.OData.Formatter
 {
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+
+    using Microsoft.OData.Edm;
+
     /// <summary>
     /// An equality comparer for <see cref="IEdmTypeReference"/>.
     /// </summary>

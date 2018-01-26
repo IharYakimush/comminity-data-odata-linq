@@ -1,19 +1,20 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Web.Http;
-
-using System.Web.OData.Formatter;
-using Community.Data.OData.Linq;
-
-namespace System.Web.OData
+namespace Community.Data.OData.Linq.OData
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
+
+    using Community.Data.OData.Linq;
+    using Community.Data.OData.Linq.Common;
+    using Community.Data.OData.Linq.OData.Formatter;
+
     internal static class TypeHelper
     {
         public static Type ToNullable(this Type t)

@@ -1,11 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.ObjectModel;
-using System.Web.Http;
-
-namespace System.Web.OData.Query
+namespace Community.Data.OData.Linq.OData.Query
 {
+    using System;
+    using System.Collections.ObjectModel;
+
+    using Community.Data.OData.Linq.Common;
+
     /// <summary>
     /// This class describes the validation settings for querying.
     /// </summary>
@@ -38,7 +40,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _allowedArithmeticOperators;
+                return this._allowedArithmeticOperators;
             }
             set
             {
@@ -47,7 +49,7 @@ namespace System.Web.OData.Query
                     throw Error.InvalidEnumArgument("value", (Int32)value, typeof(AllowedArithmeticOperators));
                 }
 
-                _allowedArithmeticOperators = value;
+                this._allowedArithmeticOperators = value;
             }
         }
 
@@ -75,7 +77,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _allowedFunctions;
+                return this._allowedFunctions;
             }
             set
             {
@@ -84,7 +86,7 @@ namespace System.Web.OData.Query
                     throw Error.InvalidEnumArgument("value", (Int32)value, typeof(AllowedFunctions));
                 }
 
-                _allowedFunctions = value;
+                this._allowedFunctions = value;
             }
         }
 
@@ -95,7 +97,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _allowedLogicalOperators;
+                return this._allowedLogicalOperators;
             }
             set
             {
@@ -104,7 +106,7 @@ namespace System.Web.OData.Query
                     throw Error.InvalidEnumArgument("value", (Int32)value, typeof(AllowedLogicalOperators));
                 }
 
-                _allowedLogicalOperators = value;
+                this._allowedLogicalOperators = value;
             }
         }
 
@@ -119,7 +121,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _allowedOrderByProperties;
+                return this._allowedOrderByProperties;
             }
         }
 
@@ -131,7 +133,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _allowedQueryParameters;
+                return this._allowedQueryParameters;
             }
             set
             {
@@ -140,7 +142,7 @@ namespace System.Web.OData.Query
                     throw Error.InvalidEnumArgument("value", (Int32)value, typeof(AllowedQueryOptions));
                 }
 
-                _allowedQueryParameters = value;
+                this._allowedQueryParameters = value;
             }
         }
 
@@ -151,7 +153,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _maxOrderByNodeCount;
+                return this._maxOrderByNodeCount;
             }
             set
             {
@@ -160,7 +162,7 @@ namespace System.Web.OData.Query
                     throw Error.ArgumentMustBeGreaterThanOrEqualTo("value", value, MinMaxOrderByNodeCount);
                 }
 
-                _maxOrderByNodeCount = value;
+                this._maxOrderByNodeCount = value;
             }
         }
 
@@ -177,7 +179,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _maxAnyAllExpressionDepth;
+                return this._maxAnyAllExpressionDepth;
             }
             set
             {
@@ -186,7 +188,7 @@ namespace System.Web.OData.Query
                     throw Error.ArgumentMustBeGreaterThanOrEqualTo("value", value, MinMaxAnyAllExpressionDepth);
                 }
 
-                _maxAnyAllExpressionDepth = value;
+                this._maxAnyAllExpressionDepth = value;
             }
         }
 
@@ -200,7 +202,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _maxNodeCount;
+                return this._maxNodeCount;
             }
             set
             {
@@ -209,7 +211,7 @@ namespace System.Web.OData.Query
                     throw Error.ArgumentMustBeGreaterThanOrEqualTo("value", value, MinMaxNodeCount);
                 }
 
-                _maxNodeCount = value;
+                this._maxNodeCount = value;
             }
         }
 
@@ -220,7 +222,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _maxSkip;
+                return this._maxSkip;
             }
             set
             {
@@ -229,7 +231,7 @@ namespace System.Web.OData.Query
                     throw Error.ArgumentMustBeGreaterThanOrEqualTo("value", value, MinMaxSkip);
                 }
 
-                _maxSkip = value;
+                this._maxSkip = value;
             }
         }
 
@@ -240,7 +242,7 @@ namespace System.Web.OData.Query
         {
             get
             {
-                return _maxTop;
+                return this._maxTop;
             }
             set
             {
@@ -249,7 +251,7 @@ namespace System.Web.OData.Query
                     throw Error.ArgumentMustBeGreaterThanOrEqualTo("value", value, MinMaxTop);
                 }
 
-                _maxTop = value;
+                this._maxTop = value;
             }
         }
 
@@ -259,14 +261,14 @@ namespace System.Web.OData.Query
         /// <remarks>To disable the maximum expansion depth check, set this property to 0.</remarks>
         public int MaxExpansionDepth
         {
-            get { return _maxExpansionDepth; }
+            get { return this._maxExpansionDepth; }
             set
             {
                 if (value < MinMaxExpansionDepth)
                 {
                     throw Error.ArgumentMustBeGreaterThanOrEqualTo("value", value, MinMaxExpansionDepth);
                 }
-                _maxExpansionDepth = value;
+                this._maxExpansionDepth = value;
             }
         }
     }
