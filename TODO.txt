@@ -1,10 +1,10 @@
-Functions in filter
-null in filter
++Functions in filter
++null in filter
 orderby
-validation custom exception ?
-datacontracts
+-validation custom exception ?
++datacontracts
 try all data types in filter
-non filterable attributes
++non filterable attributes
 negative scenarious in unit tests
 readme with samples
 nuget package

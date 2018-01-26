@@ -12,6 +12,8 @@
 
         public ODataQuerySettings QuerySettings { get; } = new ODataQuerySettings();
 
+        public ODataValidationSettings ValidationSettings { get; } = new ODataValidationSettings();
+
         public ODataUriParserSettings ParserSettings { get; } = new ODataUriParserSettings();
 
         public ODataUriResolver Resolver { get; set; } = DefaultResolver;

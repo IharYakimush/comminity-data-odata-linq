@@ -39,10 +39,17 @@
         }
 
         [Fact]
-        public void WhereByNameCaseSensitiveKeyByConfig()
+        public void WhereByNameCaseSensitiveKeyByConfigThowException()
         {            
             Assert.Throws<ODataException>(
                 () => SimpleClass.CreateQuery().OData(s => s.EnableCaseInsensitive = false).Filter("name eq 'n1'"));
+        }
+
+        [Fact]
+        public void WhereByRandomStringThrowException()
+        {
+            Assert.Throws<ODataException>(
+                () => SimpleClass.CreateQuery().OData().Filter("qwe"));
         }
 
         [Fact]
@@ -90,6 +97,28 @@
 
             Assert.Single(result);
             Assert.Equal("n2", result[0].Name);
+        }
+
+        [Fact]
+        public void WhereByNameNotNull()
+        {
+            var result = SimpleClass.CreateQuery().OData().Filter("Name ne null").ToArray();
+
+            Assert.Equal("n1", result[0].Name);
+        }
+
+        [Fact]
+        public void WhereByNonFilterableThrowException()
+        {
+            Assert.Throws<ODataException>(
+                () => SimpleClass.CreateQuery().OData(s => s.EnableCaseInsensitive = false).Filter($"{nameof(SimpleClass.NameNotFilter)} eq 'nf1'"));
+        }
+
+        [Fact]
+        public void WhereByIgnoreDataMemberThrowException()
+        {
+            Assert.Throws<ODataException>(
+                () => SimpleClass.CreateQuery().OData(s => s.EnableCaseInsensitive = false).Filter($"{nameof(SimpleClass.NameToIgnore)} eq 'ni1'"));
         }
     }
 }

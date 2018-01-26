@@ -1,4 +1,6 @@
-﻿namespace Community.OData.Linq
+﻿using Community.OData.Linq.Builder.Validators;
+
+namespace Community.OData.Linq
 {
     using System;
     using System.Collections.Generic;
@@ -19,6 +21,9 @@
 
     public static class ODataLinqExtensions
     {
+        private static readonly FilterQueryValidator Validator =
+            new FilterQueryValidator(new DefaultQuerySettings {EnableFilter = true});
+
         /// <summary>
         /// The simplified options.
         /// </summary>
@@ -46,16 +51,19 @@
                 new Dictionary<string, string> { { "$filter", filterText } },
                 query.ServiceProvider);
 
+            ODataSettings settings = query.ServiceProvider.GetRequiredService<ODataSettings>();
+
             // Workaround for strange behavior in QueryOptionsParserConfiguration constructor which set it to false always
-            queryOptionParser.Resolver.EnableCaseInsensitive =
-                query.ServiceProvider.GetRequiredService<ODataSettings>().EnableCaseInsensitive;          
+            queryOptionParser.Resolver.EnableCaseInsensitive = settings.EnableCaseInsensitive;
 
             FilterClause filterClause = queryOptionParser.ParseFilter();
             SingleValueNode filterExpression = filterClause.Expression.Accept(
                 new ParameterAliasNodeTranslator(queryOptionParser.ParameterAliasNodes)) as SingleValueNode;
             filterExpression = filterExpression ?? new ConstantNode(null);
             filterClause = new FilterClause(filterExpression, filterClause.RangeVariable);
-            Contract.Assert(filterClause != null);            
+            Contract.Assert(filterClause != null);
+
+            Validator.Validate(filterClause, settings.ValidationSettings, edmModel);
 
             Expression filter = FilterBinder.Bind(query, filterClause, typeof(T), query.ServiceProvider);
             var result = ExpressionHelpers.Where(query, filter, typeof(T));

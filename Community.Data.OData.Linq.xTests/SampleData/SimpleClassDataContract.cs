@@ -1,4 +1,6 @@
-﻿namespace Community.OData.Linq.xTests.SampleData
+﻿using Community.OData.Linq.Annotations;
+
+namespace Community.OData.Linq.xTests.SampleData
 {
     using System.Linq;
     using System.Runtime.Serialization;
@@ -6,9 +8,13 @@
     [DataContract]
     public class SimpleClassDataContract
     {
-        private static readonly SimpleClass[] items = { new SimpleClass { Id = 1, Name = "n1" }, new SimpleClass { Id = 2, Name = "n2" } };
+        private static readonly SimpleClassDataContract[] items =
+        {
+            new SimpleClassDataContract {Id = 1, Name = "n1", NameToIgnore = "ign1", NameNotMarked = "nm1"},
+            new SimpleClassDataContract {Id = 2, Name = "n2", NameToIgnore = "ign2", NameNotMarked = "nm2"}
+        };
         
-        public static IQueryable<SimpleClass> CreateQuery()
+        public static IQueryable<SimpleClassDataContract> CreateQuery()
         {
             return items.AsQueryable();
         }
@@ -21,5 +27,7 @@
 
         [IgnoreDataMember]
         public string NameToIgnore { get; set; }
+
+        public string NameNotMarked { get; set; }
     }    
 }

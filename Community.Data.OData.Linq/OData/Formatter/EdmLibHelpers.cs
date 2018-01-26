@@ -302,7 +302,84 @@ namespace Community.OData.Linq.OData.Formatter
             return false;
         }
 
-        
+        private static QueryableRestrictionsAnnotation GetPropertyRestrictions(IEdmProperty edmProperty,
+            IEdmModel edmModel)
+        {
+            Contract.Assert(edmProperty != null);
+            Contract.Assert(edmModel != null);
+
+            return edmModel.GetAnnotationValue<QueryableRestrictionsAnnotation>(edmProperty);
+        }
+
+        public static bool IsNotFilterable(IEdmProperty edmProperty, IEdmProperty pathEdmProperty,
+            IEdmStructuredType pathEdmStructuredType,
+            IEdmModel edmModel, bool enableFilter)
+        {
+            QueryableRestrictionsAnnotation annotation = GetPropertyRestrictions(edmProperty, edmModel);
+            if (annotation != null && annotation.Restrictions.NotFilterable)
+            {
+                return true;
+            }
+            else
+            {
+                if (pathEdmStructuredType == null)
+                {
+                    pathEdmStructuredType = edmProperty.DeclaringType;
+                }
+
+                ModelBoundQuerySettings querySettings = GetModelBoundQuerySettings(pathEdmProperty,
+                    pathEdmStructuredType, edmModel);
+                if (!enableFilter)
+                {
+                    return !querySettings.Filterable(edmProperty.Name);
+                }
+
+                bool enable;
+                if (querySettings.FilterConfigurations.TryGetValue(edmProperty.Name, out enable))
+                {
+                    return !enable;
+                }
+                else
+                {
+                    return querySettings.DefaultEnableFilter == false;
+                }
+            }
+        }
+
+        public static bool IsNotSortable(IEdmProperty edmProperty, IEdmProperty pathEdmProperty,
+            IEdmStructuredType pathEdmStructuredType, IEdmModel edmModel, bool enableOrderBy)
+        {
+            QueryableRestrictionsAnnotation annotation = GetPropertyRestrictions(edmProperty, edmModel);
+            if (annotation != null && annotation.Restrictions.NotSortable)
+            {
+                return true;
+            }
+            else
+            {
+                if (pathEdmStructuredType == null)
+                {
+                    pathEdmStructuredType = edmProperty.DeclaringType;
+                }
+
+                ModelBoundQuerySettings querySettings = GetModelBoundQuerySettings(pathEdmProperty,
+                    pathEdmStructuredType, edmModel);
+                if (!enableOrderBy)
+                {
+                    return !querySettings.Sortable(edmProperty.Name);
+                }
+
+                bool enable;
+                if (querySettings.OrderByConfigurations.TryGetValue(edmProperty.Name, out enable))
+                {
+                    return !enable;
+                }
+                else
+                {
+                    return querySettings.DefaultEnableOrderBy == false;
+                }
+            }
+        }
+
         public static IEnumerable<IEdmStructuralProperty> GetAutoSelectProperties(
             IEdmProperty pathProperty,
             IEdmStructuredType pathStructuredType,
