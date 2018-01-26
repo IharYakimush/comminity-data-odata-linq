@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-namespace Community.Data.OData.Linq.OData.Query.Expressions
+namespace Community.OData.Linq.OData.Query.Expressions
 {
     using System;
     using System.Collections.Generic;
@@ -12,10 +12,9 @@ namespace Community.Data.OData.Linq.OData.Query.Expressions
     using System.Reflection;
     using System.Runtime.CompilerServices;
 
-    using Community.Data.OData.Linq;
-    using Community.Data.OData.Linq.Common;
-    using Community.Data.OData.Linq.OData.Formatter;
-    using Community.Data.OData.Linq.Properties;
+    using Community.OData.Linq.Common;
+    using Community.OData.Linq.OData.Formatter;
+    using Community.OData.Linq.Properties;
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.OData;

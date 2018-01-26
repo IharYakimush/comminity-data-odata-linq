@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-
-namespace Community.Data.OData.Linq
+﻿namespace Community.OData.Linq
 {
+    using System.Collections.Generic;
+    using System.Reflection;
+
     internal interface IAssembliesResolver
     {
         ICollection<Assembly> GetAssemblies();

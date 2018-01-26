@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-namespace Community.Data.OData.Linq.OData
+namespace Community.OData.Linq.OData
 {
-    using Community.Data.OData.Linq.Builder;
+    using Community.OData.Linq.Builder;
 
     /// <summary>
     /// Represents a queryable restriction on an EDM property, including not filterable, not sortable,

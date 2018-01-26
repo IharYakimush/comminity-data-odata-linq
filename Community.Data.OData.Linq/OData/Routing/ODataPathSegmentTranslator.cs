@@ -3,13 +3,13 @@
 
 using Semantic = Microsoft.OData.UriParser;
 
-namespace Community.Data.OData.Linq.OData.Routing
+namespace Community.OData.Linq.OData.Routing
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using Community.Data.OData.Linq.Common;
-    using Community.Data.OData.Linq.Properties;
+    using Community.OData.Linq.Common;
+    using Community.OData.Linq.Properties;
 
     using Microsoft.OData;
     using Microsoft.OData.Edm;

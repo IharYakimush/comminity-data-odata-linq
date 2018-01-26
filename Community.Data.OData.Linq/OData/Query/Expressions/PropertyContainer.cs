@@ -1,15 +1,15 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-namespace Community.Data.OData.Linq.OData.Query.Expressions
+namespace Community.OData.Linq.OData.Query.Expressions
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq.Expressions;
 
-    using Community.Data.OData.Linq.Common;
-    using Community.Data.OData.Linq.Properties;
+    using Community.OData.Linq.Common;
+    using Community.OData.Linq.Properties;
 
     /// <summary>
     /// A container of property names and property values.

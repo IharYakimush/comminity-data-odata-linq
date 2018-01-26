@@ -1,14 +1,14 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-namespace Community.Data.OData.Linq.Builder.Conventions.Attributes
+namespace Community.OData.Linq.Builder.Conventions.Attributes
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
 
-    using Community.Data.OData.Linq.Common;
+    using Community.OData.Linq.Common;
 
     /// <summary>
     /// Configures classes that have the <see cref="DataContractAttribute"/> to follow DataContract serialization/deserialization rules.

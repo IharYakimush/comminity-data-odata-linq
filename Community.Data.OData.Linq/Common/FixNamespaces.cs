@@ -1,3 +1,3 @@
-﻿namespace Community.Data.OData.Linq.Common
+﻿namespace Community.OData.Linq.Common
 {
 }

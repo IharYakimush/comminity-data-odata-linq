@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-namespace Community.Data.OData.Linq.Builder
+namespace Community.OData.Linq.Builder
 {
     using System;
     using System.Collections.Generic;
@@ -10,9 +10,9 @@ namespace Community.Data.OData.Linq.Builder
     using System.Linq;
     using System.Reflection;
 
-    using Community.Data.OData.Linq.Common;
-    using Community.Data.OData.Linq.OData;
-    using Community.Data.OData.Linq.Properties;
+    using Community.OData.Linq.Common;
+    using Community.OData.Linq.OData;
+    using Community.OData.Linq.Properties;
 
     /// <summary>
     /// Allows configuration to be performed for a navigation source (entity set, singleton) in a model.

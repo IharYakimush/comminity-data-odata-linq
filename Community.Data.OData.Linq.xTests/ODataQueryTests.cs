@@ -1,19 +1,20 @@
-﻿using System.ComponentModel.Design;
-
-namespace Community.Data.OData.Linq.Tests
+﻿namespace Community.OData.Linq.xTests
 {
     using System;
+    using System.ComponentModel.Design;
+
+    using Community.OData.Linq.xTests.SampleData;
 
     using Xunit;
-    using Microsoft.OData.Edm;
+
     public class ODataQueryTests
     {
         [Fact]
         public void Constructor()
         {
-            ODataQuery<TestClass> query = new ODataQuery<TestClass>(TestClass.CreateQuery(), new ServiceContainer());
+            ODataQuery<SimpleClass> query = new ODataQuery<SimpleClass>(SimpleClass.CreateQuery(), new ServiceContainer());
 
-            Assert.Throws<ArgumentNullException>(() => new ODataQuery<TestClass>(null, null));
+            Assert.Throws<ArgumentNullException>(() => new ODataQuery<SimpleClass>(null, null));
         }
     }
 }

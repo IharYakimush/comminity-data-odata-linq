@@ -17,9 +17,9 @@
       <DependentUpon>CommonWebApiResources.resx</DependentUpon>
     </Compile>
     <Compile Update="Properties\SRResources.Designer.cs">
-      <DependentUpon>SRResources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DependentUpon>SRResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -29,8 +29,8 @@
       <LastGenOutput>CommonWebApiResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\SRResources.resx">
-      <LastGenOutput>SRResources.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SRResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-namespace Community.Data.OData.Linq.Builder.Conventions.Attributes
+namespace Community.OData.Linq.Builder.Conventions.Attributes
 {
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    using Community.Data.OData.Linq.Common;
+    using Community.OData.Linq.Common;
 
     /// <summary>
     /// Marks properties that have <see cref="ConcurrencyCheckAttribute"/> as non-optional on their EDM type.

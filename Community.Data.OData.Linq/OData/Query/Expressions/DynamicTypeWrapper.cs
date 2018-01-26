@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 [module: SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Extra needed to workaorund EF issue with expression shape.")]
 
-namespace Community.Data.OData.Linq.OData.Query.Expressions
+namespace Community.OData.Linq.OData.Query.Expressions
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;

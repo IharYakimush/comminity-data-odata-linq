@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-namespace Community.Data.OData.Linq
+﻿namespace Community.OData.Linq
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+
     internal class DefaultAssembliesResolver : IAssembliesResolver
     {
         /// <summary> Returns a list of assemblies available for the application. </summary>

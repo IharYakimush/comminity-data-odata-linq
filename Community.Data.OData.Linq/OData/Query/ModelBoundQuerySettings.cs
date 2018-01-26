@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-namespace Community.Data.OData.Linq.OData.Query
+namespace Community.OData.Linq.OData.Query
 {
     using System.Collections.Generic;
 
-    using Community.Data.OData.Linq.Common;
+    using Community.OData.Linq.Common;
 
     /// <summary>
     /// This class describes the model bound settings to use during query composition.
