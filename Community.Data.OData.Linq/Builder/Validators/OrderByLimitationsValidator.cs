@@ -1,15 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using Community.OData.Linq.Common;
-using Community.OData.Linq.OData.Formatter;
-using Community.OData.Linq.Properties;
-using Microsoft.OData;
-using Microsoft.OData.Edm;
-using Microsoft.OData.UriParser;
-
-namespace System.Web.OData.Query.Validators
+namespace Community.OData.Linq.Builder.Validators
 {
+    using Community.OData.Linq.Common;
+    using Community.OData.Linq.OData.Formatter;
+    using Community.OData.Linq.Properties;
+
+    using Microsoft.OData;
+    using Microsoft.OData.Edm;
+    using Microsoft.OData.UriParser;
+
     internal class OrderByModelLimitationsValidator : QueryNodeVisitor<SingleValueNode>
     {
         private readonly IEdmModel _model;
@@ -19,16 +20,16 @@ namespace System.Web.OData.Query.Validators
 
         public OrderByModelLimitationsValidator(IEdmModel model, bool enableOrderBy)
         {
-            _model = model;
-            _enableOrderBy = enableOrderBy;            
+            this._model = model;
+            this._enableOrderBy = enableOrderBy;            
         }
 
         public bool TryValidate(IEdmProperty property, IEdmStructuredType structuredType, OrderByClause orderByClause,
             bool explicitPropertiesDefined)
         {
-            _property = property;
-            _structuredType = structuredType;
-            return TryValidate(orderByClause, explicitPropertiesDefined);
+            this._property = property;
+            this._structuredType = structuredType;
+            return this.TryValidate(orderByClause, explicitPropertiesDefined);
         }
 
         // Visits the expression to find the first node if any, that is not sortable and throws
@@ -53,7 +54,7 @@ namespace System.Web.OData.Query.Validators
                 {
                     SingleNavigationNode singleNavigationNode = nodeIn.Source as SingleNavigationNode;
                     if (EdmLibHelpers.IsNotSortable(nodeIn.Property, singleNavigationNode.NavigationProperty,
-                        singleNavigationNode.NavigationProperty.ToEntityType(), _model, _enableOrderBy))
+                        singleNavigationNode.NavigationProperty.ToEntityType(), this._model, this._enableOrderBy))
                     {
                         return nodeIn;
                     }
@@ -62,12 +63,12 @@ namespace System.Web.OData.Query.Validators
                 {
                     SingleComplexNode singleComplexNode = nodeIn.Source as SingleComplexNode;
                     if (EdmLibHelpers.IsNotSortable(nodeIn.Property, singleComplexNode.Property,
-                        nodeIn.Property.DeclaringType, _model, _enableOrderBy))
+                        nodeIn.Property.DeclaringType, this._model, this._enableOrderBy))
                     {
                         return nodeIn;
                     }
                 }
-                else if (EdmLibHelpers.IsNotSortable(nodeIn.Property, _property, _structuredType, _model, _enableOrderBy))
+                else if (EdmLibHelpers.IsNotSortable(nodeIn.Property, this._property, this._structuredType, this._model, this._enableOrderBy))
                 {
                     return nodeIn;
                 }
@@ -83,7 +84,7 @@ namespace System.Web.OData.Query.Validators
 
         public override SingleValueNode Visit(SingleComplexNode nodeIn)
         {
-            if (EdmLibHelpers.IsNotSortable(nodeIn.Property, _property, _structuredType, _model, _enableOrderBy))
+            if (EdmLibHelpers.IsNotSortable(nodeIn.Property, this._property, this._structuredType, this._model, this._enableOrderBy))
             {
                 return nodeIn;
             }
@@ -98,8 +99,8 @@ namespace System.Web.OData.Query.Validators
 
         public override SingleValueNode Visit(SingleNavigationNode nodeIn)
         {
-            if (EdmLibHelpers.IsNotSortable(nodeIn.NavigationProperty, _property, _structuredType, _model,
-                _enableOrderBy))
+            if (EdmLibHelpers.IsNotSortable(nodeIn.NavigationProperty, this._property, this._structuredType, this._model,
+                this._enableOrderBy))
             {
                 return nodeIn;
             }

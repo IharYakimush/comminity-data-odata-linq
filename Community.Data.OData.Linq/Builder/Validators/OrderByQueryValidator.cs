@@ -1,17 +1,17 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
-using Community.OData.Linq.Common;
-using Community.OData.Linq.OData.Query;
-using Community.OData.Linq.Properties;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OData;
-using Microsoft.OData.Edm;
-using Microsoft.OData.UriParser;
-
-namespace System.Web.OData.Query.Validators
+namespace Community.OData.Linq.Builder.Validators
 {
+    using System.Collections.Generic;
+
+    using Community.OData.Linq.Common;
+    using Community.OData.Linq.OData.Query;
+    using Community.OData.Linq.Properties;
+
+    using Microsoft.OData;
+    using Microsoft.OData.Edm;
+
     /// <summary>
     /// Represents a validator used to validate an <see cref="OrderByQueryOption"/> based on the <see cref="ODataValidationSettings"/>.
     /// </summary>
@@ -26,7 +26,7 @@ namespace System.Web.OData.Query.Validators
         /// <param name="defaultQuerySettings">The <see cref="DefaultQuerySettings" />.</param>
         public OrderByQueryValidator(DefaultQuerySettings defaultQuerySettings)
         {
-            _defaultQuerySettings = defaultQuerySettings;
+            this._defaultQuerySettings = defaultQuerySettings;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace System.Web.OData.Query.Validators
             }
 
             OrderByModelLimitationsValidator validator =
-                new OrderByModelLimitationsValidator(model, _defaultQuerySettings.EnableOrderBy);
+                new OrderByModelLimitationsValidator(model, this._defaultQuerySettings.EnableOrderBy);
             bool explicitAllowedProperties = validationSettings.AllowedOrderByProperties.Count > 0;
 
             foreach (OrderByNode node in nodes)

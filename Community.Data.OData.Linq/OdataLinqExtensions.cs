@@ -1,5 +1,4 @@
-﻿using System.Web.OData.Query.Validators;
-using Community.OData.Linq.Builder.Validators;
+﻿using Community.OData.Linq.Builder.Validators;
 using Community.OData.Linq.Common;
 using Community.OData.Linq.Properties;
 
