@@ -1,0 +1,11 @@
+Functions in filter
+null in filter
+orderby
+validation custom exception ?
+datacontracts
+try all data types in filter
+non filterable attributes
+negative scenarious in unit tests
+readme with samples
+nuget package
+github CI

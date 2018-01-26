@@ -1,8 +1,11 @@
 ﻿namespace Community.OData.Linq.xTests
 {
+    using System.ComponentModel;
     using System.Linq;
 
     using Community.OData.Linq.xTests.SampleData;
+
+    using Microsoft.OData;
 
     using Xunit;
 
@@ -33,6 +36,13 @@
 
             Assert.Single(result);
             Assert.Equal("n1", result[0].Name);
+        }
+
+        [Fact]
+        public void WhereByNameCaseSensitiveKeyByConfig()
+        {            
+            Assert.Throws<ODataException>(
+                () => SimpleClass.CreateQuery().OData(s => s.EnableCaseInsensitive = false).Filter("name eq 'n1'"));
         }
 
         [Fact]
