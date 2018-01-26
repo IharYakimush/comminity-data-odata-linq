@@ -15,3 +15,18 @@
         }
     }
 }
+
+#if NET45
+namespace Microsoft.Extensions.DependencyInjection
+{
+    using System;
+
+    public static class ServiceProviderExtensions
+    {
+        public static T GetRequiredService<T>(this IServiceProvider serviceProvider)
+        {
+            return (T)serviceProvider.GetService(typeof(T));
+        }
+    }
+}
+#endif
