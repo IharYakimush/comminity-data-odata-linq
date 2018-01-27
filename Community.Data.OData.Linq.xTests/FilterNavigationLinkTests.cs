@@ -5,6 +5,8 @@
 
     using Community.OData.Linq.xTests.SampleData;
 
+    using Microsoft.OData;
+
     using Xunit;
 
     public class FilterNavigationLinkTests
@@ -16,6 +18,12 @@
 
             Assert.Single((IEnumerable) result);
             Assert.Equal(21, result[0].Id);
+        }
+
+        [Fact]
+        public void WhereNavThrowException()
+        {
+            Assert.Throws<ODataException>(() => ClassWithLink.CreateQuery().OData().Filter("Link2/Id eq 211"));
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-namespace Community.OData.Linq.Builder
+namespace Community.OData.Linq
 {
     using System;
     using System.ComponentModel;
+
+    using Community.OData.Linq.Builder;
 
     /// <summary>
     /// Provides extension methods for the <see cref="ODataConventionModelBuilder"/> class.

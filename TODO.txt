@@ -8,5 +8,5 @@ exception handling
 +non filterable attributes
 negative scenarious in unit tests
 readme with samples
-nuget package
++nuget package
 github CI

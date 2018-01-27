@@ -32,6 +32,22 @@ namespace Community.OData.Linq.xTests
         }
 
         [Fact]
+        public void OrderByIdCaseInsensitiveDefault()
+        {
+            var result = SimpleClass.CreateQuery().OData().OrderBy("id desc,name").First();
+
+            Assert.Equal(2, result.Id);
+        }
+
+        [Fact]
+        public void OrderByIdCaseSensitiveConfig()
+        {
+            Assert.Throws<ODataException>(
+                () => SimpleClass.CreateQuery().OData(s => s.EnableCaseInsensitive = false).OrderBy("id desc,name"));
+        }
+
+
+        [Fact]
         public void OrderByNotSortable()
         {
             Assert.Throws<ODataException>(() =>

@@ -130,19 +130,22 @@ namespace Community.OData.Linq
             ODataQueryOptionParser queryOptionParser = GetParser(query, entitySetName,
                     new Dictionary<string, string> { { "$orderby", orderbyText } });
 
+            ODataSettings settings = query.ServiceProvider.GetRequiredService<ODataSettings>();
+
+            // Workaround for strange behavior in QueryOptionsParserConfiguration constructor which set it to false always
+            queryOptionParser.Resolver.EnableCaseInsensitive = settings.EnableCaseInsensitive;
+
             var orderByClause = queryOptionParser.ParseOrderBy();
 
             orderByClause = TranslateParameterAlias(orderByClause, queryOptionParser);
-
-            ODataSettings settings = query.ServiceProvider.GetRequiredService<ODataSettings>();
 
             ICollection<OrderByNode> nodes = OrderByNode.CreateCollection(orderByClause);
 
             OrderValidator.Validate(nodes, settings.ValidationSettings, edmModel);
 
-            IOrderedQueryable<T> result = (IOrderedQueryable<T>) OrderApplyToCore<T>(query, settings.QuerySettings, nodes, edmModel);
+            IOrderedQueryable<T> result = (IOrderedQueryable<T>)OrderApplyToCore<T>(query, settings.QuerySettings, nodes, edmModel);
 
-            return new ODataQueryOrdered<T>(result,query.ServiceProvider);
+            return new ODataQueryOrdered<T>(result, query.ServiceProvider);
         }
 
         private static IOrderedQueryable OrderApplyToCore<T>(ODataQuery<T> query, ODataQuerySettings querySettings, ICollection<OrderByNode> nodes, IEdmModel model)

@@ -2,6 +2,8 @@
 {
     using System.Linq;
 
+    using Community.OData.Linq.Annotations;
+
     public class ClassWithLink
     {
         private static readonly ClassWithLink[] items = new[]
@@ -20,5 +22,8 @@
         public string Name { get; set; }
 
         public virtual SimpleClass Link1 { get; set; }
+
+        [NotNavigable]
+        public virtual SimpleClass Link2 { get; set; }
     }
 }

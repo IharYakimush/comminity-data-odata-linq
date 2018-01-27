@@ -203,8 +203,6 @@ namespace Community.OData.Linq.Builder
             return new SingletonConfiguration<TEntityType>(this, this.AddSingleton(name, entity));
         }
 
-        
-        
         /// <summary>
         /// Registers an entity type as part of the model and returns an object that can be used to configure the entity.
         /// This method can be called multiple times for the same entity to perform multiple lines of configuration.
