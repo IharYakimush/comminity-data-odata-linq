@@ -9,4 +9,4 @@ exception handling
 negative scenarious in unit tests
 readme with samples
 +nuget package
-github CI
++github CI
