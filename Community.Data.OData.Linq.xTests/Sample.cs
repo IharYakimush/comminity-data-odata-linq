@@ -1,9 +1,5 @@
-# Community.OData.Linq
-Use text (OData format) expressons in LINQ methods for any IQuerable
-
-# Sample
-Please check simple code below to get started
-```
+﻿namespace Readme
+{
     using System;
     using System.Linq;
     using Community.OData.Linq;
@@ -54,9 +50,4 @@ Please check simple code below to get started
                        }.AsQueryable();
         }
     }
-```
-# Nuget
-https://www.nuget.org/packages/Community.OData.Linq
-
-# Build Status
-[![Build status](https://ci.appveyor.com/api/projects/status/yrmp3074ryce61gb/branch/develop?svg=true)](https://ci.appveyor.com/project/IharYakimush/comminity-data-odata-linq/branch/develop)
+}

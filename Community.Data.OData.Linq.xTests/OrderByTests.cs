@@ -5,6 +5,8 @@ using Xunit;
 
 namespace Community.OData.Linq.xTests
 {
+    using System;
+
     public class OrderByTests
     {
         [Fact]
@@ -47,11 +49,11 @@ namespace Community.OData.Linq.xTests
         }
 
 
-        [Fact]
+        [Fact, Trait("Category", "A")]
         public void OrderByNotSortable()
         {
-            Assert.Throws<ODataException>(() =>
-                SimpleClass.CreateQuery().OData().OrderBy($"{nameof(SimpleClass.NotOrderable)}"));
+            Assert.Throws<ODataException>(
+                () => SimpleClass.CreateQuery().OData().OrderBy($"{nameof(SimpleClass.NotOrderable)}"));
         }
     }
 }
