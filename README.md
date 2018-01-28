@@ -4,7 +4,7 @@ Use text (OData format) expressons in LINQ methods for any IQuerable
 # Sample
 Please check simple code below to get started
 ```
-using System;
+    using System;
     using System.Linq;
     using Community.OData.Linq;
 
