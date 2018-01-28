@@ -1,7 +1,7 @@
-# comminity-odata-linq
+# Community.OData.Linq
 Use text (OData format) expressons in LINQ methods for any IQuerable
 
-# sample
+# Sample
 Please check simple code below to get started
 ```
 using System;
@@ -55,8 +55,8 @@ using System;
         }
     }
 ```
-# nuget
+# Nuget
 https://www.nuget.org/packages/Community.OData.Linq
 
-# build status
+# Build Status
 [![Build status](https://ci.appveyor.com/api/projects/status/yrmp3074ryce61gb/branch/develop?svg=true)](https://ci.appveyor.com/project/IharYakimush/comminity-data-odata-linq/branch/develop)
