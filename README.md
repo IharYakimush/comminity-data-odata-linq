@@ -60,3 +60,6 @@ https://www.nuget.org/packages/Community.OData.Linq
 
 # Build Status
 [![Build status](https://ci.appveyor.com/api/projects/status/yrmp3074ryce61gb/branch/develop?svg=true)](https://ci.appveyor.com/project/IharYakimush/comminity-data-odata-linq/branch/develop)
+
+# References
+Majority of the code was taken from https://github.com/OData/WebApi
