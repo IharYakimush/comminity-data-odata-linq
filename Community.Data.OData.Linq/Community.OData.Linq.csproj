@@ -10,11 +10,13 @@
     <PackageLicenseUrl>https://github.com/IharYakimush/comminity-data-odata-linq/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
     <RepositoryType></RepositoryType>
-    <PackageTags>odata linq filter</PackageTags>
+    <PackageTags>odata filter linq</PackageTags>
     <PackageReleaseNotes />
-    <Description>Use OData text filter in LINQ for any IQuerable without ASP.NET dependency</Description>
+    <Description>Use OData filter text query in linq expresson for any IQuerable without ASP.NET dependency</Description>
     <Company />
     <RepositoryUrl></RepositoryUrl>
+    <Version>1.0.1</Version>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>

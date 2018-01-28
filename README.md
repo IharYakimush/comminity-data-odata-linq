@@ -1,5 +1,5 @@
 # Community.OData.Linq
-Use text (OData format) expressons in LINQ methods for any IQuerable
+Use OData filter text query in linq expresson for any IQuerable without ASP.NET dependency
 
 # Sample
 Please check simple code below to get started
@@ -57,6 +57,9 @@ Please check simple code below to get started
 ```
 # Nuget
 https://www.nuget.org/packages/Community.OData.Linq
+
+# Contribution
+Please feel free to create issues and pool requests to develop branch
 
 # Build Status
 [![Build status](https://ci.appveyor.com/api/projects/status/yrmp3074ryce61gb/branch/develop?svg=true)](https://ci.appveyor.com/project/IharYakimush/comminity-data-odata-linq/branch/develop)
