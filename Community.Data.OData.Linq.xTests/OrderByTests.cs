@@ -52,6 +52,9 @@ namespace Community.OData.Linq.xTests
         {
             Assert.Throws<ODataException>(() =>
                 SimpleClass.CreateQuery().OData().OrderBy($"{nameof(SimpleClass.NotOrderable)}"));
+
+            // Check CI on failed unit test
+            Assert.False(true);
         }
     }
 }
