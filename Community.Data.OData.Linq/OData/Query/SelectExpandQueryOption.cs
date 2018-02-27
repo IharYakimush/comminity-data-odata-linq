@@ -75,7 +75,7 @@ namespace Community.OData.Linq.OData.Query
         }
 
         // This constructor is intended for unit testing only.
-        internal SelectExpandQueryOption(string select, string expand, ODataQueryContext context)
+        private SelectExpandQueryOption(string select, string expand, ODataQueryContext context)
         {
             if (context == null)
             {

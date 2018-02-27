@@ -77,6 +77,7 @@
             else
             {
                 autoSelectRawValue = RawValues.Select;
+                queryParameters["$select"] = autoSelectRawValue;
             }
 
             if (containsAutoSelectExpandProperties)

@@ -24,7 +24,10 @@
         public virtual SimpleClass Link1 { get; set; }
 
         [NotNavigable]
-        [AutoExpand]
         public virtual SimpleClass Link2 { get; set; }
+
+        [AutoExpand]
+        [Select(SelectType = OData.Query.SelectExpandType.Automatic)]
+        public virtual SimpleClass Link3 { get; set; }
     }
 }
