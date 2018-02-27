@@ -5,6 +5,8 @@ namespace Community.OData.Linq.OData.Query
 {
     using System.Collections.Generic;
 
+    using Community.OData.Linq.OData.Query.Expressions;
+
     using Microsoft.OData.Edm;
 
     /// <summary>

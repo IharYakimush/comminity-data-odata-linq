@@ -26,6 +26,18 @@
         private static readonly ODataSimplifiedOptions SimplifiedOptions = new ODataSimplifiedOptions();
 
         /// <summary>
+        /// The query settings default.
+        /// </summary>
+        private static readonly DefaultQuerySettings QuerySettingsDefault =
+            new DefaultQuerySettings
+                {
+                    EnableFilter = true,
+                    EnableOrderBy = true,
+                    EnableExpand = true,
+                    EnableSelect = true
+                };
+
+        /// <summary>
         /// Enable applying OData specific functions to query
         /// </summary>
         /// <param name="query">
@@ -59,7 +71,6 @@
                 if (edmModel.SchemaElements.Count(e => e.SchemaElementKind == EdmSchemaElementKind.EntityContainer) == 0)
                 {
                     throw new ArgumentException("Provided Entity Model have no IEdmEntityContainer", nameof(edmModel));
-
                 }
             }
 
@@ -75,13 +86,15 @@
             container.AddService(typeof(ODataUriResolver), settings.Resolver ?? ODataSettings.DefaultResolver);
             container.AddService(typeof(ODataSimplifiedOptions), SimplifiedOptions);
             container.AddService(typeof(ODataSettings), settings);
+            container.AddService(typeof(DefaultQuerySettings), QuerySettingsDefault);
+            container.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(QuerySettingsDefault));
 
             ODataQuery<T> dataQuery = new ODataQuery<T>(query, container);
 
             return dataQuery;
         }
 
-        public static IQueryable<T> SelectExpand<T>(
+        public static IEnumerable<ISelectExpandWrapper> SelectExpand<T>(
             this ODataQuery<T> query,
             string selectText = null,
             string expandText = null,
@@ -93,8 +106,9 @@
                 entitySetName);
 
             helper.AddAutoSelectExpandProperties();
+            var result = helper.Apply(query);
 
-            return query;
+            return result.OfType<ISelectExpandWrapper>();
         }
 
         public static ODataQuery<T> Filter<T>(this ODataQuery<T> query, string filterText, string entitySetName = null)
@@ -104,13 +118,12 @@
 
             IEdmModel edmModel = query.EdmModel;
 
-            ODataQueryOptionParser queryOptionParser = GetParser(query, entitySetName,
-                new Dictionary<string, string> {{"$filter", filterText}});               
+            ODataQueryOptionParser queryOptionParser = GetParser(
+                query,
+                entitySetName,
+                new Dictionary<string, string> { { "$filter", filterText } });
 
             ODataSettings settings = query.ServiceProvider.GetRequiredService<ODataSettings>();
-
-            // Workaround for strange behavior in QueryOptionsParserConfiguration constructor which set it to false always
-            queryOptionParser.Resolver.EnableCaseInsensitive = settings.EnableCaseInsensitive;
 
             FilterClause filterClause = queryOptionParser.ParseFilter();
             SingleValueNode filterExpression = filterClause.Expression.Accept(
@@ -119,7 +132,7 @@
             filterClause = new FilterClause(filterExpression, filterClause.RangeVariable);
             Contract.Assert(filterClause != null);
 
-            var validator = new FilterQueryValidator(new DefaultQuerySettings { EnableFilter = true });
+            var validator = new FilterQueryValidator(QuerySettingsDefault);
             validator.Validate(filterClause, settings.ValidationSettings, edmModel);
 
             Expression filter = FilterBinder.Bind(query, filterClause, typeof(T), query.ServiceProvider);
@@ -140,16 +153,13 @@
 
             ODataSettings settings = query.ServiceProvider.GetRequiredService<ODataSettings>();
 
-            // Workaround for strange behavior in QueryOptionsParserConfiguration constructor which set it to false always
-            queryOptionParser.Resolver.EnableCaseInsensitive = settings.EnableCaseInsensitive;
-
             var orderByClause = queryOptionParser.ParseOrderBy();
 
             orderByClause = TranslateParameterAlias(orderByClause, queryOptionParser);
 
             ICollection<OrderByNode> nodes = OrderByNode.CreateCollection(orderByClause);
 
-            var validator = new OrderByQueryValidator(new DefaultQuerySettings { EnableOrderBy = true });
+            var validator = new OrderByQueryValidator(QuerySettingsDefault);
             validator.Validate(nodes, settings.ValidationSettings, edmModel);
 
             IOrderedQueryable<T> result = (IOrderedQueryable<T>)OrderByBinder.OrderApplyToCore(query, settings.QuerySettings, nodes, edmModel);
@@ -212,11 +222,14 @@
 
             ODataPath path = new ODataPath(new EntitySetSegment(entitySet));
 
-            return new ODataQueryOptionParser(
-                edmModel,
-                path,
-                raws,
-                query.ServiceProvider);
+            ODataQueryOptionParser parser = new ODataQueryOptionParser(edmModel, path, raws, query.ServiceProvider);
+
+            ODataSettings settings = query.ServiceProvider.GetRequiredService<ODataSettings>();
+
+            // Workaround for strange behavior in QueryOptionsParserConfiguration constructor which set it to false always
+            parser.Resolver.EnableCaseInsensitive = settings.EnableCaseInsensitive;
+
+            return parser;
         }
     }
 }
