@@ -6,7 +6,7 @@
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Linq.Expressions;
-    
+
     using Community.OData.Linq.Builder;
     using Community.OData.Linq.Builder.Validators;
     using Community.OData.Linq.OData;
@@ -79,6 +79,22 @@
             ODataQuery<T> dataQuery = new ODataQuery<T>(query, container);
 
             return dataQuery;
+        }
+
+        public static IQueryable<T> SelectExpand<T>(
+            this ODataQuery<T> query,
+            string selectText = null,
+            string expandText = null,
+            string entitySetName = null)
+        {            
+            SelectExpandHelper<T> helper = new SelectExpandHelper<T>(
+                new ODataRawQueryOptions { Select = selectText, Expand = expandText },
+                query,
+                entitySetName);
+
+            helper.AddAutoSelectExpandProperties();
+
+            return query;
         }
 
         public static ODataQuery<T> Filter<T>(this ODataQuery<T> query, string filterText, string entitySetName = null)
@@ -159,7 +175,7 @@
                 orderBy.RangeVariable);
         }
 
-        private static ODataQueryOptionParser GetParser<T>(ODataQuery<T> query,string entitySetName, Dictionary<string, string> raws)
+        public static ODataQueryOptionParser GetParser<T>(ODataQuery<T> query, string entitySetName, IDictionary<string, string> raws)
         {
             IEdmModel edmModel = query.EdmModel;
 
