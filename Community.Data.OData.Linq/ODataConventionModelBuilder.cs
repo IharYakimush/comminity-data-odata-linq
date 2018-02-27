@@ -46,6 +46,8 @@ namespace Community.OData.Linq
             new NotSortableAttributeEdmPropertyConvention(),
             new UnsortableAttributeEdmPropertyConvention(),
             new NotNavigableAttributeEdmPropertyConvention(),
+            new SelectAttributeEdmTypeConvention(),
+            new SelectAttributeEdmPropertyConvention(),
 
             new MediaTypeAttributeConvention(),
             new AutoExpandAttributeEdmPropertyConvention(),
