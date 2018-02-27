@@ -35,7 +35,7 @@
         }
 
         [Fact]
-        public void ExpandLinkSelect()
+        public void ExpandSelect()
         {
             ISelectExpandWrapper[] result = ClassWithLink.CreateQuery().OData().SelectExpand("Name,Link1", "Link1").ToArray();
 
@@ -44,6 +44,18 @@
             // Not expanded by default
             Assert.Equal(3, metadata.Count);
             Assert.Equal(6, (metadata["Link1"] as ISelectExpandWrapper).ToDictionary().Count);
+        }
+
+        [Fact]
+        public void ExpandLinkSelect()
+        {
+            ISelectExpandWrapper[] result = ClassWithLink.CreateQuery().OData().SelectExpand("Name", "Link1($select=Name)").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            // Not expanded by default
+            Assert.Equal(3, metadata.Count);
+            Assert.Equal(1, (metadata["Link1"] as ISelectExpandWrapper).ToDictionary().Count);
         }
     }
 }
