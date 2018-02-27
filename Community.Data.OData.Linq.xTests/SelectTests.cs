@@ -14,6 +14,16 @@
     public class SelectTests
     {
         [Fact]
+        public void SelectDefault()
+        {
+            ISelectExpandWrapper[] result = SimpleClass.CreateQuery().OData().SelectExpand().ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+   
+            Assert.Equal(6, metadata.Count);
+        }
+
+        [Fact]
         public void SelectName()
         {
             ISelectExpandWrapper[] result = SimpleClass.CreateQuery().OData().SelectExpand("Name").ToArray();

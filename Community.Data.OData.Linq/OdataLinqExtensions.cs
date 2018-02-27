@@ -99,7 +99,8 @@
             string selectText = null,
             string expandText = null,
             string entitySetName = null)
-        {            
+        {
+            selectText = selectText ?? "*";
             SelectExpandHelper<T> helper = new SelectExpandHelper<T>(
                 new ODataRawQueryOptions { Select = selectText, Expand = expandText },
                 query,

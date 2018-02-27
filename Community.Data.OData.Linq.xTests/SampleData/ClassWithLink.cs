@@ -24,6 +24,7 @@
         public virtual SimpleClass Link1 { get; set; }
 
         [NotNavigable]
+        [AutoExpand]
         public virtual SimpleClass Link2 { get; set; }
     }
 }
