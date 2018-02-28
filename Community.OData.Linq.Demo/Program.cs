@@ -16,6 +16,8 @@
 
             ExpandDemo.SelectExpand1();
             ExpandDemo.SelectExpand2();
+
+            SelectExpandJsonDemo.SelectExpandToJson();
         }
     }
 }
