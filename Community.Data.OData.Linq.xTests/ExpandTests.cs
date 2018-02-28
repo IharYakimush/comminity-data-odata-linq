@@ -112,5 +112,20 @@
             Assert.Throws<ODataException>(
                () => ClassWithCollection.CreateQuery().OData().SelectExpand("Name", "Link2($top=101)"));            
         }
+
+        [Fact]
+        public void ExpandCollectionWithFilterAndSelect()
+        {
+            ISelectExpandWrapper[] result = ClassWithCollection.CreateQuery().OData().SelectExpand("Name", "Link2($filter=Id eq 311;$select=Name)").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            // Not expanded by default
+            Assert.Equal(2, metadata.Count);
+            IEnumerable<ISelectExpandWrapper> collection = metadata["Link2"] as IEnumerable<ISelectExpandWrapper>;
+            Assert.Single(collection);
+
+            Assert.Equal(1, collection.Single().ToDictionary().Count);
+        }
     }
 }
