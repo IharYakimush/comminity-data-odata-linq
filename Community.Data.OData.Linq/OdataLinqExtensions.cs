@@ -6,7 +6,7 @@
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Linq.Expressions;
-
+    
     using Community.OData.Linq.Builder;
     using Community.OData.Linq.Builder.Validators;
     using Community.OData.Linq.OData;
