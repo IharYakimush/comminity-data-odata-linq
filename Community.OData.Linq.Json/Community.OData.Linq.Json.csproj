@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>sgn.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>IharYakimush</Authors>
+    <PackageLicenseUrl>https://github.com/IharYakimush/comminity-data-odata-linq/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
+    <RepositoryType></RepositoryType>
+    <PackageTags>odata filter linq json</PackageTags>
+    <PackageReleaseNotes>Json serialization for SelectExpand result</PackageReleaseNotes>
+    <Description>Json serialization for SelectExpand result</Description>
+    <Company />
+    <RepositoryUrl></RepositoryUrl>
+    <Version>1.1.0</Version>
+    <NeutralLanguage>en</NeutralLanguage>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Community.Data.OData.Linq\Community.OData.Linq.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -33,6 +33,21 @@ namespace Community.OData.Linq.OData.Query
             }
         }
 
+        public static ODataQuerySettings UpdateQuerySettings(this ODataQueryContext context, ODataQuerySettings querySettings, IQueryable query)
+        {
+            ODataQuerySettings updatedSettings = new ODataQuerySettings();
+            updatedSettings.CopyFrom(querySettings);
+
+            if (updatedSettings.HandleNullPropagation == HandleNullPropagationOption.Default)
+            {
+                updatedSettings.HandleNullPropagation = query != null
+                                                            ? HandleNullPropagationOptionHelper.GetDefaultHandleNullPropagationOption(query)
+                                                            : HandleNullPropagationOption.True;
+            }
+
+            return updatedSettings;
+        }
+
         public static HandleNullPropagationOption GetDefaultHandleNullPropagationOption(IQueryable query)
         {
             Contract.Assert(query != null);

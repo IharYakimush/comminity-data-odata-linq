@@ -59,7 +59,6 @@
                 if (edmModel.SchemaElements.Count(e => e.SchemaElementKind == EdmSchemaElementKind.EntityContainer) == 0)
                 {
                     throw new ArgumentException("Provided Entity Model have no IEdmEntityContainer", nameof(edmModel));
-
                 }
             }
 
@@ -75,12 +74,80 @@
             container.AddService(typeof(ODataUriResolver), settings.Resolver ?? ODataSettings.DefaultResolver);
             container.AddService(typeof(ODataSimplifiedOptions), SimplifiedOptions);
             container.AddService(typeof(ODataSettings), settings);
+            container.AddService(typeof(DefaultQuerySettings), settings.DefaultQuerySettings);
+            container.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(settings.DefaultQuerySettings));
 
             ODataQuery<T> dataQuery = new ODataQuery<T>(query, container);
 
             return dataQuery;
         }
 
+        /// <summary>
+        /// The select and expand query options.
+        /// </summary>
+        /// <param name="query">
+        /// The OData aware query.
+        /// </param>
+        /// <param name="selectText">
+        /// The $select parameter text.
+        /// </param>
+        /// <param name="expandText">
+        /// The $expand parameter text.
+        /// </param>
+        /// <param name="entitySetName">
+        /// The entity set name.
+        /// </param>
+        /// <typeparam name="T">
+        /// The query type param
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{ISelectExpandWrapper}"/> selection result in specific format.
+        /// </returns>
+        public static IEnumerable<ISelectExpandWrapper> SelectExpand<T>(
+            this ODataQuery<T> query,
+            string selectText = null,
+            string expandText = null,
+            string entitySetName = null)
+        {            
+            SelectExpandHelper<T> helper = new SelectExpandHelper<T>(
+                new ODataRawQueryOptions { Select = selectText, Expand = expandText },
+                query,
+                entitySetName);
+
+            helper.AddAutoSelectExpandProperties();
+            
+            var result = helper.Apply(query);
+
+            // In case of SelectExpand ,ethod was called to convert to ISelectExpandWrapper without actually applying $select and $expand params
+            if (result == query && selectText==null && expandText == null)
+            {
+                return SelectExpand(query, "*", expandText, entitySetName);
+            }
+
+            return result.OfType<ISelectExpandWrapper>();
+        }
+
+        /// <summary>
+        /// The Filter.
+        /// </summary>
+        /// <param name="query">
+        /// The OData aware query.
+        /// </param>
+        /// <param name="filterText">
+        /// The $filter parameter text.
+        /// </param>
+        /// <param name="entitySetName">
+        /// The entity set name.
+        /// </param>
+        /// <typeparam name="T">
+        /// The query type param
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="ODataQuery{T}"/> query with applied filter parameter.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Argument Null Exception
+        /// </exception>
         public static ODataQuery<T> Filter<T>(this ODataQuery<T> query, string filterText, string entitySetName = null)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
@@ -88,13 +155,12 @@
 
             IEdmModel edmModel = query.EdmModel;
 
-            ODataQueryOptionParser queryOptionParser = GetParser(query, entitySetName,
-                new Dictionary<string, string> {{"$filter", filterText}});               
+            ODataQueryOptionParser queryOptionParser = GetParser(
+                query,
+                entitySetName,
+                new Dictionary<string, string> { { "$filter", filterText } });
 
             ODataSettings settings = query.ServiceProvider.GetRequiredService<ODataSettings>();
-
-            // Workaround for strange behavior in QueryOptionsParserConfiguration constructor which set it to false always
-            queryOptionParser.Resolver.EnableCaseInsensitive = settings.EnableCaseInsensitive;
 
             FilterClause filterClause = queryOptionParser.ParseFilter();
             SingleValueNode filterExpression = filterClause.Expression.Accept(
@@ -103,7 +169,7 @@
             filterClause = new FilterClause(filterExpression, filterClause.RangeVariable);
             Contract.Assert(filterClause != null);
 
-            var validator = new FilterQueryValidator(new DefaultQuerySettings { EnableFilter = true });
+            var validator = new FilterQueryValidator(settings.DefaultQuerySettings);
             validator.Validate(filterClause, settings.ValidationSettings, edmModel);
 
             Expression filter = FilterBinder.Bind(query, filterClause, typeof(T), query.ServiceProvider);
@@ -112,20 +178,40 @@
             return new ODataQuery<T>(result, query.ServiceProvider);
         }
 
+        /// <summary>
+        /// The OrderBy.
+        /// </summary>
+        /// <param name="query">
+        /// The OData aware query.
+        /// </param>
+        /// <param name="orderbyText">
+        /// The $orderby parameter text.
+        /// </param>
+        /// <param name="entitySetName">
+        /// The entity set name.
+        /// </param>
+        /// <typeparam name="T">
+        /// The query type param
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="ODataQuery{T}"/> query with applied order by parameter.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Argument Null Exception
+        /// </exception>
         public static IOrderedQueryable<T> OrderBy<T>(this ODataQuery<T> query, string orderbyText, string entitySetName = null)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
             if (orderbyText == null) throw new ArgumentNullException(nameof(orderbyText));
 
             IEdmModel edmModel = query.EdmModel;
-            
-            ODataQueryOptionParser queryOptionParser = GetParser(query, entitySetName,
-                    new Dictionary<string, string> { { "$orderby", orderbyText } });
+
+            ODataQueryOptionParser queryOptionParser = GetParser(
+                query,
+                entitySetName,
+                new Dictionary<string, string> { { "$orderby", orderbyText } });
 
             ODataSettings settings = query.ServiceProvider.GetRequiredService<ODataSettings>();
-
-            // Workaround for strange behavior in QueryOptionsParserConfiguration constructor which set it to false always
-            queryOptionParser.Resolver.EnableCaseInsensitive = settings.EnableCaseInsensitive;
 
             var orderByClause = queryOptionParser.ParseOrderBy();
 
@@ -133,7 +219,7 @@
 
             ICollection<OrderByNode> nodes = OrderByNode.CreateCollection(orderByClause);
 
-            var validator = new OrderByQueryValidator(new DefaultQuerySettings { EnableOrderBy = true });
+            var validator = new OrderByQueryValidator(settings.DefaultQuerySettings);
             validator.Validate(nodes, settings.ValidationSettings, edmModel);
 
             IOrderedQueryable<T> result = (IOrderedQueryable<T>)OrderByBinder.OrderApplyToCore(query, settings.QuerySettings, nodes, edmModel);
@@ -159,7 +245,7 @@
                 orderBy.RangeVariable);
         }
 
-        private static ODataQueryOptionParser GetParser<T>(ODataQuery<T> query,string entitySetName, Dictionary<string, string> raws)
+        public static ODataQueryOptionParser GetParser<T>(ODataQuery<T> query, string entitySetName, IDictionary<string, string> raws)
         {
             IEdmModel edmModel = query.EdmModel;
 
@@ -196,11 +282,14 @@
 
             ODataPath path = new ODataPath(new EntitySetSegment(entitySet));
 
-            return new ODataQueryOptionParser(
-                edmModel,
-                path,
-                raws,
-                query.ServiceProvider);
+            ODataQueryOptionParser parser = new ODataQueryOptionParser(edmModel, path, raws, query.ServiceProvider);
+
+            ODataSettings settings = query.ServiceProvider.GetRequiredService<ODataSettings>();
+
+            // Workaround for strange behavior in QueryOptionsParserConfiguration constructor which set it to false always
+            parser.Resolver.EnableCaseInsensitive = settings.EnableCaseInsensitive;
+
+            return parser;
         }
     }
 }

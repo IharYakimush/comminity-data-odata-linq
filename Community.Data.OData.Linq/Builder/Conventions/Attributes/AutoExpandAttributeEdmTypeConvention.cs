@@ -5,6 +5,7 @@ namespace Community.OData.Linq.Builder.Conventions.Attributes
 {
     using System;
 
+    using Community.OData.Linq.Annotations;
     using Community.OData.Linq.Common;
 
     /// <summary>

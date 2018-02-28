@@ -518,6 +518,97 @@ namespace Community.OData.Linq.OData.Formatter
             return edmTypeReference.Definition;
         }
 
+        public static IEnumerable<IEdmNavigationProperty> GetAutoExpandNavigationProperties(
+            IEdmProperty pathProperty, IEdmStructuredType pathStructuredType, IEdmModel edmModel,
+            bool isSelectPresent = false, ModelBoundQuerySettings querySettings = null)
+        {
+            List<IEdmNavigationProperty> autoExpandNavigationProperties = new List<IEdmNavigationProperty>();
+            IEdmEntityType baseEntityType = pathStructuredType as IEdmEntityType;
+            if (baseEntityType != null)
+            {
+                List<IEdmEntityType> entityTypes = new List<IEdmEntityType>();
+                entityTypes.Add(baseEntityType);
+                entityTypes.AddRange(GetAllDerivedEntityTypes(baseEntityType, edmModel));
+                foreach (var entityType in entityTypes)
+                {
+                    IEnumerable<IEdmNavigationProperty> navigationProperties = entityType == baseEntityType
+                        ? entityType.NavigationProperties()
+                        : entityType.DeclaredNavigationProperties();
+
+                    if (navigationProperties != null)
+                    {
+                        autoExpandNavigationProperties.AddRange(
+                            navigationProperties.Where(
+                                navigationProperty =>
+                                    IsAutoExpand(navigationProperty, pathProperty, entityType, edmModel,
+                                        isSelectPresent, querySettings)));
+                    }
+                }
+            }
+
+            return autoExpandNavigationProperties;
+        }
+
+        public static bool IsAutoExpand(IEdmProperty navigationProperty,
+                                        IEdmProperty pathProperty, IEdmStructuredType pathStructuredType, IEdmModel edmModel,
+                                        bool isSelectPresent = false, ModelBoundQuerySettings querySettings = null)
+        {
+            QueryableRestrictionsAnnotation annotation = GetPropertyRestrictions(navigationProperty, edmModel);
+            if (annotation != null && annotation.Restrictions.AutoExpand)
+            {
+                return !annotation.Restrictions.DisableAutoExpandWhenSelectIsPresent || !isSelectPresent;
+            }
+
+            if (querySettings == null)
+            {
+                querySettings = GetModelBoundQuerySettings(pathProperty, pathStructuredType, edmModel);
+            }
+
+            if (querySettings != null && querySettings.IsAutomaticExpand(navigationProperty.Name))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        
+        public static bool IsNotNavigable(IEdmProperty edmProperty, IEdmModel edmModel)
+        {
+            QueryableRestrictionsAnnotation annotation = GetPropertyRestrictions(edmProperty, edmModel);
+            return annotation == null ? false : annotation.Restrictions.NotNavigable;
+        }
+
+        public static bool IsNotExpandable(IEdmProperty edmProperty, IEdmModel edmModel)
+        {
+            QueryableRestrictionsAnnotation annotation = GetPropertyRestrictions(edmProperty, edmModel);
+            return annotation == null ? false : annotation.Restrictions.NotExpandable;
+        }
+
+        public static bool IsNotCountable(
+            IEdmProperty property,
+            IEdmStructuredType structuredType,
+            IEdmModel edmModel,
+            bool enableCount)
+        {
+            if (property != null)
+            {
+                QueryableRestrictionsAnnotation annotation = GetPropertyRestrictions(property, edmModel);
+                if (annotation != null && annotation.Restrictions.NotCountable)
+                {
+                    return true;
+                }
+            }
+
+            ModelBoundQuerySettings querySettings = GetModelBoundQuerySettings(property, structuredType, edmModel);
+            if (querySettings != null
+                && ((!querySettings.Countable.HasValue && !enableCount) || querySettings.Countable == false))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public static void GetPropertyAndStructuredTypeFromPath(IEnumerable<ODataPathSegment> segments,
             out IEdmProperty property, out IEdmStructuredType structuredType, out string name)
         {
