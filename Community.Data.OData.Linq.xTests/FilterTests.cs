@@ -115,6 +115,13 @@
         }
 
         [Fact]
+        public void WhereByNotMappedThrow()
+        {
+            Assert.Throws<ODataException>(
+                () => SimpleClass.CreateQuery().OData(s => s.EnableCaseInsensitive = false).Filter($"{nameof(SimpleClass.NotMapped)} eq 'nf1'"));
+        }
+
+        [Fact]
         public void WhereByIgnoreDataMemberThrowException()
         {
             Assert.Throws<ODataException>(
