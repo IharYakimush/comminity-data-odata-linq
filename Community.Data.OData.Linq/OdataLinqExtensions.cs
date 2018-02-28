@@ -26,18 +26,6 @@
         private static readonly ODataSimplifiedOptions SimplifiedOptions = new ODataSimplifiedOptions();
 
         /// <summary>
-        /// The query settings default.
-        /// </summary>
-        private static readonly DefaultQuerySettings QuerySettingsDefault =
-            new DefaultQuerySettings
-                {
-                    EnableFilter = true,
-                    EnableOrderBy = true,
-                    EnableExpand = true,
-                    EnableSelect = true
-                };
-
-        /// <summary>
         /// Enable applying OData specific functions to query
         /// </summary>
         /// <param name="query">
@@ -86,8 +74,8 @@
             container.AddService(typeof(ODataUriResolver), settings.Resolver ?? ODataSettings.DefaultResolver);
             container.AddService(typeof(ODataSimplifiedOptions), SimplifiedOptions);
             container.AddService(typeof(ODataSettings), settings);
-            container.AddService(typeof(DefaultQuerySettings), QuerySettingsDefault);
-            container.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(QuerySettingsDefault));
+            container.AddService(typeof(DefaultQuerySettings), settings.DefaultQuerySettings);
+            container.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(settings.DefaultQuerySettings));
 
             ODataQuery<T> dataQuery = new ODataQuery<T>(query, container);
 
@@ -133,7 +121,7 @@
             filterClause = new FilterClause(filterExpression, filterClause.RangeVariable);
             Contract.Assert(filterClause != null);
 
-            var validator = new FilterQueryValidator(QuerySettingsDefault);
+            var validator = new FilterQueryValidator(settings.DefaultQuerySettings);
             validator.Validate(filterClause, settings.ValidationSettings, edmModel);
 
             Expression filter = FilterBinder.Bind(query, filterClause, typeof(T), query.ServiceProvider);
@@ -160,7 +148,7 @@
 
             ICollection<OrderByNode> nodes = OrderByNode.CreateCollection(orderByClause);
 
-            var validator = new OrderByQueryValidator(QuerySettingsDefault);
+            var validator = new OrderByQueryValidator(settings.DefaultQuerySettings);
             validator.Validate(nodes, settings.ValidationSettings, edmModel);
 
             IOrderedQueryable<T> result = (IOrderedQueryable<T>)OrderByBinder.OrderApplyToCore(query, settings.QuerySettings, nodes, edmModel);

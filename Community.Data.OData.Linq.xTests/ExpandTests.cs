@@ -4,7 +4,7 @@
     using System.Linq;
 
     using Community.OData.Linq.xTests.SampleData;
-
+    using Microsoft.OData;
     using Xunit;
 
     public class ExpandTests
@@ -56,6 +56,61 @@
             // Not expanded by default
             Assert.Equal(3, metadata.Count);
             Assert.Equal(1, (metadata["Link1"] as ISelectExpandWrapper).ToDictionary().Count);
+        }
+
+        [Fact]
+        public void ExpandCollection()
+        {
+            ISelectExpandWrapper[] result = ClassWithCollection.CreateQuery().OData().SelectExpand("Name", "Link2").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            // Not expanded by default
+            Assert.Equal(2, metadata.Count);
+            Assert.Equal(2, (metadata["Link2"] as IEnumerable<ISelectExpandWrapper>).Count());
+        }
+
+        [Fact]
+        public void ExpandCollectionWithTop()
+        {
+            ISelectExpandWrapper[] result = ClassWithCollection.CreateQuery().OData().SelectExpand("Name", "Link2($top=1)").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            // Not expanded by default
+            Assert.Equal(2, metadata.Count);
+            Assert.Single((metadata["Link2"] as IEnumerable<ISelectExpandWrapper>));
+        }
+
+        [Fact]
+        public void ExpandCollectionWithTopDefaultPageSize()
+        {
+            ISelectExpandWrapper[] result = ClassWithCollection.CreateQuery().OData(s => s.QuerySettings.PageSize = 1).SelectExpand("Name", "Link2").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            // Not expanded by default
+            Assert.Equal(2, metadata.Count);
+            Assert.Single((metadata["Link2"] as IEnumerable<ISelectExpandWrapper>));
+        }
+
+        [Fact]
+        public void ExpandCollectionWithTop21()
+        {
+            ISelectExpandWrapper[] result = ClassWithCollection.CreateQuery().OData().SelectExpand("Name", "Link2($top=21)").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            // Not expanded by default
+            Assert.Equal(2, metadata.Count);
+            Assert.Equal(2, (metadata["Link2"] as IEnumerable<ISelectExpandWrapper>).Count());
+        }
+
+        [Fact]
+        public void ExpandCollectionWithTopExceedLimit()
+        {
+            Assert.Throws<ODataException>(
+               () => ClassWithCollection.CreateQuery().OData().SelectExpand("Name", "Link2($top=101)"));            
         }
     }
 }

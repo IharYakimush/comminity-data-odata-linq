@@ -96,6 +96,19 @@
         {
             Assert.Throws<ODataException>(
                 () => SimpleClass.CreateQuery().OData().SelectExpand("NameToIgnore"));
-        }        
+        }
+
+        [Fact]
+        public void SelectLinkWithoutExpandNotWorking()
+        {
+            ISelectExpandWrapper[] result = ClassWithLink.CreateQuery().OData().SelectExpand("Link1").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+  
+            Assert.Equal(1, metadata.Count);
+            Assert.Null(metadata["Link3"]);
+        }
+
+        
     }
 }
