@@ -1,8 +1,10 @@
-﻿namespace Community.OData.Linq.Demo
+﻿namespace Demo
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using Community.OData.Linq;
 
     public static class SelectDemo
     {

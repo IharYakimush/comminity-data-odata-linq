@@ -1,10 +1,5 @@
-# Community.OData.Linq
-Use OData filter text query in linq expresson for any IQuerable without ASP.NET dependency
-
-# Sample
-Please check simple code below to get started:
-
-```
+﻿namespace Demo
+{
     using System;
     using System.Linq;
 
@@ -39,20 +34,4 @@ Please check simple code below to get started:
             }
         }
     }
-```
-# Supported OData parameters
-- $filter
-- $orderby
-- $select
-- $expand
-# Nuget
-https://www.nuget.org/packages/Community.OData.Linq
-
-# Contribution
-Please feel free to create issues and pool requests to develop branch
-
-# Build Status
-[![Build status](https://ci.appveyor.com/api/projects/status/yrmp3074ryce61gb/branch/develop?svg=true)](https://ci.appveyor.com/project/IharYakimush/comminity-data-odata-linq/branch/develop)
-
-# References
-Majority of the code was taken from https://github.com/OData/WebApi
+}

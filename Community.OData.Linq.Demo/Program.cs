@@ -1,9 +1,14 @@
-﻿namespace Community.OData.Linq.Demo
+﻿namespace Demo
 {
+    using System;
+
     class Program
     {
         static void Main(string[] args)
         {
+            GetStartedDemo.Demo();
+            Console.WriteLine();
+
             FilterDemo.BySimpleProperties();                        
             FilterDemo.ByRelatedEntity();
             OrderByDemo.BySimpleProperties();

@@ -1,4 +1,4 @@
-﻿namespace Community.OData.Linq.Demo
+﻿namespace Demo
 {
     using System.Collections.Generic;
     using System.Linq;
