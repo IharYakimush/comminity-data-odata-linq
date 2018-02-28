@@ -79,6 +79,16 @@ namespace Community.OData.Linq.OData
             get { return _orderByMethod; }
         }
 
+        public static MethodInfo EnumerableSelectGeneric
+        {
+            get { return _enumerableSelectMethod; }
+        }
+
+        public static MethodInfo EnumerableCountGeneric
+        {
+            get { return _enumerableCountMethod; }
+        }
+
         public static MethodInfo EnumerableOrderByGeneric
         {
             get { return _enumerableOrderByMethod; }

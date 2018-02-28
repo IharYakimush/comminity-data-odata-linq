@@ -4,6 +4,7 @@ using Community.OData.Linq.Annotations;
 namespace Community.OData.Linq.xTests.SampleData
 {
     using System;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
 
     public class SimpleClass
@@ -35,5 +36,8 @@ namespace Community.OData.Linq.xTests.SampleData
 
         [NotSortable]
         public int NotOrderable { get; set; }
+
+        [NotMapped]
+        public int NotMapped { get; set; }
     }    
 }

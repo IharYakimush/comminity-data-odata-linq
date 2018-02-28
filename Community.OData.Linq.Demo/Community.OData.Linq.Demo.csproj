@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Community.Data.OData.Linq\Community.OData.Linq.csproj" />
+    <ProjectReference Include="..\Community.OData.Linq.Json\Community.OData.Linq.Json.csproj" />
+  </ItemGroup>
+
+</Project>

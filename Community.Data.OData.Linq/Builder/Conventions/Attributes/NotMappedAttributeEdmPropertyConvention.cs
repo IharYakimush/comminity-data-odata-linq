@@ -4,7 +4,7 @@
 namespace Community.OData.Linq.Builder.Conventions.Attributes
 {
     using System;
-
+    using System.ComponentModel.DataAnnotations.Schema;
     using Community.OData.Linq.Common;
 
     using Microsoft.OData.Edm;
@@ -19,7 +19,7 @@ namespace Community.OData.Linq.Builder.Conventions.Attributes
 
         private static Func<Attribute, bool> _filter = attribute =>
         {
-            return attribute.GetType().FullName.Equals(EntityFrameworkNotMappedAttributeTypeName, StringComparison.Ordinal);
+            return attribute.GetType() == typeof(NotMappedAttribute);
         };
 
         public NotMappedAttributeConvention()
