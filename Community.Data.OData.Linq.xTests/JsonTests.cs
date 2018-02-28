@@ -14,15 +14,11 @@
     {
         [Fact]
         public void SerializeSelectExpand()
-        {
-            string result = ClassWithCollection.CreateQuery().OData().SelectExpandJsonString("Name", "Link2($filter=Id eq 311;$select=Name)");
-
-            Assert.NotNull(result);
-
+        {            
             JToken token = ClassWithCollection.CreateQuery().OData().SelectExpandJsonToken("Name", "Link2($filter=Id eq 311;$select=Name)");
             Assert.NotNull(token);
 
-            Assert.Equal(result, token.ToString(Formatting.None));
+            Assert.DoesNotContain("ModelID", token.ToString(Formatting.None));
         }
     }
 }

@@ -108,15 +108,21 @@
             string selectText = null,
             string expandText = null,
             string entitySetName = null)
-        {
-            selectText = selectText ?? "*";
+        {            
             SelectExpandHelper<T> helper = new SelectExpandHelper<T>(
                 new ODataRawQueryOptions { Select = selectText, Expand = expandText },
                 query,
                 entitySetName);
 
             helper.AddAutoSelectExpandProperties();
+            
             var result = helper.Apply(query);
+
+            // In case of SelectExpand ,ethod was called to convert to ISelectExpandWrapper without actually applying $select and $expand params
+            if (result == query && selectText==null && expandText == null)
+            {
+                return SelectExpand(query, "*", expandText, entitySetName);
+            }
 
             return result.OfType<ISelectExpandWrapper>();
         }

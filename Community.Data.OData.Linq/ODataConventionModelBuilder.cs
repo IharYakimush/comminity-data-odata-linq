@@ -46,21 +46,27 @@ namespace Community.OData.Linq
             new NotSortableAttributeEdmPropertyConvention(),
             new UnsortableAttributeEdmPropertyConvention(),
             new NotNavigableAttributeEdmPropertyConvention(),
-            new SelectAttributeEdmTypeConvention(),
-            new SelectAttributeEdmPropertyConvention(),
-
+            new NotExpandableAttributeEdmPropertyConvention(),
             new MediaTypeAttributeConvention(),
             new AutoExpandAttributeEdmPropertyConvention(),
             new AutoExpandAttributeEdmTypeConvention(),
             new MaxLengthAttributeEdmPropertyConvention(),
 
+            new ExpandAttributeEdmPropertyConvention(),
+            new ExpandAttributeEdmTypeConvention(),
+
             new OrderByAttributeEdmTypeConvention(),
             new FilterAttributeEdmTypeConvention(),
             new OrderByAttributeEdmPropertyConvention(),
             new FilterAttributeEdmPropertyConvention(),
+            new SelectAttributeEdmTypeConvention(),
+            new SelectAttributeEdmPropertyConvention(),
 
             // INavigationSourceConvention's
-            new AssociationSetDiscoveryConvention()
+
+            new AssociationSetDiscoveryConvention(),
+
+            // IEdmFunctionImportConventions's
         };
 
         // These hashset's keep track of edmtypes/navigation sources for which conventions

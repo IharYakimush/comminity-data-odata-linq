@@ -35,7 +35,7 @@
                 if (this.RawValues.Select != null)
                 {
                     raws["$select"] = this.RawValues.Select;
-                }
+                }                
 
                 if (this.RawValues.Expand != null)
                 {
@@ -77,7 +77,11 @@
             else
             {
                 autoSelectRawValue = RawValues.Select;
-                queryParameters["$select"] = autoSelectRawValue;
+
+                if (autoSelectRawValue != null)
+                {
+                    queryParameters["$select"] = autoSelectRawValue;
+                }
             }
 
             if (containsAutoSelectExpandProperties)
@@ -97,7 +101,7 @@
                     this.SelectExpand.LevelsMaxLiteralExpansionDepth =
                         originalSelectExpand.LevelsMaxLiteralExpansionDepth;
                 }
-            }
+            }            
         }
 
         public IQueryable Apply(ODataQuery<T> query)

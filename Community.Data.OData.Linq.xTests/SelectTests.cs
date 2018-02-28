@@ -24,6 +24,16 @@
         }
 
         [Fact]
+        public void SelectAllt()
+        {
+            ISelectExpandWrapper[] result = SimpleClass.CreateQuery().OData().SelectExpand("*").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            Assert.Equal(6, metadata.Count);
+        }
+
+        [Fact]
         public void SelectName()
         {
             ISelectExpandWrapper[] result = SimpleClass.CreateQuery().OData().SelectExpand("Name").ToArray();
@@ -99,16 +109,23 @@
         }
 
         [Fact]
+        public void SelectDisabled()
+        {
+            ISelectExpandWrapper[] result = ClassWithLink.CreateQuery().OData().SelectExpand("Link4").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            Assert.Equal(0, metadata.Count);
+        }
+
+        [Fact]
         public void SelectLinkWithoutExpandNotWorking()
         {
             ISelectExpandWrapper[] result = ClassWithLink.CreateQuery().OData().SelectExpand("Link1").ToArray();
 
             IDictionary<string, object> metadata = result[0].ToDictionary();
   
-            Assert.Equal(1, metadata.Count);
-            Assert.Null(metadata["Link3"]);
+            Assert.Equal(0, metadata.Count);
         }
-
-        
     }
 }

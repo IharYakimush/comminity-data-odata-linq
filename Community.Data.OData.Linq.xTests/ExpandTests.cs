@@ -10,15 +10,25 @@
     public class ExpandTests
     {
         [Fact]
-        public void DefaultExpand()
+        public void EmptyExpand()
         {
             ISelectExpandWrapper[] result = ClassWithLink.CreateQuery().OData().SelectExpand().ToArray();
 
             IDictionary<string, object> metadata = result[0].ToDictionary();
 
             // Not expanded by default except auto expand attribute
-            Assert.Equal(3, metadata.Count);
-            Assert.Null(metadata["Link3"]);
+            Assert.Equal(2, metadata.Count);
+        }
+
+        [Fact]
+        public void EmptyExpandSelectAll()
+        {
+            ISelectExpandWrapper[] result = ClassWithLink.CreateQuery().OData().SelectExpand("*").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            // Not expanded by default except auto expand attribute
+            Assert.Equal(2, metadata.Count);
         }
 
         [Fact]
@@ -29,7 +39,7 @@
             IDictionary<string, object> metadata = result[0].ToDictionary();
 
             // Not expanded by default
-            Assert.Equal(4, metadata.Count);
+            Assert.Equal(3, metadata.Count);
 
             Assert.Equal(6, (metadata["Link1"] as ISelectExpandWrapper).ToDictionary().Count);
         }
@@ -42,7 +52,7 @@
             IDictionary<string, object> metadata = result[0].ToDictionary();
 
             // Not expanded by default
-            Assert.Equal(3, metadata.Count);
+            Assert.Equal(2, metadata.Count);
             Assert.Equal(6, (metadata["Link1"] as ISelectExpandWrapper).ToDictionary().Count);
         }
 
@@ -54,7 +64,7 @@
             IDictionary<string, object> metadata = result[0].ToDictionary();
 
             // Not expanded by default
-            Assert.Equal(3, metadata.Count);
+            Assert.Equal(2, metadata.Count);
             Assert.Equal(1, (metadata["Link1"] as ISelectExpandWrapper).ToDictionary().Count);
         }
 
@@ -126,6 +136,60 @@
             Assert.Single(collection);
 
             Assert.Equal(1, collection.Single().ToDictionary().Count);
+        }
+
+        [Fact]
+        public void ExpandCollectionWithNotExpandable()
+        {
+            Assert.Throws<ODataException>(
+               () => SampleWithCustomKey.CreateQuery().OData().SelectExpand("Id", "NotExpandableLink"));
+        }
+
+        [Fact]
+        public void ExpandWithAttributes()
+        {
+            ISelectExpandWrapper[] result = SampleWithCustomKey.CreateQuery().OData().SelectExpand().ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            // Not expanded by default
+            Assert.Equal(4, metadata.Count);
+
+            Assert.Equal(6, (metadata["AutoExpandLink"] as ISelectExpandWrapper).ToDictionary().Count);
+            Assert.Equal(6, (metadata["AutoExpandAndSelectLink"] as ISelectExpandWrapper).ToDictionary().Count);
+        }
+
+        [Fact]
+        public void ExpandWithAttributesAndExplicit()
+        {
+            ISelectExpandWrapper[] result = SampleWithCustomKey.CreateQuery().OData().SelectExpand("*", "AutoExpandAndSelectLink").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            // Not expanded by default
+            Assert.Equal(3, metadata.Count);
+
+            Assert.Equal(6, (metadata["AutoExpandAndSelectLink"] as ISelectExpandWrapper).ToDictionary().Count);
+        }
+
+        [Fact]
+        public void ExpandMaxDeepNotExceed()
+        {
+            ISelectExpandWrapper[] result = SampleWithCustomKey.CreateQuery().OData().SelectExpand(null, "RecursiveLink($expand=RecursiveLink)").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            // Not expanded by default
+            Assert.Equal(5, metadata.Count);
+
+            Assert.NotNull(metadata["RecursiveLink"]);
+        }
+
+        [Fact]
+        public void ExpandMaxDeepExceed()
+        {
+            Assert.Throws<ODataException>(
+               () => SampleWithCustomKey.CreateQuery().OData().SelectExpand(null, "RecursiveLink($expand=RecursiveLink($expand=RecursiveLink))"));            
         }
     }
 }

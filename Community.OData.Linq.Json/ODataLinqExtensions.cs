@@ -10,26 +10,7 @@
     using Newtonsoft.Json.Linq;
 
     public static class ODataLinqExtensions
-    {
-        public static string SelectExpandJsonString<T>(
-            this ODataQuery<T> query,            
-            string selectText = null,
-            string expandText = null,
-            Action<JsonSerializer> configureSerializer = null,
-            string entitySetName = null)
-        {            
-            StringBuilder stringBuilder = new StringBuilder();
-            TextWriter textWriter = new StringWriter(stringBuilder);
-            using (textWriter)
-            {
-                JsonWriter writer = new JsonTextWriter(textWriter);
-
-                SelectExpandJson(query, writer, selectText, expandText, configureSerializer, entitySetName);
-
-                return stringBuilder.ToString();
-            }
-        }
-
+    {        
         public static JToken SelectExpandJsonToken<T>(
             this ODataQuery<T> query,
             string selectText = null,
