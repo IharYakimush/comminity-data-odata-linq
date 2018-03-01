@@ -1,3 +1,4 @@
+
 # Community.OData.Linq
 Use OData filter text query in linq expresson for any IQuerable without ASP.NET dependency
 
@@ -40,6 +41,9 @@ Please check simple code below to get started:
         }
     }
 ```
+# Advanced code samples at wiki
+https://github.com/IharYakimush/comminity-data-odata-linq/wiki
+
 # Supported OData parameters
 - $filter
 - $orderby
