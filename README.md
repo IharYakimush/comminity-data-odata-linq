@@ -3,7 +3,9 @@ Use OData filter text query in linq expresson for any IQuerable without ASP.NET 
 
 # Sample
 Please check simple code below to get started:
-
+### .NET Fiddle
+https://dotnetfiddle.net/7Ndwot
+### Code
 ```
     using System;
     using System.Linq;
