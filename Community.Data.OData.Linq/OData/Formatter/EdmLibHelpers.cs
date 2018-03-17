@@ -12,7 +12,7 @@ namespace Community.OData.Linq.OData.Formatter
     using System.Linq;
     using System.Reflection;
     using System.Xml.Linq;
-
+    using Community.OData.Linq.Builder;
     using Community.OData.Linq.Common;
     using Community.OData.Linq.OData.Query;
     using Community.OData.Linq.OData.Query.Expressions;
@@ -705,12 +705,12 @@ namespace Community.OData.Linq.OData.Formatter
                 throw Error.ArgumentNull("edmModel");
             }
 
-            //DynamicPropertyDictionaryAnnotation annotation =
-            //    edmModel.GetAnnotationValue<DynamicPropertyDictionaryAnnotation>(edmType);
-            //if (annotation != null)
-            //{
-            //    return annotation.PropertyInfo;
-            //}
+            DynamicPropertyDictionaryAnnotation annotation =
+                edmModel.GetAnnotationValue<DynamicPropertyDictionaryAnnotation>(edmType);
+            if (annotation != null)
+            {
+                return annotation.PropertyInfo;
+            }
 
             return null;
         }
