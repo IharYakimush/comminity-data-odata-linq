@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.OData.Linq", "Community.Data.OData.Linq\Community.OData.Linq.csproj", "{0EA4A9B7-BEE7-4500-8676-0B18E7B369D2}"
 EndProject
@@ -10,13 +10,17 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CBF15A2-B552-47EB-B2A1-475E4B05A4CA}"
 	ProjectSection(SolutionItems) = preProject
 		build.ps1 = build.ps1
+		docker-compose.yml = docker-compose.yml
 		LICENSE = LICENSE
+		localEnv.ps1 = localEnv.ps1
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Community.OData.Linq.Demo", "Community.OData.Linq.Demo\Community.OData.Linq.Demo.csproj", "{DE428072-2C49-4F4A-8F2E-DB976C0BC797}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.OData.Linq.Demo", "Community.OData.Linq.Demo\Community.OData.Linq.Demo.csproj", "{DE428072-2C49-4F4A-8F2E-DB976C0BC797}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Community.OData.Linq.Json", "Community.OData.Linq.Json\Community.OData.Linq.Json.csproj", "{6C454F01-28D1-49B1-BE98-244E5DA2D095}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.OData.Linq.Json", "Community.OData.Linq.Json\Community.OData.Linq.Json.csproj", "{6C454F01-28D1-49B1-BE98-244E5DA2D095}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Community.OData.Linq.EF6Tests", "Community.OData.Linq.EF6Tests\Community.OData.Linq.EF6Tests.csproj", "{F034D1D8-D44A-4B0E-96C4-855F30B239BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +53,12 @@ Global
 		{6C454F01-28D1-49B1-BE98-244E5DA2D095}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C454F01-28D1-49B1-BE98-244E5DA2D095}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C454F01-28D1-49B1-BE98-244E5DA2D095}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F034D1D8-D44A-4B0E-96C4-855F30B239BA}.CodeAnalysis|Any CPU.ActiveCfg = Debug|Any CPU
+		{F034D1D8-D44A-4B0E-96C4-855F30B239BA}.CodeAnalysis|Any CPU.Build.0 = Debug|Any CPU
+		{F034D1D8-D44A-4B0E-96C4-855F30B239BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F034D1D8-D44A-4B0E-96C4-855F30B239BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F034D1D8-D44A-4B0E-96C4-855F30B239BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F034D1D8-D44A-4B0E-96C4-855F30B239BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
