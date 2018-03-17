@@ -3,7 +3,9 @@ Use OData filter text query in linq expresson for any IQuerable without ASP.NET 
 
 # Sample
 Please check simple code below to get started:
-
+### .NET Fiddle
+https://dotnetfiddle.net/7Ndwot
+### Code
 ```
     using System;
     using System.Linq;
@@ -40,13 +42,18 @@ Please check simple code below to get started:
         }
     }
 ```
+# Advanced code samples at wiki
+https://github.com/IharYakimush/comminity-data-odata-linq/wiki
+
 # Supported OData parameters
 - $filter
 - $orderby
 - $select
 - $expand
+
 # Nuget
-https://www.nuget.org/packages/Community.OData.Linq
+- https://www.nuget.org/packages/Community.OData.Linq
+- https://www.nuget.org/packages/Community.OData.Linq.Json
 
 # Contribution
 Please feel free to create issues and pool requests to develop branch

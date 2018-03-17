@@ -118,13 +118,13 @@
             
             var result = helper.Apply(query);
 
-            // In case of SelectExpand ,ethod was called to convert to ISelectExpandWrapper without actually applying $select and $expand params
+            // In case of SelectExpand ,method was called to convert to ISelectExpandWrapper without actually applying $select and $expand params
             if (result == query && selectText==null && expandText == null)
             {
                 return SelectExpand(query, "*", expandText, entitySetName);
             }
 
-            return result.OfType<ISelectExpandWrapper>();
+            return Enumerate<ISelectExpandWrapper>(result);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@
         /// <exception cref="ArgumentNullException">
         /// Argument Null Exception
         /// </exception>
-        public static IOrderedQueryable<T> OrderBy<T>(this ODataQuery<T> query, string orderbyText, string entitySetName = null)
+        public static ODataQueryOrdered<T> OrderBy<T>(this ODataQuery<T> query, string orderbyText, string entitySetName = null)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
             if (orderbyText == null) throw new ArgumentNullException(nameof(orderbyText));
@@ -226,6 +226,16 @@
 
             return new ODataQueryOrdered<T>(result, query.ServiceProvider);
         }        
+
+        private static IEnumerable<T> Enumerate<T>(IQueryable queryable) where T : class
+        {
+            var enumerator = queryable.GetEnumerator();
+
+            while (enumerator.MoveNext())
+            {
+                yield return enumerator.Current as T;
+            }
+        }
 
         private static OrderByClause TranslateParameterAlias(OrderByClause orderBy, ODataQueryOptionParser queryOptionParser)
         {
