@@ -2,10 +2,14 @@
 {
     using System;
 
+    using Community.OData.Linq;
+
     class Program
     {
         static void Main(string[] args)
         {
+            ODataSettings.SetInitializer(s => s.ValidationSettings.MaxTop = 1000);
+
             GetStartedDemo.Demo();
             Console.WriteLine();
 

@@ -31,7 +31,7 @@ https://dotnetfiddle.net/7Ndwot
                 };
             IQueryable<Entity> query = items.AsQueryable();
 
-            var result = query.OData().Filter("Id eq 1 or Name eq 'n3'").OrderBy("Name desc").ToArray();
+            var result = query.OData().Filter("Id eq 1 or Name eq 'n3'").OrderBy("Name desc").TopSkip("10", "0").ToArray();
 
             // Id: 3 Name: n3
             // Id: 1 Name: n1
@@ -50,6 +50,8 @@ https://github.com/IharYakimush/comminity-data-odata-linq/wiki
 - $orderby
 - $select
 - $expand
+- $top
+- $skip
 
 # Nuget
 - https://www.nuget.org/packages/Community.OData.Linq
