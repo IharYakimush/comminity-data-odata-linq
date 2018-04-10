@@ -10,7 +10,7 @@
     <PackageLicenseUrl>https://github.com/IharYakimush/comminity-data-odata-linq/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
     <RepositoryType></RepositoryType>
-    <PackageTags>odata filter linq</PackageTags>
+    <PackageTags>odata filter linq netstandard</PackageTags>
     <PackageReleaseNotes>Added support for $top and $skip parameters</PackageReleaseNotes>
     <Description>Use OData filter text query in linq expresson for any IQuerable without ASP.NET dependency. Support netstandard2.0</Description>
     <Company />
