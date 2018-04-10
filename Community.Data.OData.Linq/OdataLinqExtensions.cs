@@ -9,9 +9,11 @@
     
     using Community.OData.Linq.Builder;
     using Community.OData.Linq.Builder.Validators;
+    using Community.OData.Linq.Common;
     using Community.OData.Linq.OData;
     using Community.OData.Linq.OData.Query;
-    using Community.OData.Linq.OData.Query.Expressions;    
+    using Community.OData.Linq.OData.Query.Expressions;
+    using Community.OData.Linq.Properties;
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.OData;
@@ -127,28 +129,72 @@
             return Enumerate<ISelectExpandWrapper>(result);
         }
 
+        public static ODataQuery<T> TopSkip<T>(this ODataQuery<T> query, string topText = null, string skipText = null, string entitySetName = null)
+        {
+            if (query == null) throw new ArgumentNullException(nameof(query));            
+
+            ODataSettings settings = query.ServiceProvider.GetRequiredService<ODataSettings>();
+
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+
+            if (topText != null)
+            {
+                dictionary.Add("$top", topText);                
+            }
+
+            if (skipText != null)
+            {
+                dictionary.Add("$skip", skipText);
+            }
+
+            ODataQueryOptionParser queryOptionParser = GetParser(
+                query,
+                entitySetName,
+                dictionary);
+
+            long? skip = queryOptionParser.ParseSkip();
+            long? top = queryOptionParser.ParseTop();
+
+            if (skip.HasValue || top.HasValue || settings.QuerySettings.PageSize.HasValue)
+            {
+                IQueryable<T> result = TopSkipHelper.ApplySkipWithValidation(query, skip, settings);
+                if (top.HasValue)
+                {
+                    result = TopSkipHelper.ApplyTopWithValidation(result, top, settings);
+                }
+                else
+                {
+                    result = TopSkipHelper.ApplyTopWithValidation(result, settings.QuerySettings.PageSize, settings);
+                }
+
+                return new ODataQuery<T>(result, query.ServiceProvider);
+            }
+
+            return query;
+        }
+
         /// <summary>
-        /// The Filter.
-        /// </summary>
-        /// <param name="query">
-        /// The OData aware query.
-        /// </param>
-        /// <param name="filterText">
-        /// The $filter parameter text.
-        /// </param>
-        /// <param name="entitySetName">
-        /// The entity set name.
-        /// </param>
-        /// <typeparam name="T">
-        /// The query type param
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="ODataQuery{T}"/> query with applied filter parameter.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// Argument Null Exception
-        /// </exception>
-        public static ODataQuery<T> Filter<T>(this ODataQuery<T> query, string filterText, string entitySetName = null)
+            /// The Filter.
+            /// </summary>
+            /// <param name="query">
+            /// The OData aware query.
+            /// </param>
+            /// <param name="filterText">
+            /// The $filter parameter text.
+            /// </param>
+            /// <param name="entitySetName">
+            /// The entity set name.
+            /// </param>
+            /// <typeparam name="T">
+            /// The query type param
+            /// </typeparam>
+            /// <returns>
+            /// The <see cref="ODataQuery{T}"/> query with applied filter parameter.
+            /// </returns>
+            /// <exception cref="ArgumentNullException">
+            /// Argument Null Exception
+            /// </exception>
+            public static ODataQuery<T> Filter<T>(this ODataQuery<T> query, string filterText, string entitySetName = null)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
             if (filterText == null) throw new ArgumentNullException(nameof(filterText));
@@ -161,7 +207,7 @@
                 new Dictionary<string, string> { { "$filter", filterText } });
 
             ODataSettings settings = query.ServiceProvider.GetRequiredService<ODataSettings>();
-
+            
             FilterClause filterClause = queryOptionParser.ParseFilter();
             SingleValueNode filterExpression = filterClause.Expression.Accept(
                 new ParameterAliasNodeTranslator(queryOptionParser.ParameterAliasNodes)) as SingleValueNode;
@@ -225,7 +271,7 @@
             IOrderedQueryable<T> result = (IOrderedQueryable<T>)OrderByBinder.OrderApplyToCore(query, settings.QuerySettings, nodes, edmModel);
 
             return new ODataQueryOrdered<T>(result, query.ServiceProvider);
-        }        
+        }
 
         private static IEnumerable<T> Enumerate<T>(IQueryable queryable) where T : class
         {
