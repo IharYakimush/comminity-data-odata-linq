@@ -173,28 +173,70 @@
             return query;
         }
 
+        public static IQueryable<T> ApplyRawQueryOptionsWithoutSelectExpand<T>(
+            this ODataQuery<T> query,
+            IODataRawQueryOptions rawQueryOptions,
+            string entitySetName = null)
+        {
+            return ApplyRawQueryOptionsWithoutSelectExpandInternal(query, rawQueryOptions, entitySetName);
+        }
+
+        public static IEnumerable<ISelectExpandWrapper> ApplyRawQueryOptionsWithSelectExpand<T>(
+            this ODataQuery<T> query,
+            IODataRawQueryOptions rawQueryOptions,
+            string entitySetName = null)
+        {
+            return ApplyRawQueryOptionsWithoutSelectExpandInternal(query, rawQueryOptions, entitySetName).SelectExpand(
+                rawQueryOptions.Select,
+                rawQueryOptions.Expand,
+                entitySetName);
+        }
+
+        private static ODataQuery<T> ApplyRawQueryOptionsWithoutSelectExpandInternal<T>(ODataQuery<T> query, IODataRawQueryOptions rawQueryOptions, string entitySetName)
+        {
+            if (query == null) throw new ArgumentNullException(nameof(query));
+            if (rawQueryOptions == null) throw new ArgumentNullException(nameof(rawQueryOptions));
+
+            if (rawQueryOptions.Filters != null)
+            {
+                foreach (string filter in rawQueryOptions.Filters)
+                {
+                    query = query.Filter(filter, entitySetName);
+                }                
+            }
+
+            if (rawQueryOptions.OrderBy != null)
+            {
+                query = query.OrderBy(rawQueryOptions.OrderBy, entitySetName);
+            }
+
+            query = query.TopSkip(rawQueryOptions.Top, rawQueryOptions.Skip);
+
+            return query;
+        }
+
         /// <summary>
-            /// The Filter.
-            /// </summary>
-            /// <param name="query">
-            /// The OData aware query.
-            /// </param>
-            /// <param name="filterText">
-            /// The $filter parameter text.
-            /// </param>
-            /// <param name="entitySetName">
-            /// The entity set name.
-            /// </param>
-            /// <typeparam name="T">
-            /// The query type param
-            /// </typeparam>
-            /// <returns>
-            /// The <see cref="ODataQuery{T}"/> query with applied filter parameter.
-            /// </returns>
-            /// <exception cref="ArgumentNullException">
-            /// Argument Null Exception
-            /// </exception>
-            public static ODataQuery<T> Filter<T>(this ODataQuery<T> query, string filterText, string entitySetName = null)
+        /// The Filter.
+        /// </summary>
+        /// <param name="query">
+        /// The OData aware query.
+        /// </param>
+        /// <param name="filterText">
+        /// The $filter parameter text.
+        /// </param>
+        /// <param name="entitySetName">
+        /// The entity set name.
+        /// </param>
+        /// <typeparam name="T">
+        /// The query type param
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="ODataQuery{T}"/> query with applied filter parameter.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Argument Null Exception
+        /// </exception>
+        public static ODataQuery<T> Filter<T>(this ODataQuery<T> query, string filterText, string entitySetName = null)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
             if (filterText == null) throw new ArgumentNullException(nameof(filterText));

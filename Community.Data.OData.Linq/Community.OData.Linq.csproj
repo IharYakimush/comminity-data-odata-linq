@@ -11,14 +11,14 @@
     <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
     <RepositoryType></RepositoryType>
     <PackageTags>odata filter linq netstandard</PackageTags>
-    <PackageReleaseNotes>Added support for $top and $skip parameters</PackageReleaseNotes>
+    <PackageReleaseNotes>Add support for ApplyRawQueryOptionsWithSelectExpand and ApplyRawQueryOptionsWithoutSelectExpand</PackageReleaseNotes>
     <Description>Use OData filter text query in linq expresson for any IQuerable without ASP.NET dependency. Support netstandard2.0</Description>
     <Company />
     <RepositoryUrl></RepositoryUrl>
-    <Version>1.3.0</Version>
+    <Version>1.4.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.3.0.0</AssemblyVersion>
-    <FileVersion>1.3.0.0</FileVersion>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
+    <FileVersion>1.4.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
