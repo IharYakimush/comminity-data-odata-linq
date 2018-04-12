@@ -44,7 +44,7 @@ https://dotnetfiddle.net/7Ndwot
 ```
 ### ASP.NET Core 2.0
 ```
-	using System.Linq;
+    using System.Linq;
 
     using Community.OData.Linq;
     using Community.OData.Linq.AspNetCore;
@@ -56,7 +56,7 @@ https://dotnetfiddle.net/7Ndwot
 
     using Newtonsoft.Json.Linq;
 
-	public class Entity
+    public class Entity
     {
         public int Id { get; set; }
 
@@ -88,7 +88,7 @@ https://dotnetfiddle.net/7Ndwot
                 return this.BadRequest(e.Message);
             }
         }
-	}
+    }
 ```
 # Advanced code samples at wiki
 https://github.com/IharYakimush/comminity-data-odata-linq/wiki
