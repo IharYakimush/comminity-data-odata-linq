@@ -2,13 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.4.0</Version>
+    <SignAssembly>true</SignAssembly>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <AssemblyOriginatorKeyFile>sgn.snk</AssemblyOriginatorKeyFile>
     <Authors>IharYakimush</Authors>
     <PackageLicenseUrl>https://github.com/IharYakimush/comminity-data-odata-linq/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
     <PackageTags>odata linq aspnetcore</PackageTags>
     <Description>OData linq for ASP.NET Core 2.0</Description>
     <PackageReleaseNotes>IModelBinder and IModelBinderProvider for ODataQueryOptions.</PackageReleaseNotes>
+    <NeutralLanguage>en</NeutralLanguage>
+    <RepositoryUrl></RepositoryUrl>
+    <Version>1.4.0</Version>
+    <NeutralLanguage>en</NeutralLanguage>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
+    <FileVersion>1.4.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
