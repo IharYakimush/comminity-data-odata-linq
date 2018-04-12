@@ -104,6 +104,7 @@ https://github.com/IharYakimush/comminity-data-odata-linq/wiki
 # Nuget
 - https://www.nuget.org/packages/Community.OData.Linq
 - https://www.nuget.org/packages/Community.OData.Linq.Json
+- https://www.nuget.org/packages/Community.OData.Linq.AspNetCore
 
 # Contribution
 Please feel free to create issues and pool requests to develop branch
