@@ -1,19 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>sgn.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <AssemblyOriginatorKeyFile>sgn.snk</AssemblyOriginatorKeyFile>
     <Authors>IharYakimush</Authors>
     <PackageLicenseUrl>https://github.com/IharYakimush/comminity-data-odata-linq/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
-    <RepositoryType></RepositoryType>
-    <PackageTags>odata filter linq json</PackageTags>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <Description>Json serialization for SelectExpand result</Description>
-    <Company />
+    <PackageTags>odata linq aspnetcore</PackageTags>
+    <Description>OData linq for ASP.NET Core 2.0</Description>
+    <PackageReleaseNotes>IModelBinder and IModelBinderProvider for ODataQueryOptions.</PackageReleaseNotes>
+    <NeutralLanguage>en</NeutralLanguage>
     <RepositoryUrl></RepositoryUrl>
     <Version>1.4.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
@@ -22,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
