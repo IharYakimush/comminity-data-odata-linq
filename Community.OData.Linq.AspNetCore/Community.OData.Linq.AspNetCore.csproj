@@ -7,7 +7,7 @@
     <PackageLicenseUrl>https://github.com/IharYakimush/comminity-data-odata-linq/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
     <PackageTags>odata linq aspnetcore</PackageTags>
-    <Description>ASP.NET Core use OData query parameters in linq expressons</Description>
+    <Description>OData linq for ASP.NET Core 2.0</Description>
     <PackageReleaseNotes>IModelBinder and IModelBinderProvider for ODataQueryOptions.</PackageReleaseNotes>
   </PropertyGroup>
 

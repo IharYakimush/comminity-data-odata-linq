@@ -1,11 +1,11 @@
 # Community.OData.Linq
-Use OData filter text query in linq expresson for any IQuerable without ASP.NET dependency
+Use OData filter text query in linq expresson for any IQuerable. Support web and desktop applications.
 
 # Sample
-Please check simple code below to get started:
+Please check samples below to get started:
 ### .NET Fiddle
 https://dotnetfiddle.net/7Ndwot
-### Code
+### Console app
 ```
     using System;
     using System.Linq;
@@ -41,6 +41,54 @@ https://dotnetfiddle.net/7Ndwot
             }
         }
     }
+```
+### ASP.NET Core 2.0
+```
+	using System.Linq;
+
+    using Community.OData.Linq;
+    using Community.OData.Linq.AspNetCore;
+
+    using Community.OData.Linq.Json;
+
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.OData;
+
+    using Newtonsoft.Json.Linq;
+
+	public class Entity
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+    }
+
+    public class ValuesController : Controller
+    {
+        [Route("/v1")]
+        [HttpGet]
+        public IActionResult Get(ODataQueryOptions queryOptions)
+        {
+            if (queryOptions == null && !this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            IQueryable<Entity> data = Enumerable.Range(1, 10)
+                .Select(i => new Entity { Id = i, Name = $"n{i}" })
+                .ToArray()
+                .AsQueryable();
+            try
+            {
+                JToken result = data.OData().ApplyQueryOptions(queryOptions).ToJson();
+                return this.Ok(result);
+            }
+            catch (ODataException e)
+            {
+                return this.BadRequest(e.Message);
+            }
+        }
+	}
 ```
 # Advanced code samples at wiki
 https://github.com/IharYakimush/comminity-data-odata-linq/wiki

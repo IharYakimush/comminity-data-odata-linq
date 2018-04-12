@@ -20,5 +20,14 @@
 
             Assert.DoesNotContain("ModelID", token.ToString(Formatting.None));
         }
+
+        [Fact]
+        public void SerializeSelectExpand2()
+        {
+            JToken token = ClassWithCollection.CreateQuery().OData().SelectExpand("Name", "Link2($filter=Id eq 311;$select=Name)").ToJson();
+            Assert.NotNull(token);
+
+            Assert.DoesNotContain("ModelID", token.ToString(Formatting.None));
+        }
     }
 }

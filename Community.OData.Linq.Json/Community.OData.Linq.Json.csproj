@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
     <RepositoryType></RepositoryType>
     <PackageTags>odata filter linq json</PackageTags>
-    <PackageReleaseNotes>Add support for ODataRawQueryOptions in Select methods</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <Description>Json serialization for SelectExpand result</Description>
     <Company />
     <RepositoryUrl></RepositoryUrl>

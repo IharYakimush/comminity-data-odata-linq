@@ -6,13 +6,12 @@
     using System.Linq;
     using System.Text;
 
-    using Community.OData.Linq.OData.Query;
-
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
     public static class ODataLinqExtensions
-    {        
+    {
+        [Obsolete("Use query.SelectExpand(...).ToJson(...) instead")]
         public static JToken SelectExpandJsonToken<T>(
             this ODataQuery<T> query,
             string selectText = null,
@@ -20,15 +19,10 @@
             Action<JsonSerializer> configureSerializer = null,
             string entitySetName = null)
         {
-            JTokenWriter writer = new JTokenWriter();
-            using (writer)
-            {
-                SelectExpandJson(query, writer, selectText, expandText, configureSerializer, entitySetName);
-
-                return writer.Token;
-            }            
+            return query.SelectExpand(selectText, expandText, entitySetName).ToJson(configureSerializer);
         }
 
+        [Obsolete("Use query.SelectExpand(...).ToJson(...) instead")]
         public static void SelectExpandJson<T>(
             this ODataQuery<T> query,
             JsonWriter writer,
@@ -37,52 +31,57 @@
             Action<JsonSerializer> configureSerializer = null,
             string entitySetName = null)
         {
-            ISelectExpandWrapper[] result = query.SelectExpand(selectText, expandText, entitySetName).ToArray();
-
-            WriteToSerializer(writer, configureSerializer, result);
+            query.SelectExpand(selectText, expandText, entitySetName).ToJson(writer, configureSerializer);
         }
 
-        private static void WriteToSerializer(JsonWriter writer, Action<JsonSerializer> configureSerializer, ISelectExpandWrapper[] result)
+        /// <summary>
+        /// The to Json.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="configureSerializer">
+        /// The configure serializer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="JToken"/>.
+        /// </returns>
+        public static JToken ToJson(this IEnumerable<ISelectExpandWrapper> value, Action<JsonSerializer> configureSerializer = null)
+        {
+            JTokenWriter writer = new JTokenWriter();
+            using (writer)
+            {
+                value.ToJson(writer, configureSerializer);
+
+                return writer.Token;
+            }
+        }
+
+        /// <summary>
+        /// The to json.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="writer">
+        /// The writer.
+        /// </param>
+        /// <param name="configureSerializer">
+        /// The configure serializer.
+        /// </param>
+        public static void ToJson(this IEnumerable<ISelectExpandWrapper> value, JsonWriter writer, Action<JsonSerializer> configureSerializer = null)
+        {
+            WriteToSerializer(writer, configureSerializer, value);
+        }
+
+        private static void WriteToSerializer(JsonWriter writer, Action<JsonSerializer> configureSerializer, IEnumerable<ISelectExpandWrapper> result)
         {
             JsonSerializer serializer = new JsonSerializer();
 
             configureSerializer?.Invoke(serializer);
             serializer.Converters.Add(new SelectExpandWrapperConverter());
 
-            serializer.Serialize(writer, result);
-        }
-
-        public static JToken ApplyRawQueryOptionsWithSelectExpandJsonToken<T>(
-            this ODataQuery<T> query,
-            IODataRawQueryOptions rawQueryOptions,
-            Action<JsonSerializer> configureSerializer = null,
-            string entitySetName = null)
-        {
-            JTokenWriter writer = new JTokenWriter();
-            using (writer)
-            {
-                ApplyRawQueryOptionsWithSelectExpandJson(
-                    query,
-                    writer,
-                    rawQueryOptions,
-                    configureSerializer,
-                    entitySetName);
-
-                return writer.Token;
-            }
-        }
-
-        public static void ApplyRawQueryOptionsWithSelectExpandJson<T>(
-            this ODataQuery<T> query,
-            JsonWriter writer,
-            IODataRawQueryOptions rawQueryOptions,
-            Action<JsonSerializer> configureSerializer = null,
-            string entitySetName = null)
-        {
-            ISelectExpandWrapper[] result = query.ApplyRawQueryOptionsWithSelectExpand(rawQueryOptions, entitySetName)
-                .ToArray();
-
-            WriteToSerializer(writer, configureSerializer, result);
+            serializer.Serialize(writer, result.ToArray());
         }
     }
 }

@@ -12,7 +12,7 @@
     [DataContract]
     [Serializable]
     [ModelBinder(BinderType = typeof(ODataQueryOptionsModelBinder))]
-    public class ODataQueryOptions : ODataRawQueryOptions, IODataRawQueryOptions
+    public class ODataQueryOptions : ODataRawQueryOptions, IODataQueryOptions
     {
         public IReadOnlyCollection<string> Filters { get; set; }
 

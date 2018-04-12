@@ -1,6 +1,6 @@
 ﻿namespace Community.OData.Linq.AspNetCore.IntegrationTests
 {
-    public class SampleData
+    public class Entity
     {
         public int Id { get; set; }
 

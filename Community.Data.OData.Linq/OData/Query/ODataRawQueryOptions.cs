@@ -13,13 +13,13 @@ namespace Community.OData.Linq.OData.Query
     /// </summary>
     [DataContract]
     [Serializable]
-    public class ODataRawQueryOptions : IODataRawQueryOptions
+    public class ODataRawQueryOptions : IODataQueryOptions
     {
         /// <summary>
         ///  Gets the raw $filter query value from the incoming request Uri if exists.
         /// </summary>
         [IgnoreDataMember]
-        IReadOnlyCollection<string> IODataRawQueryOptions.Filters
+        IReadOnlyCollection<string> IODataQueryOptions.Filters
         {
             get
             {

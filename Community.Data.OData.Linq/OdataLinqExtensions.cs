@@ -173,26 +173,26 @@
             return query;
         }
 
-        public static IQueryable<T> ApplyRawQueryOptionsWithoutSelectExpand<T>(
+        public static IQueryable<T> ApplyQueryOptionsWithoutSelectExpand<T>(
             this ODataQuery<T> query,
-            IODataRawQueryOptions rawQueryOptions,
+            IODataQueryOptions rawQueryOptions,
             string entitySetName = null)
         {
-            return ApplyRawQueryOptionsWithoutSelectExpandInternal(query, rawQueryOptions, entitySetName);
+            return ApplyQueryOptionsInternal(query, rawQueryOptions, entitySetName);
         }
 
-        public static IEnumerable<ISelectExpandWrapper> ApplyRawQueryOptionsWithSelectExpand<T>(
+        public static IEnumerable<ISelectExpandWrapper> ApplyQueryOptions<T>(
             this ODataQuery<T> query,
-            IODataRawQueryOptions rawQueryOptions,
+            IODataQueryOptions rawQueryOptions,
             string entitySetName = null)
         {
-            return ApplyRawQueryOptionsWithoutSelectExpandInternal(query, rawQueryOptions, entitySetName).SelectExpand(
+            return ApplyQueryOptionsInternal(query, rawQueryOptions, entitySetName).SelectExpand(
                 rawQueryOptions.Select,
                 rawQueryOptions.Expand,
                 entitySetName);
         }
 
-        private static ODataQuery<T> ApplyRawQueryOptionsWithoutSelectExpandInternal<T>(ODataQuery<T> query, IODataRawQueryOptions rawQueryOptions, string entitySetName)
+        private static ODataQuery<T> ApplyQueryOptionsInternal<T>(ODataQuery<T> query, IODataQueryOptions rawQueryOptions, string entitySetName)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
             if (rawQueryOptions == null) throw new ArgumentNullException(nameof(rawQueryOptions));

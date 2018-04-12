@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public interface IODataRawQueryOptions
+    public interface IODataQueryOptions
     {
         /// <summary>
         ///  Gets the raw $filter query value from the incoming request Uri if exists.
