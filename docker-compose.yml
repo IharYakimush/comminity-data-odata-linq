@@ -8,3 +8,8 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "10001:1433"
+  solr:
+    image: solr:7.4
+    command: "solr-demo"
+    ports:
+     - "8983:8983"
