@@ -110,23 +110,32 @@
             string selectText = null,
             string expandText = null,
             string entitySetName = null)
-        {            
+        {
+            return SelectExpandAsQueryable(query, selectText, expandText, entitySetName).AsEnumerable();
+        }
+
+        public static IQueryable<ISelectExpandWrapper> SelectExpandAsQueryable<T>(
+            this ODataQuery<T> query,
+            string selectText = null,
+            string expandText = null,
+            string entitySetName = null)
+        {
             SelectExpandHelper<T> helper = new SelectExpandHelper<T>(
                 new ODataRawQueryOptions { Select = selectText, Expand = expandText },
                 query,
                 entitySetName);
 
             helper.AddAutoSelectExpandProperties();
-            
+
             var result = helper.Apply(query);
 
             // In case of SelectExpand ,method was called to convert to ISelectExpandWrapper without actually applying $select and $expand params
-            if (result == query && selectText==null && expandText == null)
+            if (result == query && selectText == null && expandText == null)
             {
-                return SelectExpand(query, "*", expandText, entitySetName);
+                return SelectExpandAsQueryable(query, "*", expandText, entitySetName);
             }
 
-            return Enumerate<ISelectExpandWrapper>(result);
+            return result as IQueryable<ISelectExpandWrapper>;
         }
 
         public static ODataQuery<T> TopSkip<T>(this ODataQuery<T> query, string topText = null, string skipText = null, string entitySetName = null)
@@ -187,6 +196,17 @@
             string entitySetName = null)
         {
             return ApplyQueryOptionsInternal(query, rawQueryOptions, entitySetName).SelectExpand(
+                rawQueryOptions.Select,
+                rawQueryOptions.Expand,
+                entitySetName);
+        }
+
+        public static IQueryable<ISelectExpandWrapper> ApplyQueryOptionsAsQueryable<T>(
+            this ODataQuery<T> query,
+            IODataQueryOptions rawQueryOptions,
+            string entitySetName = null)
+        {
+            return ApplyQueryOptionsInternal(query, rawQueryOptions, entitySetName).SelectExpandAsQueryable(
                 rawQueryOptions.Select,
                 rawQueryOptions.Expand,
                 entitySetName);
