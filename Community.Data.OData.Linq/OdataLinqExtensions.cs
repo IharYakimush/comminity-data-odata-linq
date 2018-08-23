@@ -43,7 +43,7 @@
         /// The query type param
         /// </typeparam>
         /// <returns>
-        /// The <see cref="ODataQuery{T}"/> query.
+        /// The OData aware <see cref="ODataQuery{T}"/> query.
         /// </returns>
         public static ODataQuery<T> OData<T>(this IQueryable<T> query, Action<ODataSettings> configuration = null, IEdmModel edmModel = null)
         {
@@ -85,7 +85,7 @@
         }
 
         /// <summary>
-        /// The select and expand query options.
+        /// Apply select and expand query options.
         /// </summary>
         /// <param name="query">
         /// The OData aware query.
@@ -111,14 +111,45 @@
             string expandText = null,
             string entitySetName = null)
         {
-            return SelectExpandAsQueryable(query, selectText, expandText, entitySetName).AsEnumerable();
+            var result = SelectExpandInternal(query, selectText, expandText, entitySetName);
+
+            return Enumerate<ISelectExpandWrapper>(result);
         }
 
+        /// <summary>
+        /// Apply select and expand query options to query. Warning! not all query providers support it.
+        /// </summary>
+        /// <param name="query">
+        /// The OData aware query.
+        /// </param>
+        /// <param name="selectText">
+        /// The $select parameter text.
+        /// </param>
+        /// <param name="expandText">
+        /// The $expand parameter text.
+        /// </param>
+        /// <param name="entitySetName">
+        /// The entity set name.
+        /// </param>
+        /// <typeparam name="T">
+        /// The query type param
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IQueryable{ISelectExpandWrapper}"/> selection result in specific format.
+        /// </returns>
         public static IQueryable<ISelectExpandWrapper> SelectExpandAsQueryable<T>(
             this ODataQuery<T> query,
             string selectText = null,
             string expandText = null,
             string entitySetName = null)
+        {
+            var result = SelectExpandInternal(query, selectText, expandText, entitySetName);
+
+            return result.Cast<ISelectExpandWrapper>();
+        }
+
+        private static IQueryable SelectExpandInternal<T>(ODataQuery<T> query, string selectText, string expandText,
+            string entitySetName)
         {
             SelectExpandHelper<T> helper = new SelectExpandHelper<T>(
                 new ODataRawQueryOptions { Select = selectText, Expand = expandText },
@@ -132,12 +163,21 @@
             // In case of SelectExpand ,method was called to convert to ISelectExpandWrapper without actually applying $select and $expand params
             if (result == query && selectText == null && expandText == null)
             {
-                return SelectExpandAsQueryable(query, "*", expandText, entitySetName);
+                return SelectExpandInternal(query, "*", expandText, entitySetName);
             }
 
-            return result as IQueryable<ISelectExpandWrapper>;
+            return result;
         }
 
+        /// <summary>
+        /// Apply $top and $skip parameters to query.
+        /// </summary>
+        /// <typeparam name="T">The type param</typeparam>
+        /// <param name="query">The OData aware query.</param>
+        /// <param name="topText">$top parameter value</param>
+        /// <param name="skipText">$skip parameter value</param>
+        /// <param name="entitySetName">The entity set name.</param>
+        /// <returns>The <see cref="ODataQuery{T}"/> query with applied $top and $skip parameters.</returns>
         public static ODataQuery<T> TopSkip<T>(this ODataQuery<T> query, string topText = null, string skipText = null, string entitySetName = null)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));            
@@ -182,6 +222,14 @@
             return query;
         }
 
+        /// <summary>
+        /// Apply OData query options except $select and $expand parameters.
+        /// </summary>
+        /// <typeparam name="T">The type param.</typeparam>
+        /// <param name="query">The OData aware query.</param>
+        /// <param name="rawQueryOptions">The query options.</param>
+        /// <param name="entitySetName">The entity set name.</param>
+        /// <returns>The query <see cref="IQueryable{T}"/> with applied OData parameters.</returns>
         public static IQueryable<T> ApplyQueryOptionsWithoutSelectExpand<T>(
             this ODataQuery<T> query,
             IODataQueryOptions rawQueryOptions,
@@ -190,6 +238,14 @@
             return ApplyQueryOptionsInternal(query, rawQueryOptions, entitySetName);
         }
 
+        /// <summary>
+        /// Apply OData query options and execute query.
+        /// </summary>
+        /// <typeparam name="T">The type param.</typeparam>
+        /// <param name="query">The OData aware query.</param>
+        /// <param name="rawQueryOptions">The query options.</param>
+        /// <param name="entitySetName">The entity set name.</param>
+        /// <returns>The enumeration of query results <see cref="IEnumerable{ISelectExpandWrapper}"/>.</returns>
         public static IEnumerable<ISelectExpandWrapper> ApplyQueryOptions<T>(
             this ODataQuery<T> query,
             IODataQueryOptions rawQueryOptions,
@@ -201,6 +257,14 @@
                 entitySetName);
         }
 
+        /// <summary>
+        /// Apply OData query options. Warning! not all providers support it.
+        /// </summary>
+        /// <typeparam name="T">The type param.</typeparam>
+        /// <param name="query">The OData aware query.</param>
+        /// <param name="rawQueryOptions">The query options.</param>
+        /// <param name="entitySetName">The entity set name.</param>
+        /// <returns>The query with special type of results <see cref="IQueryable{ISelectExpandWrapper}"/>.</returns>
         public static IQueryable<ISelectExpandWrapper> ApplyQueryOptionsAsQueryable<T>(
             this ODataQuery<T> query,
             IODataQueryOptions rawQueryOptions,
@@ -236,7 +300,7 @@
         }
 
         /// <summary>
-        /// The Filter.
+        /// Apply $filter parameter to query.
         /// </summary>
         /// <param name="query">
         /// The OData aware query.
@@ -287,7 +351,7 @@
         }
 
         /// <summary>
-        /// The OrderBy.
+        /// Apply $orderby parameter to query.
         /// </summary>
         /// <param name="query">
         /// The OData aware query.

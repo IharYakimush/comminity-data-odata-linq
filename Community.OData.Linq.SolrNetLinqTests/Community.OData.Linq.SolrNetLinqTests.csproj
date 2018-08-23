@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="SolrNet" Version="1.0.10" />
-    <PackageReference Include="SolrNet.Linq" Version="1.3.0" />
+    <PackageReference Include="SolrNet.Linq" Version="1.4.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -15,17 +15,17 @@ namespace Community.OData.Linq.SolrNetLinqTests
 
             ISolrOperations<Product> solr = ServiceLocator.Current.GetInstance<ISolrOperations<Product>>();
 
-            IQueryable<ISelectExpandWrapper> sr = solr.AsQueryable().OData().Filter("Id ne null and Price gt 0").OrderBy("Id desc").TopSkip("1", "1")
-                .SelectExpandAsQueryable("Id,Price,Categories");
+            //IQueryable<ISelectExpandWrapper> sr = solr.AsQueryable().OData().Filter("Id ne null and Price gt 0").OrderBy("Id desc").TopSkip("1", "1")
+            //    .SelectExpandAsQueryable("Id,Price,Categories");
 
-            Console.WriteLine(sr.GetType());
-            Console.WriteLine(sr.ToJson());
+            //Console.WriteLine(sr.GetType());
+            //Console.WriteLine(sr.ToJson());
 
-            //SolrQueryResults<ISelectExpandWrapper> results = solr.AsQueryable().OData().Filter("Id ne null").OrderBy("Id desc").TopSkip("1", "1")
-            //    .SelectExpandAsQueryable("Id,Price,Categories").ToSolrQueryResults();
+            SolrQueryResults<ISelectExpandWrapper> results = solr.AsQueryable().OData().Filter("Id ne null").OrderBy("Id desc").TopSkip("1", "1")
+                .SelectExpandAsQueryable("Id,Price,Categories").ToSolrQueryResults();
 
-            //Console.WriteLine(results.NumFound);
-            //Console.WriteLine(results.ToJson());
+            Console.WriteLine(results.NumFound);
+            Console.WriteLine(results.ToJson());
         }
     }
 }
