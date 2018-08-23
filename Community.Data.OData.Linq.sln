@@ -22,9 +22,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.OData.Linq.Json",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.OData.Linq.EF6Tests", "Community.OData.Linq.EF6Tests\Community.OData.Linq.EF6Tests.csproj", "{F034D1D8-D44A-4B0E-96C4-855F30B239BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Community.OData.Linq.AspNetCore", "Community.OData.Linq.AspNetCore\Community.OData.Linq.AspNetCore.csproj", "{8F6BC2CA-5442-4A2E-A133-D62A93394ABE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.OData.Linq.AspNetCore", "Community.OData.Linq.AspNetCore\Community.OData.Linq.AspNetCore.csproj", "{8F6BC2CA-5442-4A2E-A133-D62A93394ABE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Community.OData.Linq.AspNetCore.IntegrationTests", "Community.OData.Linq.AspNetCore.IntegrationTests\Community.OData.Linq.AspNetCore.IntegrationTests.csproj", "{E879A557-82B2-4466-8A7C-590E3DFBFBF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.OData.Linq.AspNetCore.IntegrationTests", "Community.OData.Linq.AspNetCore.IntegrationTests\Community.OData.Linq.AspNetCore.IntegrationTests.csproj", "{E879A557-82B2-4466-8A7C-590E3DFBFBF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Community.OData.Linq.SolrNetLinqTests", "Community.OData.Linq.SolrNetLinqTests\Community.OData.Linq.SolrNetLinqTests.csproj", "{631CE3F7-DEB5-4BCB-9FB3-6807CCF5A7F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,12 @@ Global
 		{E879A557-82B2-4466-8A7C-590E3DFBFBF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E879A557-82B2-4466-8A7C-590E3DFBFBF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E879A557-82B2-4466-8A7C-590E3DFBFBF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{631CE3F7-DEB5-4BCB-9FB3-6807CCF5A7F7}.CodeAnalysis|Any CPU.ActiveCfg = Debug|Any CPU
+		{631CE3F7-DEB5-4BCB-9FB3-6807CCF5A7F7}.CodeAnalysis|Any CPU.Build.0 = Debug|Any CPU
+		{631CE3F7-DEB5-4BCB-9FB3-6807CCF5A7F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{631CE3F7-DEB5-4BCB-9FB3-6807CCF5A7F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{631CE3F7-DEB5-4BCB-9FB3-6807CCF5A7F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{631CE3F7-DEB5-4BCB-9FB3-6807CCF5A7F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

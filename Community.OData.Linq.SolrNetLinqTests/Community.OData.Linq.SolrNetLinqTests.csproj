@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SolrNet" Version="1.0.10" />
+    <PackageReference Include="SolrNet.Linq" Version="1.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Community.Data.OData.Linq\Community.OData.Linq.csproj" />
+    <ProjectReference Include="..\Community.OData.Linq.Json\Community.OData.Linq.Json.csproj" />
+  </ItemGroup>
+
+</Project>
