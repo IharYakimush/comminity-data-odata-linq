@@ -11,14 +11,15 @@
     <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
     <RepositoryType></RepositoryType>
     <PackageTags>odata filter linq json</PackageTags>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>Change of dependencies for Community.OData.Linq.
+Microsoft.Extensions.DependencyInjection.Abstractions used instead of Microsoft.Extensions.DependencyInjection</PackageReleaseNotes>
     <Description>Json serialization for SelectExpand result</Description>
     <Company />
     <RepositoryUrl></RepositoryUrl>
-    <Version>1.4.1</Version>
+    <Version>1.4.2</Version>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.4.1.0</AssemblyVersion>
-    <FileVersion>1.4.1.0</FileVersion>
+    <AssemblyVersion>1.4.2.0</AssemblyVersion>
+    <FileVersion>1.4.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
