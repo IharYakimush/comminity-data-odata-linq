@@ -16,9 +16,9 @@
             Console.WriteLine("/*");
 
             IQueryable<Sample> dataSet = Sample.CreateQuerable();
-            var result = dataSet.OData().SelectExpandJsonToken(
+            var result = dataSet.OData().SelectExpand(
                 "Name",
-                "RelatedEntity($select=Id),RelatedEntitiesCollection($filter=Id ge 200;$top=1)");
+                "RelatedEntity($select=Id),RelatedEntitiesCollection($filter=Id ge 200;$top=1)").ToJson();
 
             /*
             [
