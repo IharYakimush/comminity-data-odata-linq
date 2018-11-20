@@ -191,5 +191,16 @@
             Assert.Throws<ODataException>(
                () => SampleWithCustomKey.CreateQuery().OData().SelectExpand(null, "RecursiveLink($expand=RecursiveLink($expand=RecursiveLink))"));            
         }
+
+        [Fact]
+        public void ExpandMaxDeepSetInValidationSettings()
+        {
+            ISelectExpandWrapper[] result = ClassWithDeepNavigation.CreateQuery().OData(settings => settings.ValidationSettings.MaxExpansionDepth = 3).SelectExpand(null, "D1($expand=D2($expand=D3))").ToArray();
+
+            IDictionary<string, object> metadata = result[0].ToDictionary();
+
+            Assert.Equal(3, metadata.Count);
+            Assert.Equal("n1123", (((metadata["D1"] as ISelectExpandWrapper).ToDictionary()["D2"] as ISelectExpandWrapper).ToDictionary()["D3"] as ISelectExpandWrapper).ToDictionary()["Name"]);
+        }
     }
 }
