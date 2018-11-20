@@ -15,7 +15,7 @@
         [Fact]
         public void SerializeSelectExpand()
         {            
-            JToken token = ClassWithCollection.CreateQuery().OData().SelectExpandJsonToken("Name", "Link2($filter=Id eq 311;$select=Name)");
+            JToken token = ClassWithCollection.CreateQuery().OData().SelectExpand("Name", "Link2($filter=Id eq 311;$select=Name)").ToJson();
             Assert.NotNull(token);
 
             Assert.DoesNotContain("ModelID", token.ToString(Formatting.None));

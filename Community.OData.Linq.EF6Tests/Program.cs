@@ -22,7 +22,7 @@ namespace Community.OData.Linq.EF6Tests
             configuration.Seed2(c);
 
             Console.WriteLine(c.Students.Count());
-            var result = c.Students.OData().Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'").OrderBy("EnrollmentDate desc").SelectExpandJsonToken();
+            var result = c.Students.OData().Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'").OrderBy("EnrollmentDate desc").SelectExpand().ToJson();
 
             Console.WriteLine(result.ToString(formatting: Newtonsoft.Json.Formatting.Indented));
         }
