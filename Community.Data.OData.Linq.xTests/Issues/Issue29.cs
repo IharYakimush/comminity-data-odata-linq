@@ -90,6 +90,7 @@ namespace Community.OData.Linq.xTests.Issues29
 
 
             string a1000b1Json = a1000b1.ToJson().ToString();
+            Assert.NotNull(a1000b1Json);
 
             Assert.True(stopwatch.ElapsedMilliseconds < 10000, "to json performance");
             stopwatch.Stop();
@@ -105,7 +106,7 @@ namespace Community.OData.Linq.xTests.Issues29
             Assert.True(stopwatch.ElapsedMilliseconds < 5000, "query performance");            
 
             string a1000b1Json = a1000b1.ToJson().ToString();
-            Assert.NotNull(a1000b1);
+            Assert.NotNull(a1000b1Json);
 
             Assert.True(stopwatch.ElapsedMilliseconds < 10000, "to json performance");
             stopwatch.Stop();
@@ -123,7 +124,7 @@ namespace Community.OData.Linq.xTests.Issues29
 
 
             string a1000b1000Json = a1000b1000.ToJson().ToString();
-
+            Assert.NotNull(a1000b1000Json);
             Assert.True(stopwatch.ElapsedMilliseconds < 10000, "to json performance");
             stopwatch.Stop();
         }
