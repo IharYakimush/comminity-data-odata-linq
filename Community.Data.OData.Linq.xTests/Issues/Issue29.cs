@@ -9,6 +9,8 @@ using Community.OData.Linq.Json;
 
 namespace Community.OData.Linq.xTests.Issues29
 {
+    using System.Diagnostics;
+
     class MyClassA
     {
         [Key]
@@ -61,6 +63,69 @@ namespace Community.OData.Linq.xTests.Issues29
                     Subs = new List<MyClassB>() {{new MyClassB() {Integer = 1}}, {new MyClassB() {Integer = 2}}, {new MyClassB() {Integer = 3}}, {new MyClassB() {Integer = 4}}}
                 }
             }.AsQueryable();
+        }
+
+        private static IQueryable<MyClassA> GetBigSampleData()
+        {
+            var result = Enumerable.Range(1, 2000).Select(
+                i => new MyClassA
+                         {
+                             String = i <= 1000 ? "A" : "B",
+                             Subs = Enumerable.Range(1, 1000).Select(j => new MyClassB { Integer = j })
+                                 .ToList()
+                         });
+
+            return result.AsQueryable();
+        }
+
+        [Fact]
+        public void FilterMany1()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            ISelectExpandWrapper[] a1000b1 = GetBigSampleData().OData().Filter("String eq 'A'").SelectExpand("String", "Subs($filter=Integer eq 1)").ToArray();
+
+            Assert.True(stopwatch.ElapsedMilliseconds < 5000, "query performance");
+            Assert.Equal(1000, a1000b1.Length);
+
+
+            string a1000b1Json = a1000b1.ToJson().ToString();
+
+            Assert.True(stopwatch.ElapsedMilliseconds < 10000, "to json performance");
+            stopwatch.Stop();
+        }
+
+        [Fact]
+        public void FilterMany3()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            IEnumerable<ISelectExpandWrapper> a1000b1 = GetBigSampleData().OData().Filter("String eq 'A'").SelectExpand("String", "Subs($filter=Integer eq 1)");
+
+            Assert.True(stopwatch.ElapsedMilliseconds < 5000, "query performance");            
+
+            string a1000b1Json = a1000b1.ToJson().ToString();
+            Assert.NotNull(a1000b1);
+
+            Assert.True(stopwatch.ElapsedMilliseconds < 10000, "to json performance");
+            stopwatch.Stop();
+        }
+
+        [Fact]
+        public void FilterMany2()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            ISelectExpandWrapper[] a1000b1000 = GetBigSampleData().OData().SelectExpand("String", "Subs").ToArray();
+
+            Assert.True(stopwatch.ElapsedMilliseconds < 5000, "query performance");
+            Assert.Equal(2000, a1000b1000.Length);            
+
+
+            string a1000b1000Json = a1000b1000.ToJson().ToString();
+
+            Assert.True(stopwatch.ElapsedMilliseconds < 10000, "to json performance");
+            stopwatch.Stop();
         }
     }
 }
