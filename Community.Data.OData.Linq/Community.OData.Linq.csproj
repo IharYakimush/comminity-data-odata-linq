@@ -20,7 +20,7 @@ https://github.com/IharYakimush/comminity-data-odata-linq/issues/35</PackageRele
     <NeutralLanguage>en</NeutralLanguage>
     <AssemblyVersion>1.4.3.0</AssemblyVersion>
     <FileVersion>1.4.3.0</FileVersion>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
   </PropertyGroup>
 
   <ItemGroup>
