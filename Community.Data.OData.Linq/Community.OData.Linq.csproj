@@ -7,19 +7,20 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Authors>IharYakimush</Authors>
-    <PackageLicenseUrl>https://github.com/IharYakimush/comminity-data-odata-linq/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
     <RepositoryType></RepositoryType>
     <PackageTags>odata filter linq netstandard</PackageTags>
-    <PackageReleaseNotes>Change of dependencies for Community.OData.Linq.
-Microsoft.Extensions.DependencyInjection.Abstractions used instead of Microsoft.Extensions.DependencyInjection</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed compatibility with .net6
+https://github.com/IharYakimush/comminity-data-odata-linq/issues/35</PackageReleaseNotes>
     <Description>Use OData filter text query in linq expresson for any IQuerable without ASP.NET dependency. Support netstandard2.0</Description>
     <Company />
     <RepositoryUrl></RepositoryUrl>
-    <Version>1.4.2</Version>
+    <Version>1.4.3</Version>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.4.2.0</AssemblyVersion>
-    <FileVersion>1.4.2.0</FileVersion>
+    <AssemblyVersion>1.4.3.0</AssemblyVersion>
+    <FileVersion>1.4.3.0</FileVersion>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -55,6 +56,13 @@ Microsoft.Extensions.DependencyInjection.Abstractions used instead of Microsoft.
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
       <Version>2.0.0</Version>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
