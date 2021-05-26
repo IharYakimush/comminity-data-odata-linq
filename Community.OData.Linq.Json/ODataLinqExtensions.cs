@@ -79,7 +79,9 @@
             JsonSerializer serializer = new JsonSerializer();
 
             configureSerializer?.Invoke(serializer);
-            serializer.Converters.Add(new SelectExpandWrapperConverter());
+            SelectExpandWrapperConverter jsonConverter = new SelectExpandWrapperConverter();
+            
+            serializer.Converters.Add(jsonConverter);
 
             serializer.Serialize(writer, result.ToArray());
         }

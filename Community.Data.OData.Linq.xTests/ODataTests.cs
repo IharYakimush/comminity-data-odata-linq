@@ -1,6 +1,7 @@
 ﻿namespace Community.OData.Linq.xTests
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Community.OData.Linq.xTests.SampleData;
@@ -24,6 +25,21 @@
         public void WithoutKeyThrowException()
         {
             Assert.Throws<InvalidOperationException>(() => SampleWithoutKey.CreateQuery().OData());
+        }
+
+        [Fact]
+        public void Disposable()
+        {
+            // Generate the list of items to query
+            var items = new List<TestItem>();
+            items.Add(new TestItem() { Id = Guid.NewGuid(), Name = "Test", Number = 1 });
+            items.Add(new TestItem() { Id = Guid.NewGuid(), Name = "Another", Number = 2 });
+
+            var odata = items.AsQueryable().OData();
+            var filteredItems = odata.Filter("Number eq 2");
+            //odata.Dispose();                                        // Test that the OData object is being torn down
+
+            Assert.Equal(1, filteredItems.Count());
         }
     }
 }
