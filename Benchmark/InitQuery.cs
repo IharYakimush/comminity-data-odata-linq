@@ -37,7 +37,7 @@ namespace Benchmark
         }
 
         [Benchmark]
-        public Tuple<IQueryable, ServiceContainer> CreateDefault()
+        public Tuple<IQueryable, ServiceContainer> CreateLegacy()
         {
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.AddEntityType(typeof(ClassWithDeepNavigation));
@@ -62,7 +62,7 @@ namespace Benchmark
         }
 
         [Benchmark]
-        public Tuple<IQueryable, ServiceContainer> CreateEdm()
+        public Tuple<IQueryable, ServiceContainer> CreateNoContainer()
         {
             var edmModel = defaultEdmModel;
 
@@ -72,8 +72,8 @@ namespace Benchmark
             }
 
             ODataSettings settings = new ODataSettings();
-
             ServiceContainer container = new ServiceContainer();
+            
             container.AddService(typeof(IEdmModel), edmModel);
             container.AddService(typeof(ODataQuerySettings), settings.QuerySettings);
             container.AddService(typeof(ODataUriParserSettings), settings.ParserSettings);
@@ -82,9 +82,15 @@ namespace Benchmark
             container.AddService(typeof(ODataSimplifiedOptions), SimplifiedOptions);
             container.AddService(typeof(ODataSettings), settings);
             container.AddService(typeof(DefaultQuerySettings), settings.DefaultQuerySettings);
-            container.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(settings.DefaultQuerySettings));
+            container.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(settings.DefaultQuerySettings));            
 
             return new Tuple<IQueryable, ServiceContainer>(query, container);
+        }
+
+        [Benchmark]
+        public Tuple<IQueryable, ServiceContainer> CreateExtension()
+        {
+            return new Tuple<IQueryable, ServiceContainer>(query.OData(), new ServiceContainer());
         }
     }
 }

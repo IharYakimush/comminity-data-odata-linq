@@ -1,6 +1,7 @@
 ﻿namespace Community.OData.Linq
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.ComponentModel.Design;
     using System.Diagnostics.Contracts;
@@ -27,6 +28,8 @@
         /// </summary>
         private static readonly ODataSimplifiedOptions SimplifiedOptions = new ODataSimplifiedOptions();
 
+        private static readonly ConcurrentDictionary<Type,IEdmModel> Models = new ConcurrentDictionary<Type, IEdmModel>();
+
         /// <summary>
         /// Enable applying OData specific functions to query
         /// </summary>
@@ -50,11 +53,14 @@
             if (query == null) throw new ArgumentNullException(nameof(query));
 
             if (edmModel == null)
-            {                
-                ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-                builder.AddEntityType(typeof(T));
-                builder.AddEntitySet(typeof(T).Name, new EntityTypeConfiguration(new ODataModelBuilder(), typeof(T)));
-                edmModel = builder.GetEdmModel();
+            {
+                edmModel = Models.GetOrAdd(typeof(T), t =>
+                {
+                    ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+                    builder.AddEntityType(t);
+                    builder.AddEntitySet(t.Name, new EntityTypeConfiguration(new ODataModelBuilder(), t));
+                    return builder.GetEdmModel();
+                });
             }
             else
             {
