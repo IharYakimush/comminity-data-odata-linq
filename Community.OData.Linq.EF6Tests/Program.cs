@@ -10,6 +10,8 @@ namespace Community.OData.Linq.EF6Tests
     using ContosoUniversity.DAL;
     using ContosoUniversity.Migrations;
     using Community.OData.Linq.Json;
+    using System.Data.Entity;
+    using ContosoUniversity.Models;
 
     public class Program
     {
@@ -25,6 +27,10 @@ namespace Community.OData.Linq.EF6Tests
             var result = c.Students.OData().Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'").OrderBy("EnrollmentDate desc").SelectExpand().ToJson();
 
             Console.WriteLine(result.ToString(formatting: Newtonsoft.Json.Formatting.Indented));
+
+            Student[] array = c.Students.OData().Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'").OrderBy("EnrollmentDate desc").ToOriginalQuery().ToArrayAsync().Result;
+
+            Console.WriteLine(array.Length);
         }
     }
 }

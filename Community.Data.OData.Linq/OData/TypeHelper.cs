@@ -186,12 +186,12 @@ namespace Community.OData.Linq.OData
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Catching all exceptions in this case is the right to do.")]
         // This code is copied from DefaultHttpControllerTypeResolver.GetControllerTypes.
-        internal static IEnumerable<Type> GetLoadedTypes(IAssembliesResolver assembliesResolver)
+        internal static IEnumerable<Type> GetLoadedTypes()
         {
             List<Type> result = new List<Type>();
 
             // Go through all assemblies referenced by the application and search for types matching a predicate
-            ICollection<Assembly> assemblies = assembliesResolver.GetAssemblies();
+            ICollection<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly assembly in assemblies)
             {
                 Type[] exportedTypes = null;

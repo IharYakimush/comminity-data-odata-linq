@@ -84,22 +84,21 @@ namespace Community.OData.Linq.OData.Query.Expressions
 
         private FilterBinder(
             IEdmModel model,
-            IAssembliesResolver assembliesResolver,
             ODataQuerySettings querySettings,
             Type filterType)
-            : base(model, assembliesResolver, querySettings)
+            : base(model,  querySettings)
         {
             this._filterType = filterType;
         }
 
         internal static Expression<Func<TEntityType, bool>> Bind<TEntityType>(FilterClause filterClause, IEdmModel model,
-            IAssembliesResolver assembliesResolver, ODataQuerySettings querySettings)
+             ODataQuerySettings querySettings)
         {
-            return Bind(filterClause, typeof(TEntityType), model, assembliesResolver, querySettings) as Expression<Func<TEntityType, bool>>;
+            return Bind(filterClause, typeof(TEntityType), model, querySettings) as Expression<Func<TEntityType, bool>>;
         }
 
         internal static Expression Bind(FilterClause filterClause, Type filterType, IEdmModel model,
-            IAssembliesResolver assembliesResolver, ODataQuerySettings querySettings)
+             ODataQuerySettings querySettings)
         {
             if (filterClause == null)
             {
@@ -114,7 +113,7 @@ namespace Community.OData.Linq.OData.Query.Expressions
                 throw Error.ArgumentNull("model");
             }
 
-            FilterBinder binder = new FilterBinder(model, assembliesResolver, querySettings, filterType);
+            FilterBinder binder = new FilterBinder(model, querySettings, filterType);
 
             return BindFilterClause(binder, filterClause, filterType);
         }
@@ -525,7 +524,7 @@ namespace Community.OData.Linq.OData.Query.Expressions
                 return NullConstant;
             }
 
-            Type constantType = EdmLibHelpers.GetClrType(constantNode.TypeReference, this.Model, this.AssembliesResolver);
+            Type constantType = EdmLibHelpers.GetClrType(constantNode.TypeReference, this.Model);
             object value = constantNode.Value;
 
             if (constantNode.TypeReference != null && constantNode.TypeReference.IsEnum())
@@ -1451,7 +1450,7 @@ namespace Community.OData.Linq.OData.Query.Expressions
                         }
                     }
 
-                    parameter = Expression.Parameter(EdmLibHelpers.GetClrType(edmTypeReference, this.Model, this.AssembliesResolver), rangeVariable.Name);
+                    parameter = Expression.Parameter(EdmLibHelpers.GetClrType(edmTypeReference, this.Model), rangeVariable.Name);
                     Contract.Assert(lambdaIt == null, "There can be only one parameter in an Any/All lambda");
                     lambdaIt = parameter;
                 }

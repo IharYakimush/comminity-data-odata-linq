@@ -63,8 +63,6 @@ namespace Community.OData.Linq.OData.Query.Expressions
 
         internal ODataQuerySettings QuerySettings { get; set; }
 
-        internal IAssembliesResolver AssembliesResolver { get; set; }
-
         /// <summary>
         /// Base query used for the binder.
         /// </summary>
@@ -85,13 +83,6 @@ namespace Community.OData.Linq.OData.Query.Expressions
 
             this.QuerySettings = requestContainer.GetRequiredService<ODataQuerySettings>();
             this.Model = requestContainer.GetRequiredService<IEdmModel>();
-            this.AssembliesResolver = requestContainer.GetRequiredService<IAssembliesResolver>();
-        }
-
-        internal ExpressionBinderBase(IEdmModel model, IAssembliesResolver assembliesResolver, ODataQuerySettings querySettings)
-            : this(model, querySettings)
-        {
-            this.AssembliesResolver = assembliesResolver;
         }
 
         internal ExpressionBinderBase(IEdmModel model, ODataQuerySettings querySettings)
@@ -217,7 +208,7 @@ namespace Community.OData.Linq.OData.Query.Expressions
 
         internal Expression CreateConvertExpression(ConvertNode convertNode, Expression source)
         {
-            Type conversionType = EdmLibHelpers.GetClrType(convertNode.TypeReference, this.Model, this.AssembliesResolver);
+            Type conversionType = EdmLibHelpers.GetClrType(convertNode.TypeReference, this.Model);
 
             if (conversionType == typeof(bool?) && source.Type == typeof(bool))
             {

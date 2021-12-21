@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31321.278
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.OData.Linq", "Community.Data.OData.Linq\Community.OData.Linq.csproj", "{0EA4A9B7-BEE7-4500-8676-0B18E7B369D2}"
 EndProject
@@ -29,6 +29,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.OData.Linq.AspNetCore.IntegrationTests", "Community.OData.Linq.AspNetCore.IntegrationTests\Community.OData.Linq.AspNetCore.IntegrationTests.csproj", "{E879A557-82B2-4466-8A7C-590E3DFBFBF0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.OData.Linq.SolrNetLinqTests", "Community.OData.Linq.SolrNetLinqTests\Community.OData.Linq.SolrNetLinqTests.csproj", "{631CE3F7-DEB5-4BCB-9FB3-6807CCF5A7F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comminuty.OData.CosmosDbTests", "Comminuty.OData.CosmosDbTests\Comminuty.OData.CosmosDbTests.csproj", "{893FED48-4BB6-436A-A55B-E9C0F0B4B9E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmark", "Benchmark\Benchmark.csproj", "{3E18F5C4-832E-49DC-BF5B-37777F8FC0A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +89,18 @@ Global
 		{631CE3F7-DEB5-4BCB-9FB3-6807CCF5A7F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{631CE3F7-DEB5-4BCB-9FB3-6807CCF5A7F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{631CE3F7-DEB5-4BCB-9FB3-6807CCF5A7F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{893FED48-4BB6-436A-A55B-E9C0F0B4B9E2}.CodeAnalysis|Any CPU.ActiveCfg = Debug|Any CPU
+		{893FED48-4BB6-436A-A55B-E9C0F0B4B9E2}.CodeAnalysis|Any CPU.Build.0 = Debug|Any CPU
+		{893FED48-4BB6-436A-A55B-E9C0F0B4B9E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{893FED48-4BB6-436A-A55B-E9C0F0B4B9E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{893FED48-4BB6-436A-A55B-E9C0F0B4B9E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{893FED48-4BB6-436A-A55B-E9C0F0B4B9E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E18F5C4-832E-49DC-BF5B-37777F8FC0A6}.CodeAnalysis|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E18F5C4-832E-49DC-BF5B-37777F8FC0A6}.CodeAnalysis|Any CPU.Build.0 = Debug|Any CPU
+		{3E18F5C4-832E-49DC-BF5B-37777F8FC0A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E18F5C4-832E-49DC-BF5B-37777F8FC0A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E18F5C4-832E-49DC-BF5B-37777F8FC0A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E18F5C4-832E-49DC-BF5B-37777F8FC0A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

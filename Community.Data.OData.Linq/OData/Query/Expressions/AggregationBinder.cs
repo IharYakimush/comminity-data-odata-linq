@@ -34,9 +34,9 @@ namespace Community.OData.Linq.OData.Query.Expressions
 
         private bool _linqToObjectMode = false;
 
-        internal AggregationBinder(ODataQuerySettings settings, IAssembliesResolver assembliesResolver, Type elementType,
+        internal AggregationBinder(ODataQuerySettings settings, Type elementType,
             IEdmModel model, TransformationNode transformation)
-            : base(model, assembliesResolver, settings)
+            : base(model, settings)
         {
             Contract.Assert(elementType != null);
             Contract.Assert(transformation != null);

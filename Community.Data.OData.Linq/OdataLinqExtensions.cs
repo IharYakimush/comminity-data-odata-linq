@@ -71,7 +71,6 @@
             container.AddService(typeof(IEdmModel), edmModel);
             container.AddService(typeof(ODataQuerySettings), settings.QuerySettings);
             container.AddService(typeof(ODataUriParserSettings), settings.ParserSettings);
-            container.AddService(typeof(IAssembliesResolver), new DefaultAssembliesResolver());
             container.AddService(typeof(FilterBinder), new FilterBinder(container));
             container.AddService(typeof(ODataUriResolver), settings.Resolver ?? ODataSettings.DefaultResolver);
             container.AddService(typeof(ODataSimplifiedOptions), SimplifiedOptions);
