@@ -6,6 +6,7 @@ using Community.OData.Linq.OData.Query;
 using Community.OData.Linq.OData.Query.Expressions;
 using Community.OData.Linq.xTests.SampleData;
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OData;
 using Microsoft.OData.Edm;
 using Microsoft.OData.UriParser;
@@ -26,6 +27,7 @@ namespace Benchmark
         private static readonly IEdmModel defaultEdmModel;
 
         private static readonly IQueryable<ClassWithDeepNavigation> query;
+        
         static InitQuery()
         {
             query = ClassWithDeepNavigation.CreateQuery();
@@ -33,17 +35,16 @@ namespace Benchmark
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.AddEntityType(typeof(ClassWithDeepNavigation));
             builder.AddEntitySet(typeof(ClassWithDeepNavigation).Name, new EntityTypeConfiguration(new ODataModelBuilder(), typeof(ClassWithDeepNavigation)));
-            defaultEdmModel = builder.GetEdmModel();
+            defaultEdmModel = builder.GetEdmModel();            
         }
 
         [Benchmark]
-        public Tuple<IQueryable, ServiceContainer> CreateLegacy()
+        public Tuple<IQueryable, ServiceContainer> LegacyEdmAndContainer()
         {
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.AddEntityType(typeof(ClassWithDeepNavigation));
             builder.AddEntitySet(typeof(ClassWithDeepNavigation).Name, new EntityTypeConfiguration(new ODataModelBuilder(), typeof(ClassWithDeepNavigation)));
             var edmModel = builder.GetEdmModel();
-
 
             ODataSettings settings = new ODataSettings();
 
@@ -62,7 +63,7 @@ namespace Benchmark
         }
 
         [Benchmark]
-        public Tuple<IQueryable, ServiceContainer> CreateNoContainer()
+        public Tuple<IQueryable, IServiceProvider> LegacyContainer()
         {
             var edmModel = defaultEdmModel;
 
@@ -72,8 +73,8 @@ namespace Benchmark
             }
 
             ODataSettings settings = new ODataSettings();
+
             ServiceContainer container = new ServiceContainer();
-            
             container.AddService(typeof(IEdmModel), edmModel);
             container.AddService(typeof(ODataQuerySettings), settings.QuerySettings);
             container.AddService(typeof(ODataUriParserSettings), settings.ParserSettings);
@@ -82,15 +83,15 @@ namespace Benchmark
             container.AddService(typeof(ODataSimplifiedOptions), SimplifiedOptions);
             container.AddService(typeof(ODataSettings), settings);
             container.AddService(typeof(DefaultQuerySettings), settings.DefaultQuerySettings);
-            container.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(settings.DefaultQuerySettings));            
+            container.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(settings.DefaultQuerySettings));
 
-            return new Tuple<IQueryable, ServiceContainer>(query, container);
+            return new Tuple<IQueryable, IServiceProvider>(query, container);
         }
 
         [Benchmark]
-        public Tuple<IQueryable, ServiceContainer> CreateExtension()
+        public Tuple<IQueryable, IServiceProvider> ODataExtension()
         {
-            return new Tuple<IQueryable, ServiceContainer>(query.OData(), new ServiceContainer());
+            return new Tuple<IQueryable, IServiceProvider>(query.OData(), new ServiceContainer());
         }
     }
 }
