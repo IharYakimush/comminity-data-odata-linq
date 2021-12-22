@@ -148,9 +148,9 @@
             string expandText = null,
             string entitySetName = null)
         {
-            var result = SelectExpandInternal(query, selectText, expandText, entitySetName);
-
-            return result as IQueryable<ISelectExpandWrapper>;
+            IQueryable result = SelectExpandInternal(query, selectText, expandText, entitySetName);
+            return query.Provider.CreateQuery<ISelectExpandWrapper>(result.Expression).Cast<ISelectExpandWrapper>();
+            //return result as IQueryable<ISelectExpandWrapper>;
         }
 
         private static IQueryable SelectExpandInternal<T>(ODataQuery<T> query, string selectText, string expandText,

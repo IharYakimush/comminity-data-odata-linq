@@ -186,8 +186,8 @@ namespace Comminuty.OData.CosmosDbTests
 
                 ODataQuery<TestEntity> odataQuery = container.Container.GetItemLinqQueryable<TestEntity>(true).OData();
 
-                using FeedIterator single1 = odataQuery.Filter($"Id eq '{id1}'").SelectExpandAsQueryable("Id").ToStreamIterator();
-                using ResponseMessage next = await single1.ReadNextAsync();
+                var next = await odataQuery.Filter($"Id eq '{id1}'").SelectExpandAsQueryable("Id,Number").ToStreamIterator().ReadNextAsync();
+
                 next.EnsureSuccessStatusCode();
 
                 using StreamReader reader = new StreamReader(next.Content);
@@ -195,6 +195,49 @@ namespace Comminuty.OData.CosmosDbTests
                 string json = reader.ReadToEnd();
 
                 Output.WriteLine(json);
+
+                Assert.Contains($"\"Documents\":[{{\"id\":\"{id1}\"}}]", json);
+            }
+        }
+
+        [Fact]
+        public async Task LinqSelectAsync()
+        {
+            using (CosmosClient client = new CosmosClientBuilder(configuration["CosmosDb"])
+                .WithSerializerOptions(
+                new CosmosSerializationOptions()
+                {
+                    PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
+                }).Build())
+            {
+                var db = await client.CreateDatabaseIfNotExistsAsync("dam");
+                var container = await db.Database.CreateContainerIfNotExistsAsync("odata", "/pk");
+
+                TestEntity entity = TestEntity.Create();
+                await container.Container.CreateItemAsync(entity);
+                string id1 = entity.Id;
+
+                entity = TestEntity.Create();
+                await container.Container.CreateItemAsync(entity);
+                string id2 = entity.Item.Id;
+
+                entity = TestEntity.Create();
+                await container.Container.CreateItemAsync(entity);
+                string id3 = entity.Childs.First().Id;
+
+                var query = container.Container.GetItemLinqQueryable<TestEntity>();
+
+                var next = await query.Where(e => e.Id == id1).Select(e=>new {e.Id }).ToStreamIterator().ReadNextAsync();
+               
+                next.EnsureSuccessStatusCode();
+
+                using StreamReader reader = new StreamReader(next.Content);
+
+                string json = reader.ReadToEnd();
+
+                Output.WriteLine(json);
+
+                Assert.Contains($"\"Documents\":[{{\"id\":\"{id1}\"}}]", json);
             }
         }
 

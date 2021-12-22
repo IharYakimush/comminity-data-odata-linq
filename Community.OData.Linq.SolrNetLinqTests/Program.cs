@@ -22,7 +22,7 @@ namespace Community.OData.Linq.SolrNetLinqTests
             //Console.WriteLine(sr.ToJson());
 
             SolrQueryResults<ISelectExpandWrapper> results = solr.AsQueryable().OData().Filter("Id ne null").OrderBy("Id desc").TopSkip("1", "1")
-                .SelectExpandAsQueryable("Id,Price,Categories").Cast<ISelectExpandWrapper>().ToSolrQueryResults();
+                .SelectExpandAsQueryable("Id,Price,Categories").ToSolrQueryResults();
 
             Console.WriteLine(results.NumFound);
             Console.WriteLine(results.ToJson());

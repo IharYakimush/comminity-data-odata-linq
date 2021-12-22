@@ -34,11 +34,11 @@ namespace Community.OData.Linq.EF6Tests
 
             ISelectExpandWrapper[] select1 = c.Students.OData().Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'").OrderBy("EnrollmentDate desc").SelectExpand("LastName").ToArray();
 
-            Console.WriteLine(select1.Length);
+            Console.WriteLine(select1.ToJson());
 
-            ISelectExpandWrapper[] select2 = c.Students.OData().Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'").OrderBy("EnrollmentDate desc").SelectExpandAsQueryable("LastName").ToArrayAsync().Result;
+            ISelectExpandWrapper[] select2 = c.Students.OData().Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'").OrderBy("EnrollmentDate desc").SelectExpandAsQueryable("LastName", "Enrollments($select=CourseId)").ToArrayAsync().Result;
 
-            Console.WriteLine(select2.Length);
+            Console.WriteLine(select2.ToJson());
         }
     }
 }
