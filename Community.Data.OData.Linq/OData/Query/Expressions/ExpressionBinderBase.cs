@@ -27,6 +27,7 @@ namespace Community.OData.Linq.OData.Query.Expressions
     /// </summary>
     public abstract class ExpressionBinderBase
     {
+        private static readonly Type typeOfString = typeof(string); // Use in the linq query to get the TryParse method.
         internal static readonly MethodInfo StringCompareMethodInfo = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string), typeof(StringComparison) });
 
         internal static readonly Expression NullConstant = Expression.Constant(null);
@@ -34,9 +35,12 @@ namespace Community.OData.Linq.OData.Query.Expressions
         internal static readonly Expression TrueConstant = Expression.Constant(true);
         internal static readonly Expression ZeroConstant = Expression.Constant(0);
         internal static readonly Expression OrdinalStringComparisonConstant = Expression.Constant(StringComparison.Ordinal);
-
+        
         internal static readonly MethodInfo EnumTryParseMethod = typeof(Enum).GetMethods()
-                        .Single(m => m.Name == "TryParse" && m.GetParameters().Length == 2);
+                        .Single(m => m.Name == "TryParse" &&
+                            m.GetParameters().Length == 2 &&
+                            // TryParse method for .Net 6.0 has 2 override with 2 parameters. We need to choose the good one.
+                            m.GetParameters().FirstOrDefault(p => p.ParameterType == typeOfString) != null);
 
         internal static readonly Dictionary<BinaryOperatorKind, ExpressionType> BinaryOperatorMapping = new Dictionary<BinaryOperatorKind, ExpressionType>
         {
@@ -59,8 +63,6 @@ namespace Community.OData.Linq.OData.Query.Expressions
 
         internal ODataQuerySettings QuerySettings { get; set; }
 
-        internal IAssembliesResolver AssembliesResolver { get; set; }
-
         /// <summary>
         /// Base query used for the binder.
         /// </summary>
@@ -81,13 +83,6 @@ namespace Community.OData.Linq.OData.Query.Expressions
 
             this.QuerySettings = requestContainer.GetRequiredService<ODataQuerySettings>();
             this.Model = requestContainer.GetRequiredService<IEdmModel>();
-            this.AssembliesResolver = requestContainer.GetRequiredService<IAssembliesResolver>();
-        }
-
-        internal ExpressionBinderBase(IEdmModel model, IAssembliesResolver assembliesResolver, ODataQuerySettings querySettings)
-            : this(model, querySettings)
-        {
-            this.AssembliesResolver = assembliesResolver;
         }
 
         internal ExpressionBinderBase(IEdmModel model, ODataQuerySettings querySettings)
@@ -213,7 +208,7 @@ namespace Community.OData.Linq.OData.Query.Expressions
 
         internal Expression CreateConvertExpression(ConvertNode convertNode, Expression source)
         {
-            Type conversionType = EdmLibHelpers.GetClrType(convertNode.TypeReference, this.Model, this.AssembliesResolver);
+            Type conversionType = EdmLibHelpers.GetClrType(convertNode.TypeReference, this.Model);
 
             if (conversionType == typeof(bool?) && source.Type == typeof(bool))
             {

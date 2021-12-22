@@ -27,8 +27,6 @@ namespace Community.OData.Linq.OData.Formatter
     {
         private static readonly EdmCoreModel _coreModel = EdmCoreModel.Instance;
 
-        private static readonly IAssembliesResolver _defaultAssemblyResolver = new DefaultAssembliesResolver();
-
         private static ConcurrentDictionary<IEdmNavigationSource, IEnumerable<IEdmStructuralProperty>> _concurrencyProperties;
 
         private static readonly Dictionary<Type, IEdmPrimitiveType> _builtInTypesMapping =
@@ -194,11 +192,6 @@ namespace Community.OData.Linq.OData.Formatter
 
         public static Type GetClrType(IEdmTypeReference edmTypeReference, IEdmModel edmModel)
         {
-            return GetClrType(edmTypeReference, edmModel, _defaultAssemblyResolver);
-        }
-
-        public static Type GetClrType(IEdmTypeReference edmTypeReference, IEdmModel edmModel, IAssembliesResolver assembliesResolver)
-        {
             if (edmTypeReference == null)
             {
                 throw Error.ArgumentNull("edmTypeReference");
@@ -215,7 +208,7 @@ namespace Community.OData.Linq.OData.Formatter
             }
             else
             {
-                Type clrType = GetClrType(edmTypeReference.Definition, edmModel, assembliesResolver);
+                Type clrType = GetClrType(edmTypeReference.Definition, edmModel);
                 if (clrType != null && clrType.IsEnum && edmTypeReference.IsNullable)
                 {
                     return clrType.ToNullable();
@@ -226,11 +219,6 @@ namespace Community.OData.Linq.OData.Formatter
         }
 
         public static Type GetClrType(IEdmType edmType, IEdmModel edmModel)
-        {
-            return GetClrType(edmType, edmModel, _defaultAssemblyResolver);
-        }
-
-        public static Type GetClrType(IEdmType edmType, IEdmModel edmModel, IAssembliesResolver assembliesResolver)
         {
             IEdmSchemaType edmSchemaType = edmType as IEdmSchemaType;
 
@@ -243,7 +231,7 @@ namespace Community.OData.Linq.OData.Formatter
             }
 
             string typeName = edmSchemaType.FullName();
-            IEnumerable<Type> matchingTypes = GetMatchingTypes(typeName, assembliesResolver);
+            IEnumerable<Type> matchingTypes = GetMatchingTypes(typeName);
 
             if (matchingTypes.Count() > 1)
             {
@@ -926,9 +914,9 @@ namespace Community.OData.Linq.OData.Formatter
             return matchesInterface(queryType) ? queryType : queryType.GetInterfaces().FirstOrDefault(matchesInterface);
         }
 
-        private static IEnumerable<Type> GetMatchingTypes(string edmFullName, IAssembliesResolver assembliesResolver)
+        private static IEnumerable<Type> GetMatchingTypes(string edmFullName)
         {
-            return TypeHelper.GetLoadedTypes(assembliesResolver).Where(t => t.IsPublic && t.EdmFullName() == edmFullName);
+            return TypeHelper.GetLoadedTypes().Where(t => t.IsPublic && t.EdmFullName() == edmFullName);
         }
 
         // TODO (workitem 336): Support nested types and anonymous types.

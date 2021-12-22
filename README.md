@@ -5,7 +5,7 @@ Use OData filter text query in linq expresson for any IQuerable. Support web and
 Please check samples below to get started:
 ### .NET Fiddle
 https://dotnetfiddle.net/7Ndwot
-### Console app
+## Console app
 ```
     using System;
     using System.Linq;
@@ -42,64 +42,45 @@ https://dotnetfiddle.net/7Ndwot
         }
     }
 ```
-### ASP.NET Core 2.0
+## Support ToArrayAsync(), ToListAsync(), and all other provider specific methods.
+Use `.ToOriginalQuery()` after finishing working with OData to be able to support provider specific methods of original query.
+
+### Entity Framework async data fetch.
 ```
-    using System.Linq;
+Student[] array = await dbContext.Students.OData()
+                .Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'")
+                .OrderBy("EnrollmentDate desc")
+                .TopSkip("1","1")
+                .ToOriginalQuery() // required to be able to use .ToArrayAsync() next.
+                .ToArrayAsync();
 
-    using Community.OData.Linq;
-    using Community.OData.Linq.AspNetCore;
-
-    using Community.OData.Linq.Json;
-
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.OData;
-
-    using Newtonsoft.Json.Linq;
-
-    public class Entity
-    {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-    }
-
-    public class ValuesController : Controller
-    {
-        [Route("/v1")]
-        [HttpGet]
-        public IActionResult Get(ODataQueryOptions queryOptions)
-        {
-            if (queryOptions == null && !this.ModelState.IsValid)
-            {
-                return this.BadRequest(this.ModelState);
-            }
-
-            IQueryable<Entity> data = Enumerable.Range(1, 10)
-                .Select(i => new Entity { Id = i, Name = $"n{i}" })
-                .ToArray()
-                .AsQueryable();
-            try
-            {
-                JToken result = data.OData().ApplyQueryOptions(queryOptions).ToJson();
-                return this.Ok(result);
-            }
-            catch (ODataException e)
-            {
-                return this.BadRequest(e.Message);
-            }
-        }
-    }
+ISelectExpandWrapper[] select2 = await dbContext.Students.OData()
+                .Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'")
+                .OrderBy("EnrollmentDate desc")
+                .SelectExpandAsQueryable("LastName", "Enrollments($select=CourseId)") //.SelectExpandAsQueryable() use .ToOriginalQuery() implicitly, so not need to call it.
+                .ToArrayAsync()
+```
+### CosmosDb SQL API async data fetch.
+```
+var item = await Container.GetItemLinqQueryable<TestEntity>().OData()
+                .Filter($"Id eq '{id1}'")
+                .TopSkip("1")
+                .ToOriginalQuery() // required to be able to use .ToFeedIterator() next.
+                .ToFeedIterator()
+                .ReadNextAsync()
 ```
 # Advanced code samples at wiki
 https://github.com/IharYakimush/comminity-data-odata-linq/wiki
 
 # Supported OData parameters
-- $filter
-- $orderby
-- $select
-- $expand
-- $top
-- $skip
+| Params        | In Memory Collections | Entity Framework | CosmosDB SQL API |
+| ------------- |:---------------------:|:----------------:| :---------------:|
+| $filter       |+                      | +                | +                |
+| $orderby      |+                      | +                | +                |
+| $select       |+                      | +                | -                |
+| $expand       |+                      | +                | -                |
+| $top          |+                      | +                | +                |
+| $skip         |+                      | +                | +                |
 
 # Nuget
 - https://www.nuget.org/packages/Community.OData.Linq

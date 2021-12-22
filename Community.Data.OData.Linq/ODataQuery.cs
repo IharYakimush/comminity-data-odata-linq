@@ -37,5 +37,10 @@
         {
             return (IEnumerator<T>)this.Inner.GetEnumerator();
         }
+
+        public IQueryable<T> ToOriginalQuery()
+        {
+            return (IQueryable<T>)this.Inner;
+        }
     }
 }

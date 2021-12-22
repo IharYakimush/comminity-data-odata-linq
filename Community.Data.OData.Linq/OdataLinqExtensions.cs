@@ -1,6 +1,7 @@
 ﻿namespace Community.OData.Linq
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.ComponentModel.Design;
     using System.Diagnostics.Contracts;
@@ -27,6 +28,10 @@
         /// </summary>
         private static readonly ODataSimplifiedOptions SimplifiedOptions = new ODataSimplifiedOptions();
 
+        private static readonly ConcurrentDictionary<Type,IEdmModel> Models = new ConcurrentDictionary<Type, IEdmModel>();
+
+        private static readonly ConcurrentDictionary<int, ServiceContainer> Containers = new ConcurrentDictionary<int, ServiceContainer>();
+
         /// <summary>
         /// Enable applying OData specific functions to query
         /// </summary>
@@ -50,11 +55,14 @@
             if (query == null) throw new ArgumentNullException(nameof(query));
 
             if (edmModel == null)
-            {                
-                ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-                builder.AddEntityType(typeof(T));
-                builder.AddEntitySet(typeof(T).Name, new EntityTypeConfiguration(new ODataModelBuilder(), typeof(T)));
-                edmModel = builder.GetEdmModel();
+            {
+                edmModel = Models.GetOrAdd(typeof(T), t =>
+                {
+                    ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+                    builder.AddEntityType(t);
+                    builder.AddEntitySet(t.Name, new EntityTypeConfiguration(new ODataModelBuilder(), t));
+                    return builder.GetEdmModel();
+                });
             }
             else
             {
@@ -67,18 +75,30 @@
             ODataSettings settings = new ODataSettings();
             configuration?.Invoke(settings);
 
-            ServiceContainer container = new ServiceContainer();
+            int settingsHash = HashCode.Combine(
+                settings.QuerySettings, 
+                settings.DefaultQuerySettings, 
+                settings.ParserSettings.MaximumExpansionCount, 
+                settings.ParserSettings.MaximumExpansionDepth);
+
+            ServiceContainer baseContainer = Containers.GetOrAdd(settingsHash, i =>
+            {
+                ServiceContainer c = new ServiceContainer();
+                c.AddService(typeof(ODataQuerySettings), settings.QuerySettings);
+                c.AddService(typeof(DefaultQuerySettings), settings.DefaultQuerySettings);
+                c.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(settings.DefaultQuerySettings));
+                c.AddService(typeof(ODataSimplifiedOptions), SimplifiedOptions);
+                c.AddService(typeof(ODataUriParserSettings), settings.ParserSettings);
+
+                return c;
+            });
+
+            ServiceContainer container = new ServiceContainer(baseContainer);
             container.AddService(typeof(IEdmModel), edmModel);
-            container.AddService(typeof(ODataQuerySettings), settings.QuerySettings);
-            container.AddService(typeof(ODataUriParserSettings), settings.ParserSettings);
-            container.AddService(typeof(IAssembliesResolver), new DefaultAssembliesResolver());
             container.AddService(typeof(FilterBinder), new FilterBinder(container));
             container.AddService(typeof(ODataUriResolver), settings.Resolver ?? ODataSettings.DefaultResolver);
-            container.AddService(typeof(ODataSimplifiedOptions), SimplifiedOptions);
             container.AddService(typeof(ODataSettings), settings);
-            container.AddService(typeof(DefaultQuerySettings), settings.DefaultQuerySettings);
-            container.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(settings.DefaultQuerySettings));
-
+            
             ODataQuery<T> dataQuery = new ODataQuery<T>(query, container);
 
             return dataQuery;
@@ -143,9 +163,8 @@
             string expandText = null,
             string entitySetName = null)
         {
-            var result = SelectExpandInternal(query, selectText, expandText, entitySetName);
-
-            return result.Cast<ISelectExpandWrapper>();
+            IQueryable result = SelectExpandInternal(query, selectText, expandText, entitySetName);
+            return query.Provider.CreateQuery<ISelectExpandWrapper>(result.Expression);
         }
 
         private static IQueryable SelectExpandInternal<T>(ODataQuery<T> query, string selectText, string expandText,

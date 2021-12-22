@@ -118,5 +118,26 @@ namespace Community.OData.Linq.OData.Query
             this.PageSize = settings.PageSize;
             this.ModelBoundPageSize = settings.ModelBoundPageSize;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ODataQuerySettings settings &&
+                   _handleNullPropagationOption == settings._handleNullPropagationOption &&
+                   _pageSize == settings._pageSize &&
+                   _modelBoundPageSize == settings._modelBoundPageSize &&
+                   EnsureStableOrdering == settings.EnsureStableOrdering &&
+                   EnableConstantParameterization == settings.EnableConstantParameterization;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 238262878;
+            hashCode = hashCode * -1521134295 + _handleNullPropagationOption.GetHashCode();
+            hashCode = hashCode * -1521134295 + _pageSize.GetHashCode();
+            hashCode = hashCode * -1521134295 + _modelBoundPageSize.GetHashCode();
+            hashCode = hashCode * -1521134295 + EnsureStableOrdering.GetHashCode();
+            hashCode = hashCode * -1521134295 + EnableConstantParameterization.GetHashCode();
+            return hashCode;
+        }
     }
 }

@@ -16,6 +16,8 @@ namespace Community.OData.Linq.OData
 
     internal static class TypeHelper
     {
+        private static readonly Lazy<List<Type>> LoadedTypes = new Lazy<List<Type>>(() => GetLoadedTypesWithoutCache());
+
         public static Type ToNullable(this Type t)
         {
             if (t.IsNullable())
@@ -186,12 +188,17 @@ namespace Community.OData.Linq.OData
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Catching all exceptions in this case is the right to do.")]
         // This code is copied from DefaultHttpControllerTypeResolver.GetControllerTypes.
-        internal static IEnumerable<Type> GetLoadedTypes(IAssembliesResolver assembliesResolver)
+        internal static IEnumerable<Type> GetLoadedTypes()
+        {
+            return LoadedTypes.Value;
+        }
+
+        private static List<Type> GetLoadedTypesWithoutCache()
         {
             List<Type> result = new List<Type>();
 
             // Go through all assemblies referenced by the application and search for types matching a predicate
-            ICollection<Assembly> assemblies = assembliesResolver.GetAssemblies();
+            ICollection<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly assembly in assemblies)
             {
                 Type[] exportedTypes = null;

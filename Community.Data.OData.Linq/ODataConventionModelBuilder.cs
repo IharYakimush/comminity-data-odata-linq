@@ -89,7 +89,7 @@ namespace Community.OData.Linq
         /// </summary>
         public ODataConventionModelBuilder()
         {
-            this.Initialize(new DefaultAssembliesResolver(), isQueryCompositionMode: false);
+            this.Initialize(isQueryCompositionMode: false);
         }
         
         /// <summary>
@@ -104,7 +104,7 @@ namespace Community.OData.Linq
         /// <remarks>Use this action to modify the <see cref="ODataModelBuilder"/> configuration that has been inferred by convention.</remarks>
         public Action<ODataConventionModelBuilder> OnModelCreating { get; set; }
 
-        internal void Initialize(IAssembliesResolver assembliesResolver, bool isQueryCompositionMode)
+        internal void Initialize(bool isQueryCompositionMode)
         {
             this._isQueryCompositionMode = isQueryCompositionMode;
             this._configuredNavigationSources = new HashSet<NavigationSourceConfiguration>();
@@ -112,7 +112,7 @@ namespace Community.OData.Linq
             this._ignoredTypes = new HashSet<Type>();
             this.ModelAliasingEnabled = true;
             this._allTypesWithDerivedTypeMapping = new Lazy<IDictionary<Type, List<Type>>>(
-                () => BuildDerivedTypesMapping(assembliesResolver),
+                () => BuildDerivedTypesMapping(),
                 isThreadSafe: false);
         }
 
@@ -1044,9 +1044,9 @@ namespace Community.OData.Linq
             }
         }
 
-        private static Dictionary<Type, List<Type>> BuildDerivedTypesMapping(IAssembliesResolver assemblyResolver)
+        private static Dictionary<Type, List<Type>> BuildDerivedTypesMapping()
         {
-            IEnumerable<Type> allTypes = TypeHelper.GetLoadedTypes(assemblyResolver).Where(t => t.IsVisible && t.IsClass && t != typeof(object));
+            IEnumerable<Type> allTypes = TypeHelper.GetLoadedTypes().Where(t => t.IsVisible && t.IsClass && t != typeof(object));
             Dictionary<Type, List<Type>> allTypeMapping = allTypes.ToDictionary(k => k, k => new List<Type>());
 
             foreach (Type type in allTypes)

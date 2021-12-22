@@ -10,30 +10,7 @@
     using Newtonsoft.Json.Linq;
 
     public static class ODataLinqExtensions
-    {
-        [Obsolete("Use query.SelectExpand(...).ToJson(...) instead")]
-        public static JToken SelectExpandJsonToken<T>(
-            this ODataQuery<T> query,
-            string selectText = null,
-            string expandText = null,
-            Action<JsonSerializer> configureSerializer = null,
-            string entitySetName = null)
-        {
-            return query.SelectExpand(selectText, expandText, entitySetName).ToJson(configureSerializer);
-        }
-
-        [Obsolete("Use query.SelectExpand(...).ToJson(...) instead")]
-        public static void SelectExpandJson<T>(
-            this ODataQuery<T> query,
-            JsonWriter writer,
-            string selectText = null,
-            string expandText = null,
-            Action<JsonSerializer> configureSerializer = null,
-            string entitySetName = null)
-        {
-            query.SelectExpand(selectText, expandText, entitySetName).ToJson(writer, configureSerializer);
-        }
-
+    {        
         /// <summary>
         /// The to Json.
         /// </summary>
@@ -79,7 +56,9 @@
             JsonSerializer serializer = new JsonSerializer();
 
             configureSerializer?.Invoke(serializer);
-            serializer.Converters.Add(new SelectExpandWrapperConverter());
+            SelectExpandWrapperConverter jsonConverter = new SelectExpandWrapperConverter();
+            
+            serializer.Converters.Add(jsonConverter);
 
             serializer.Serialize(writer, result.ToArray());
         }

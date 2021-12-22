@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -7,18 +7,19 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <AssemblyOriginatorKeyFile>sgn.snk</AssemblyOriginatorKeyFile>
     <Authors>IharYakimush</Authors>
-    <PackageLicenseUrl>https://github.com/IharYakimush/comminity-data-odata-linq/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
     <PackageTags>odata linq aspnetcore</PackageTags>
-    <Description>OData linq for ASP.NET Core 2.0</Description>
-    <PackageReleaseNotes>Change of dependencies for Community.OData.Linq.
-Microsoft.Extensions.DependencyInjection.Abstractions used instead of Microsoft.Extensions.DependencyInjection</PackageReleaseNotes>
-    <NeutralLanguage>en</NeutralLanguage>
-    <RepositoryUrl></RepositoryUrl>
-    <Version>1.4.2</Version>
-    <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.4.2.0</AssemblyVersion>
-    <FileVersion>1.4.2.0</FileVersion>
+    <Description>OData linq for ASP.NET Core 2.0+</Description>
+	<PackageReleaseNotes>Significant improvement in query initialization performance. Support ToArrayAsync(), ToListAsync(), and all other provider specific methods. More integration tests for Entity Framework and CosmosDb SQL API. Breaking Changes: net4.5 not suported anymore. Obsolete methods removed (.SelectExpandJsonToken() and .SelectExpandJson())</PackageReleaseNotes>	  
+	<Company />
+	<RepositoryUrl></RepositoryUrl>
+	<Version>2.0.0</Version>
+	<NeutralLanguage>en</NeutralLanguage>
+	<AssemblyVersion>2.0.0.0</AssemblyVersion>
+	<FileVersion>2.0.0.0</FileVersion>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +28,17 @@ Microsoft.Extensions.DependencyInjection.Abstractions used instead of Microsoft.
 
   <ItemGroup>
     <ProjectReference Include="..\Community.Data.OData.Linq\Community.OData.Linq.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
