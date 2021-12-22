@@ -29,8 +29,9 @@
                 .AsQueryable();
             try
             {
-                JToken result = data.OData().ApplyQueryOptions(queryOptions).ToJson();
-                return this.Ok(result);
+                JToken result = data.OData().ApplyQueryOptions(queryOptions).ToJson();                                
+
+                return this.Content(result.ToString());
             }
             catch (ODataException e)
             {

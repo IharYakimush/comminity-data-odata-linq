@@ -10,16 +10,16 @@
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
     <PackageTags>odata linq aspnetcore</PackageTags>
-    <Description>OData linq for ASP.NET Core 2.0</Description>
-    <PackageReleaseNotes>Fixed compatibility with .net6
-https://github.com/IharYakimush/comminity-data-odata-linq/issues/35</PackageReleaseNotes>
-    <NeutralLanguage>en</NeutralLanguage>
-    <RepositoryUrl></RepositoryUrl>
-    <Version>1.4.3</Version>
-    <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.4.3.0</AssemblyVersion>
-    <FileVersion>1.4.3.0</FileVersion>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Description>OData linq for ASP.NET Core 2.0+</Description>
+	<PackageReleaseNotes>Significant improvement in query initialization performance. Support ToArrayAsync(), ToListAsync(), and all other provider specific methods. More integration tests for Entity Framework and CosmosDb SQL API. Breaking Changes: net4.5 not suported anymore. Obsolete methods removed (.SelectExpandJsonToken() and .SelectExpandJson())</PackageReleaseNotes>	  
+	<Company />
+	<RepositoryUrl></RepositoryUrl>
+	<Version>2.0.0</Version>
+	<NeutralLanguage>en</NeutralLanguage>
+	<AssemblyVersion>2.0.0.0</AssemblyVersion>
+	<FileVersion>2.0.0.0</FileVersion>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>

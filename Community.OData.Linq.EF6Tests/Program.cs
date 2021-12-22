@@ -28,7 +28,7 @@ namespace Community.OData.Linq.EF6Tests
 
             Console.WriteLine(result.ToString(formatting: Newtonsoft.Json.Formatting.Indented));
 
-            Student[] array = c.Students.OData().Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'").OrderBy("EnrollmentDate desc").ToOriginalQuery().ToArrayAsync().Result;
+            Student[] array = c.Students.OData().Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'").OrderBy("EnrollmentDate desc").TopSkip("1","1").ToOriginalQuery().ToArrayAsync().Result;
 
             Console.WriteLine(array.Length);
 

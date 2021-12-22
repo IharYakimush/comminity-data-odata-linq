@@ -11,16 +11,16 @@
     <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
     <RepositoryType></RepositoryType>
     <PackageTags>odata filter linq netstandard</PackageTags>
-    <PackageReleaseNotes>Fixed compatibility with .net6
-https://github.com/IharYakimush/comminity-data-odata-linq/issues/35</PackageReleaseNotes>
+    <PackageReleaseNotes>Significant improvement in query initialization performance. Support ToArrayAsync(), ToListAsync(), and all other provider specific methods. More integration tests for Entity Framework and CosmosDb SQL API. Breaking Changes: net4.5 not suported anymore. Obsolete methods removed (.SelectExpandJsonToken() and .SelectExpandJson())</PackageReleaseNotes>
     <Description>Use OData filter text query in linq expresson for any IQuerable without ASP.NET dependency. Support netstandard2.0</Description>
     <Company />
     <RepositoryUrl></RepositoryUrl>
-    <Version>1.4.3</Version>
+    <Version>2.0.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.4.3.0</AssemblyVersion>
-    <FileVersion>1.4.3.0</FileVersion>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>    
   </PropertyGroup>
 
   <ItemGroup>
@@ -62,6 +62,10 @@ https://github.com/IharYakimush/comminity-data-odata-linq/issues/35</PackageRele
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 

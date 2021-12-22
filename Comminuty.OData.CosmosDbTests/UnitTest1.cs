@@ -143,9 +143,9 @@ namespace Comminuty.OData.CosmosDbTests
                 await container.Container.CreateItemAsync(entity);
                 string id3 = entity.Childs.First().Id;
 
-                ODataQuery<TestEntity> odataQuery = container.Container.GetItemLinqQueryable<TestEntity>(true).OData();
+                ODataQuery<TestEntity> odataQuery = container.Container.GetItemLinqQueryable<TestEntity>().OData();
 
-                var single1 = (await odataQuery.Filter($"Id eq '{id1}'").ToOriginalQuery().ToFeedIterator().ReadNextAsync()).SingleOrDefault();
+                var single1 = (await odataQuery.Filter($"Id eq '{id1}'").TopSkip("1").ToOriginalQuery().ToFeedIterator().ReadNextAsync()).SingleOrDefault();
                 Assert.NotNull(single1);
                 Assert.Equal(id1, single1.Id);
 
@@ -156,49 +156,84 @@ namespace Comminuty.OData.CosmosDbTests
                 var single3 = (await odataQuery.Filter($"Childs/Any(c: c/Id eq '{id3}')").ToOriginalQuery().ToFeedIterator().ReadNextAsync()).SingleOrDefault();
                 Assert.NotNull(single3);
                 Assert.Contains(single3.Childs, c => c.Id == id3);
+
+                FeedResponse<TestEntity> iterator = await odataQuery.TopSkip("2","1").ToOriginalQuery().ToFeedIterator().ReadNextAsync();
+                Assert.NotNull(iterator);
+                Assert.Equal(2, iterator.Count);
             }
         }
 
-        [Fact]
-        public async Task ODataSelectAsync()
-        {
-            using (CosmosClient client = new CosmosClientBuilder(configuration["CosmosDb"])
-                .WithSerializerOptions(
-                new CosmosSerializationOptions()
-                {
-                    PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
-                }).Build())
-            {
-                var db = await client.CreateDatabaseIfNotExistsAsync("dam");
-                var container = await db.Database.CreateContainerIfNotExistsAsync("odata", "/pk");
+        //[Fact]
+        //public async Task ODataSelectAsync()
+        //{
+        //    using (CosmosClient client = new CosmosClientBuilder(configuration["CosmosDb"])
+        //        .WithSerializerOptions(
+        //        new CosmosSerializationOptions()
+        //        {
+        //            PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
+        //        }).Build())
+        //    {
+        //        var db = await client.CreateDatabaseIfNotExistsAsync("dam");
+        //        var container = await db.Database.CreateContainerIfNotExistsAsync("odata", "/pk");
 
-                TestEntity entity = TestEntity.Create();
-                await container.Container.CreateItemAsync(entity);
-                string id1 = entity.Id;
+        //        TestEntity entity = TestEntity.Create();
+        //        await container.Container.CreateItemAsync(entity);
+        //        string id1 = entity.Id;
 
-                entity = TestEntity.Create();
-                await container.Container.CreateItemAsync(entity);
-                string id2 = entity.Item.Id;
+        //        entity = TestEntity.Create();
+        //        await container.Container.CreateItemAsync(entity);
+        //        string id2 = entity.Item.Id;
 
-                entity = TestEntity.Create();
-                await container.Container.CreateItemAsync(entity);
-                string id3 = entity.Childs.First().Id;
+        //        entity = TestEntity.Create();
+        //        await container.Container.CreateItemAsync(entity);
+        //        string id3 = entity.Childs.First().Id;
 
-                ODataQuery<TestEntity> odataQuery = container.Container.GetItemLinqQueryable<TestEntity>(true).OData();
+        //        ODataQuery<TestEntity> odataQuery = container.Container.GetItemLinqQueryable<TestEntity>().OData();
 
-                var next = await odataQuery.Filter($"Id eq '{id1}'").SelectExpandAsQueryable("Id,Number").ToStreamIterator().ReadNextAsync();
+        //        var next = await odataQuery.Filter($"Id eq '{id1}'").SelectExpandAsQueryable("Id,Number").ToStreamIterator().ReadNextAsync();
 
-                next.EnsureSuccessStatusCode();
+        //        next.EnsureSuccessStatusCode();
 
-                using StreamReader reader = new StreamReader(next.Content);
+        //        using StreamReader reader = new StreamReader(next.Content);
 
-                string json = reader.ReadToEnd();
+        //        string json = reader.ReadToEnd();
 
-                Output.WriteLine(json);
+        //        Output.WriteLine(json);
 
-                Assert.Contains($"\"Documents\":[{{\"id\":\"{id1}\"}}]", json);
-            }
-        }
+        //        Assert.Contains($"\"Documents\":[{{\"id\":\"{id1}\"}}]", json);
+        //    }
+        //}
+
+        //[Fact]
+        //public async Task ODataSelectSync()
+        //{
+        //    using (CosmosClient client = new CosmosClientBuilder(configuration["CosmosDb"])
+        //        .WithSerializerOptions(
+        //        new CosmosSerializationOptions()
+        //        {
+        //            PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
+        //        }).Build())
+        //    {
+        //        var db = await client.CreateDatabaseIfNotExistsAsync("dam");
+        //        var container = await db.Database.CreateContainerIfNotExistsAsync("odata", "/pk");
+
+        //        TestEntity entity = TestEntity.Create();
+        //        await container.Container.CreateItemAsync(entity);
+        //        string id1 = entity.Id;
+
+        //        entity = TestEntity.Create();
+        //        await container.Container.CreateItemAsync(entity);
+        //        string id2 = entity.Item.Id;
+
+        //        entity = TestEntity.Create();
+        //        await container.Container.CreateItemAsync(entity);
+        //        string id3 = entity.Childs.First().Id;
+
+        //        ODataQuery<TestEntity> odataQuery = container.Container.GetItemLinqQueryable<TestEntity>(true).OData();
+
+        //        ISelectExpandWrapper[] next = odataQuery.Filter($"Id eq '{id1}'").SelectExpand("Id,Number").ToArray();                                              
+        //    }
+        //}
 
         [Fact]
         public async Task LinqSelectAsync()
