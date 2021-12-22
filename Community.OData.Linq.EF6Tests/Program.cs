@@ -31,6 +31,14 @@ namespace Community.OData.Linq.EF6Tests
             Student[] array = c.Students.OData().Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'").OrderBy("EnrollmentDate desc").ToOriginalQuery().ToArrayAsync().Result;
 
             Console.WriteLine(array.Length);
+
+            ISelectExpandWrapper[] select1 = c.Students.OData().Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'").OrderBy("EnrollmentDate desc").SelectExpand("LastName").ToArray();
+
+            Console.WriteLine(select1.Length);
+
+            ISelectExpandWrapper[] select2 = c.Students.OData().Filter("LastName eq 'Alexander' or FirstMidName eq 'Laura'").OrderBy("EnrollmentDate desc").SelectExpandAsQueryable("LastName").ToArrayAsync().Result;
+
+            Console.WriteLine(select2.Length);
         }
     }
 }

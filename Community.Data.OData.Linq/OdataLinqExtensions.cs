@@ -150,7 +150,7 @@
         {
             var result = SelectExpandInternal(query, selectText, expandText, entitySetName);
 
-            return result.Cast<ISelectExpandWrapper>();
+            return result as IQueryable<ISelectExpandWrapper>;
         }
 
         private static IQueryable SelectExpandInternal<T>(ODataQuery<T> query, string selectText, string expandText,
