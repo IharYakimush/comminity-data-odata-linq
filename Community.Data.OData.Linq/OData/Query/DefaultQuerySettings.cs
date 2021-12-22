@@ -114,5 +114,28 @@ namespace Community.OData.Linq.OData.Query
                 this._maxTop = value;
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is DefaultQuerySettings settings &&
+                   _enableFilter == settings._enableFilter &&
+                   _enableOrderBy == settings._enableOrderBy &&
+                   _enableExpand == settings._enableExpand &&
+                   _enableCount == settings._enableCount &&
+                   _enableSelect == settings._enableSelect &&
+                   _maxTop == settings._maxTop;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 2109394230;
+            hashCode = hashCode * -1521134295 + _enableFilter.GetHashCode();
+            hashCode = hashCode * -1521134295 + _enableOrderBy.GetHashCode();
+            hashCode = hashCode * -1521134295 + _enableExpand.GetHashCode();
+            hashCode = hashCode * -1521134295 + _enableCount.GetHashCode();
+            hashCode = hashCode * -1521134295 + _enableSelect.GetHashCode();
+            hashCode = hashCode * -1521134295 + _maxTop.GetHashCode();
+            return hashCode;
+        }
     }
 }

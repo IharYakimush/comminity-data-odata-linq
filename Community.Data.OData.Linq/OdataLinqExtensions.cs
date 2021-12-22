@@ -30,6 +30,8 @@
 
         private static readonly ConcurrentDictionary<Type,IEdmModel> Models = new ConcurrentDictionary<Type, IEdmModel>();
 
+        private static readonly ConcurrentDictionary<int, ServiceContainer> Containers = new ConcurrentDictionary<int, ServiceContainer>();
+
         /// <summary>
         /// Enable applying OData specific functions to query
         /// </summary>
@@ -73,17 +75,30 @@
             ODataSettings settings = new ODataSettings();
             configuration?.Invoke(settings);
 
-            ServiceContainer container = new ServiceContainer();
+            int settingsHash = HashCode.Combine(
+                settings.QuerySettings, 
+                settings.DefaultQuerySettings, 
+                settings.ParserSettings.MaximumExpansionCount, 
+                settings.ParserSettings.MaximumExpansionDepth);
+
+            ServiceContainer baseContainer = Containers.GetOrAdd(settingsHash, i =>
+            {
+                ServiceContainer c = new ServiceContainer();
+                c.AddService(typeof(ODataQuerySettings), settings.QuerySettings);
+                c.AddService(typeof(DefaultQuerySettings), settings.DefaultQuerySettings);
+                c.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(settings.DefaultQuerySettings));
+                c.AddService(typeof(ODataSimplifiedOptions), SimplifiedOptions);
+                c.AddService(typeof(ODataUriParserSettings), settings.ParserSettings);
+
+                return c;
+            });
+
+            ServiceContainer container = new ServiceContainer(baseContainer);
             container.AddService(typeof(IEdmModel), edmModel);
-            container.AddService(typeof(ODataQuerySettings), settings.QuerySettings);
-            container.AddService(typeof(ODataUriParserSettings), settings.ParserSettings);
             container.AddService(typeof(FilterBinder), new FilterBinder(container));
             container.AddService(typeof(ODataUriResolver), settings.Resolver ?? ODataSettings.DefaultResolver);
-            container.AddService(typeof(ODataSimplifiedOptions), SimplifiedOptions);
             container.AddService(typeof(ODataSettings), settings);
-            container.AddService(typeof(DefaultQuerySettings), settings.DefaultQuerySettings);
-            container.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(settings.DefaultQuerySettings));
-
+            
             ODataQuery<T> dataQuery = new ODataQuery<T>(query, container);
 
             return dataQuery;
