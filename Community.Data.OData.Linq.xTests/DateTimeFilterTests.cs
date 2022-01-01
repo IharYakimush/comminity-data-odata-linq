@@ -163,6 +163,12 @@ namespace Community.OData.Linq.xTests
             Assert.Equal(dt, dtLocal);
             Assert.Equal(dt, dtUtc);
             Assert.Equal(dtUtc, dtLocal);
+
+            Assert.NotEqual(TimeZoneInfo.Local, TimeZoneInfo.Utc);
+            Assert.NotEqual(TimeZoneInfo.Local.GetHashCode(), TimeZoneInfo.Utc.GetHashCode());
+
+            Assert.Equal(TimeZoneInfo.Utc, TimeZoneInfo.Utc);
+            Assert.Equal(TimeZoneInfo.Utc.GetHashCode(), TimeZoneInfo.Utc.GetHashCode());
         }
     }                
 }
