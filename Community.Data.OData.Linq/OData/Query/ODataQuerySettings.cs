@@ -63,6 +63,13 @@ namespace Community.OData.Linq.OData.Query
         /// The default value is <c>true</c>.</value>
         public bool EnsureStableOrdering { get; set; }
 
+        /// <summary>
+        /// Gets or sets timezone value which will be used to convert <see cref="DateTimeOffset"/> from filter query to <see cref="DateTime"/> when it is used as property type.
+        /// </summary>
+        /// <value><list type="">
+        /// <item><c>TimeZoneInfo.Local</c> - default value. </item>
+        /// <item><c>TimeZoneInfo.Utc</c> - useful when property of type <see cref="DateTimeOffset"/> can't be used in the model and as a workaround we have <see cref="DateTime"/> type and convention to store UTC values.</item>
+        /// </list></value>        
         public TimeZoneInfo DefaultTimeZone { get => defaultTimeZone ?? TimeZoneInfo.Local; set => defaultTimeZone = value; }
 
         /// <summary>
