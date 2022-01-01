@@ -87,10 +87,13 @@
             // to replicate please use the following cases 
             //string ExpandStr = "DA($select=DAID,isDeleted;$Filter=isDeleted eq false;$expand=URLT($Select=*;$filter=isDeleted eq false))"; // Case 1 - Expand Filter working fine (Aparently)
             string ExpandStr = "DA($select=DAID,isDeleted;$Filter=isDeleted eq false;$expand=URLT($Select=*;$Filter=isDeleted eq true))"; // Case 2 - Expand Filter not working
-                                                                                                                                           // string ExpandStr = "DA($select=DAID,isDeleted;$Filter=isDeleted eq true;$expand=URLT($Select=*;$filter=isDeleted eq true))"; // Case 3 - Expand Filter not working fine
-                                                                                                                                           // string ExpandStr = "DA($select=DAID,isDeleted;$Filter=isDeleted eq true;$expand=URLT($Select=*;$filter=URLTN eq 'a'))"; // Case 4 - Expand Filter not working fine on diferent DataTypes
+                                                                                                                                          // string ExpandStr = "DA($select=DAID,isDeleted;$Filter=isDeleted eq true;$expand=URLT($Select=*;$filter=isDeleted eq true))"; // Case 3 - Expand Filter not working fine
+                                                                                                                                          // string ExpandStr = "DA($select=DAID,isDeleted;$Filter=isDeleted eq true;$expand=URLT($Select=*;$filter=URLTN eq 'a'))"; // Case 4 - Expand Filter not working fine on diferent DataTypes
 
-            IQueryable<PDA> query = items.AsQueryable();
+            ODataQuery<PDA> query = items.AsQueryable().OData();
+
+            ODataSettings settings = (ODataSettings)query.ServiceProvider.GetService(typeof(ODataSettings));
+            Assert.True(settings.EnableCaseInsensitive);
 
             var result = query.OData().Filter(filter).OrderBy(orderBy).SelectExpand(selectStr, ExpandStr).ToJson(settings => settings.NullValueHandling = NullValueHandling.Ignore);
             string str = result.ToString();

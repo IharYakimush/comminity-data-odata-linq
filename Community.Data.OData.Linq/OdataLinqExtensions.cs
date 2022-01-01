@@ -84,6 +84,7 @@
             ServiceContainer baseContainer = Containers.GetOrAdd(settingsHash, i =>
             {
                 ServiceContainer c = new ServiceContainer();
+
                 c.AddService(typeof(ODataQuerySettings), settings.QuerySettings);
                 c.AddService(typeof(DefaultQuerySettings), settings.DefaultQuerySettings);
                 c.AddService(typeof(SelectExpandQueryValidator), new SelectExpandQueryValidator(settings.DefaultQuerySettings));

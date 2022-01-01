@@ -116,11 +116,11 @@ namespace Community.OData.Linq.OData.Query.Expressions
 
             if (leftUnderlyingType == typeof(DateTime) && rightUnderlyingType == typeof(DateTimeOffset))
             {
-                right = DateTimeOffsetToDateTime(right);
+                right = DateTimeOffsetToDateTime(right, this.QuerySettings.DefaultTimeZone);
             }
             else if (rightUnderlyingType == typeof(DateTime) && leftUnderlyingType == typeof(DateTimeOffset))
             {
-                left = DateTimeOffsetToDateTime(left);
+                left = DateTimeOffsetToDateTime(left, this.QuerySettings.DefaultTimeZone);
             }
 
             if ((IsDateOrOffset(leftUnderlyingType) && IsDate(rightUnderlyingType)) ||
@@ -856,7 +856,7 @@ namespace Community.OData.Linq.OData.Query.Expressions
             return null;
         }
 
-        internal static Expression DateTimeOffsetToDateTime(Expression expression)
+        internal static Expression DateTimeOffsetToDateTime(Expression expression, TimeZoneInfo timeZone)
         {
             var unaryExpression = expression as UnaryExpression;
             if (unaryExpression != null)
@@ -871,7 +871,7 @@ namespace Community.OData.Linq.OData.Query.Expressions
             var dto = parameterizedConstantValue as DateTimeOffset?;
             if (dto != null)
             {
-                expression = Expression.Constant(EdmPrimitiveHelpers.ConvertPrimitiveValue(dto.Value, typeof(DateTime)));
+                expression = Expression.Constant(EdmPrimitiveHelpers.ConvertPrimitiveValue(dto.Value, typeof(DateTime), timeZone));
             }
             return expression;
         }

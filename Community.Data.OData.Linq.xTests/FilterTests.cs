@@ -1,6 +1,5 @@
 ﻿namespace Community.OData.Linq.xTests
 {
-    using System.ComponentModel;
     using System.Linq;
 
     using Community.OData.Linq.xTests.SampleData;
@@ -10,7 +9,7 @@
     using Xunit;
 
     public class FilterTests
-    {
+    {        
         [Fact]
         public void WhereById()
         {
@@ -51,16 +50,7 @@
             Assert.Throws<ODataException>(
                 () => SimpleClass.CreateQuery().OData().Filter("qwe"));
         }
-
-        [Fact]
-        public void WhereByDateTime()
-        {
-            var result = SimpleClass.CreateQuery().OData().Filter("DateTime gt 2010-01-25T02:13:40.00Z").ToArray();
-
-            Assert.Single(result);
-            Assert.Equal("n1", result[0].Name);
-        }
-
+                
         [Fact]
         public void WhereByEnumString()
         {
@@ -126,6 +116,6 @@
         {
             Assert.Throws<ODataException>(
                 () => SimpleClass.CreateQuery().OData(s => s.EnableCaseInsensitive = false).Filter($"{nameof(SimpleClass.NameToIgnore)} eq 'ni1'"));
-        }
+        }        
     }
 }
