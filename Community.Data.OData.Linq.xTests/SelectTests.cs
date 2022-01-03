@@ -20,7 +20,7 @@
 
             IDictionary<string, object> metadata = result[0].ToDictionary();
    
-            Assert.Equal(6, metadata.Count);
+            Assert.Equal(7, metadata.Count);
         }
 
         [Fact]
@@ -30,7 +30,7 @@
 
             IDictionary<string, object> metadata = result[0].ToDictionary();
 
-            Assert.Equal(6, metadata.Count);
+            Assert.Equal(7, metadata.Count);
         }
 
         [Fact]

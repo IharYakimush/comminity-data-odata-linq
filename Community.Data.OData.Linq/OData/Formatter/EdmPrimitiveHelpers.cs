@@ -16,7 +16,7 @@ namespace Community.OData.Linq.OData.Formatter
 
     internal static class EdmPrimitiveHelpers
     {
-        public static object ConvertPrimitiveValue(object value, Type type)
+        public static object ConvertPrimitiveValue(object value, Type type, TimeZoneInfo timeZone)
         {
             Contract.Assert(value != null);
             Contract.Assert(type != null);
@@ -81,8 +81,7 @@ namespace Community.OData.Linq.OData.Formatter
                 {
                     if (value is DateTimeOffset)
                     {
-                        DateTimeOffset dateTimeOffsetValue = (DateTimeOffset)value;
-                        TimeZoneInfo timeZone = TimeZoneInfoHelper.TimeZone;
+                        DateTimeOffset dateTimeOffsetValue = (DateTimeOffset)value;  
                         dateTimeOffsetValue = TimeZoneInfo.ConvertTime(dateTimeOffsetValue, timeZone);
                         return dateTimeOffsetValue.DateTime;
                     }

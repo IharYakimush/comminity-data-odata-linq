@@ -41,7 +41,7 @@
             // Not expanded by default
             Assert.Equal(3, metadata.Count);
 
-            Assert.Equal(6, (metadata["Link1"] as ISelectExpandWrapper).ToDictionary().Count);
+            Assert.Equal(7, (metadata["Link1"] as ISelectExpandWrapper).ToDictionary().Count);
         }
 
         [Fact]
@@ -53,7 +53,7 @@
 
             // Not expanded by default
             Assert.Equal(2, metadata.Count);
-            Assert.Equal(6, (metadata["Link1"] as ISelectExpandWrapper).ToDictionary().Count);
+            Assert.Equal(7, (metadata["Link1"] as ISelectExpandWrapper).ToDictionary().Count);
         }
 
         [Fact]
@@ -155,8 +155,8 @@
             // Not expanded by default
             Assert.Equal(4, metadata.Count);
 
-            Assert.Equal(6, (metadata["AutoExpandLink"] as ISelectExpandWrapper).ToDictionary().Count);
-            Assert.Equal(6, (metadata["AutoExpandAndSelectLink"] as ISelectExpandWrapper).ToDictionary().Count);
+            Assert.Equal(7, (metadata["AutoExpandLink"] as ISelectExpandWrapper).ToDictionary().Count);
+            Assert.Equal(7, (metadata["AutoExpandAndSelectLink"] as ISelectExpandWrapper).ToDictionary().Count);
         }
 
         [Fact]
@@ -169,7 +169,7 @@
             // Not expanded by default
             Assert.Equal(3, metadata.Count);
 
-            Assert.Equal(6, (metadata["AutoExpandAndSelectLink"] as ISelectExpandWrapper).ToDictionary().Count);
+            Assert.Equal(7, (metadata["AutoExpandAndSelectLink"] as ISelectExpandWrapper).ToDictionary().Count);
         }
 
         [Fact]

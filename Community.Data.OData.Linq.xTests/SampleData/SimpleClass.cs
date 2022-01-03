@@ -11,8 +11,22 @@ namespace Community.OData.Linq.xTests.SampleData
     {
         private static readonly SimpleClass[] items =
         {
-            new SimpleClass {Id = 1, Name = "n1", DateTime = new DateTime(2018, 1, 26), TestEnum = TestEnum.Item1, NameToIgnore = "ni1", NameNotFilter="nf1"},
-            new SimpleClass {Id = 2, Name = "n2", DateTime = new DateTime(2001, 1, 26), TestEnum = TestEnum.Item2, NameToIgnore = "ni1", NameNotFilter="nf2"}
+            new SimpleClass {
+                Id = 1, 
+                Name = "n1",
+                DateTimeOffset = new DateTimeOffset(new DateTime(2018, 1, 26), TimeZoneInfo.Local.BaseUtcOffset), 
+                DateTime = new DateTime(2018, 1, 26), 
+                TestEnum = TestEnum.Item1, 
+                NameToIgnore = "ni1", 
+                NameNotFilter="nf1"},
+            new SimpleClass {
+                Id = 2, 
+                Name = "n2",
+                DateTimeOffset = new DateTimeOffset(new DateTime(2001, 1, 26), TimeZoneInfo.Local.BaseUtcOffset), 
+                DateTime = new DateTime(2001, 1, 26), 
+                TestEnum = TestEnum.Item2, 
+                NameToIgnore = "ni1", 
+                NameNotFilter="nf2"}
         };
         
         public static IQueryable<SimpleClass> CreateQuery()
@@ -25,6 +39,8 @@ namespace Community.OData.Linq.xTests.SampleData
         public string Name { get; set; }
 
         public DateTime DateTime { get; set; }
+
+        public DateTimeOffset DateTimeOffset { get; set; }
 
         public TestEnum TestEnum { get; set; }
 

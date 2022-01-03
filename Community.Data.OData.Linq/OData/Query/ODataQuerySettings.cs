@@ -5,6 +5,8 @@ namespace Community.OData.Linq.OData.Query
 {
     using Community.OData.Linq.Common;
 
+    using System;
+
     /// <summary>
     /// This class describes the settings to use during query composition.
     /// </summary>
@@ -13,6 +15,7 @@ namespace Community.OData.Linq.OData.Query
         private HandleNullPropagationOption _handleNullPropagationOption = HandleNullPropagationOption.Default;
         private int? _pageSize;
         private int? _modelBoundPageSize;
+        private TimeZoneInfo defaultTimeZone;
 
         /// <summary>
         /// Instantiates a new instance of the <see cref="ODataQuerySettings"/> class
@@ -59,6 +62,15 @@ namespace Community.OData.Linq.OData.Query
         /// a stable sort order should set this value to <c>false</c>.
         /// The default value is <c>true</c>.</value>
         public bool EnsureStableOrdering { get; set; }
+
+        /// <summary>
+        /// Gets or sets timezone value which will be used to convert <see cref="DateTimeOffset"/> from filter query to <see cref="DateTime"/> when it is used as property type.
+        /// </summary>
+        /// <value><list type="">
+        /// <item><c>TimeZoneInfo.Local</c> - default value. </item>
+        /// <item><c>TimeZoneInfo.Utc</c> - useful when property of type <see cref="DateTimeOffset"/> can't be used in the model and as a workaround we have <see cref="DateTime"/> type and convention to store UTC values.</item>
+        /// </list></value>        
+        public TimeZoneInfo DefaultTimeZone { get => defaultTimeZone ?? TimeZoneInfo.Local; set => defaultTimeZone = value; }
 
         /// <summary>
         /// Gets or sets a value indicating how null propagation should
@@ -117,6 +129,7 @@ namespace Community.OData.Linq.OData.Query
             this.HandleNullPropagation = settings.HandleNullPropagation;
             this.PageSize = settings.PageSize;
             this.ModelBoundPageSize = settings.ModelBoundPageSize;
+            this.defaultTimeZone = settings.defaultTimeZone;
         }
 
         public override bool Equals(object obj)
@@ -125,19 +138,14 @@ namespace Community.OData.Linq.OData.Query
                    _handleNullPropagationOption == settings._handleNullPropagationOption &&
                    _pageSize == settings._pageSize &&
                    _modelBoundPageSize == settings._modelBoundPageSize &&
+                   DefaultTimeZone == settings.DefaultTimeZone &&
                    EnsureStableOrdering == settings.EnsureStableOrdering &&
                    EnableConstantParameterization == settings.EnableConstantParameterization;
         }
 
         public override int GetHashCode()
         {
-            int hashCode = 238262878;
-            hashCode = hashCode * -1521134295 + _handleNullPropagationOption.GetHashCode();
-            hashCode = hashCode * -1521134295 + _pageSize.GetHashCode();
-            hashCode = hashCode * -1521134295 + _modelBoundPageSize.GetHashCode();
-            hashCode = hashCode * -1521134295 + EnsureStableOrdering.GetHashCode();
-            hashCode = hashCode * -1521134295 + EnableConstantParameterization.GetHashCode();
-            return hashCode;
+            return HashCode.Combine(_handleNullPropagationOption, _pageSize, _modelBoundPageSize, EnsureStableOrdering, EnableConstantParameterization, DefaultTimeZone);
         }
     }
 }
