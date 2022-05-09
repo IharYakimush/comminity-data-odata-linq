@@ -123,17 +123,39 @@ namespace Community.OData.Linq.OData.Query.Expressions
                 left = DateTimeOffsetToDateTime(left, this.QuerySettings.DefaultTimeZone);
             }
 
+#if !NET6_0_OR_GREATER
             if ((IsDateOrOffset(leftUnderlyingType) && IsDate(rightUnderlyingType)) ||
                 (IsDate(leftUnderlyingType) && IsDateOrOffset(rightUnderlyingType)))
+
+#else
+            if ((IsDateOrOffset(leftUnderlyingType) && IsDate(rightUnderlyingType)) ||
+                (IsDate(leftUnderlyingType) && IsDateOrOffset(rightUnderlyingType)) ||
+                (IsDateOnly(leftUnderlyingType) && IsDate(rightUnderlyingType)) ||
+                (IsDate(leftUnderlyingType) && IsDateOnly(rightUnderlyingType))
+                )
+#endif
             {
                 left = this.CreateDateBinaryExpression(left);
                 right = this.CreateDateBinaryExpression(right);
             }
 
+#if !NET6_0_OR_GREATER
             if ((IsDateOrOffset(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
                 (IsTimeOfDay(leftUnderlyingType) && IsDateOrOffset(rightUnderlyingType)) ||
                 (IsTimeSpan(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
                 (IsTimeOfDay(leftUnderlyingType) && IsTimeSpan(rightUnderlyingType)))
+
+#else
+            if ((IsDateOrOffset(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
+                (IsTimeOfDay(leftUnderlyingType) && IsDateOrOffset(rightUnderlyingType)) ||
+                (IsTimeSpan(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
+                (IsTimeOfDay(leftUnderlyingType) && IsTimeSpan(rightUnderlyingType)) ||
+                (IsTimeOnly(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
+                (IsTimeOfDay(leftUnderlyingType) && IsTimeOnly(rightUnderlyingType)) ||
+                (IsTimeSpan(leftUnderlyingType) && IsTimeOnly(rightUnderlyingType)) ||
+                (IsTimeOnly(leftUnderlyingType) && IsTimeSpan(rightUnderlyingType))
+                )
+#endif
             {
                 left = this.CreateTimeBinaryExpression(left);
                 right = this.CreateTimeBinaryExpression(right);
@@ -220,8 +242,8 @@ namespace Community.OData.Linq.OData.Query.Expressions
             {
                 return source;
             }
-            if ((conversionType == typeof(TimeOfDay?) && source.Type == typeof(TimeOfDay)) ||
-                ((conversionType == typeof(Date?) && source.Type == typeof(Date))))
+            else if((conversionType == typeof(TimeOfDay?) && source.Type == typeof(TimeOfDay)) ||
+                   ((conversionType == typeof(Date?) && source.Type == typeof(Date))))
             {
                 return source;
             }
@@ -230,6 +252,16 @@ namespace Community.OData.Linq.OData.Query.Expressions
             {
                 return source;
             }
+#if NET6_0_OR_GREATER
+            else if (conversionType == typeof(Date?) && source.Type == typeof(DateOnly?))
+            {
+                return source;
+            }
+            else if (conversionType == typeof(TimeOfDay?) && source.Type == typeof(TimeOnly?))
+            {
+                return source;
+            }
+#endif
             else if (source == NullConstant)
             {
                 return source;
@@ -310,7 +342,16 @@ namespace Community.OData.Linq.OData.Query.Expressions
                             {
                                 convertedExpression = Expression.Call(source, "ToString", typeArguments: null, arguments: null);
                             }
-                            
+#if NET6_0_OR_GREATER
+                            else if (sourceType == typeof(DateOnly))
+                            {
+                                convertedExpression = source;
+                            }
+                            else if (sourceType == typeof(TimeOnly))
+                            {
+                                convertedExpression = source;
+                            }
+#endif
                             break;
 
                         default:
@@ -716,10 +757,22 @@ namespace Community.OData.Linq.OData.Query.Expressions
             {
                 return this.MakePropertyAccess(ClrCanonicalFunctions.TimeOfDayProperties[propertyName], source);
             }
+#if NET6_0_OR_GREATER
+            else if (IsDateOnly(source.Type))
+            {
+                return this.MakePropertyAccess(ClrCanonicalFunctions.DateOnlyProperties[propertyName], source);
+            }
+#endif
             else if (IsTimeSpan(source.Type))
             {
                 return this.MakePropertyAccess(ClrCanonicalFunctions.TimeSpanProperties[propertyName], source);
             }
+#if NET6_0_OR_GREATER
+            else if (IsTimeOnly(source.Type))
+            {
+                return this.MakePropertyAccess(ClrCanonicalFunctions.TimeOnlyProperties[propertyName], source);
+            }
+#endif
 
             return source;
         }
@@ -920,12 +973,20 @@ namespace Community.OData.Linq.OData.Query.Expressions
 
         internal static bool IsDateRelated(Type type)
         {
+#if NET6_0_OR_GREATER
+            return IsType<Date>(type) || IsType<DateTime>(type) || IsType<DateTimeOffset>(type) || IsType<DateOnly>(type);
+#else
             return IsType<Date>(type) || IsType<DateTime>(type) || IsType<DateTimeOffset>(type);
+#endif
         }
 
         internal static bool IsTimeRelated(Type type)
         {
+#if NET6_0_OR_GREATER
+            return IsType<TimeOfDay>(type) || IsType<DateTime>(type) || IsType<DateTimeOffset>(type) || IsType<TimeSpan>(type) || IsType<TimeOnly>(type);
+#else
             return IsType<TimeOfDay>(type) || IsType<DateTime>(type) || IsType<DateTimeOffset>(type) || IsType<TimeSpan>(type);
+#endif
         }
 
         internal static bool IsDateOrOffset(Type type)
@@ -952,6 +1013,18 @@ namespace Community.OData.Linq.OData.Query.Expressions
         {
             return IsType<Date>(type);
         }
+
+#if NET6_0_OR_GREATER
+        internal static bool IsDateOnly(Type type)
+        {
+            return IsType<DateOnly>(type);
+        }
+
+        internal static bool IsTimeOnly(Type type)
+        {
+            return IsType<TimeOnly>(type);
+        }
+#endif
 
         internal static bool IsInteger(Type type)
         {
