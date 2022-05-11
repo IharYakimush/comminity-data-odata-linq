@@ -129,10 +129,11 @@ namespace Community.OData.Linq.OData.Query.Expressions
 
 #else
             if ((IsDateOrOffset(leftUnderlyingType) && IsDate(rightUnderlyingType)) ||
+                (IsDateOrOffset(leftUnderlyingType) && IsDateOnly(rightUnderlyingType)) ||
                 (IsDate(leftUnderlyingType) && IsDateOrOffset(rightUnderlyingType)) ||
-                (IsDateOnly(leftUnderlyingType) && IsDate(rightUnderlyingType)) ||
-                (IsDate(leftUnderlyingType) && IsDateOnly(rightUnderlyingType))
-                )
+                (IsDate(leftUnderlyingType) && IsDateOnly(rightUnderlyingType)) ||
+                (IsDateOnly(leftUnderlyingType) && IsDateOrOffset(rightUnderlyingType)) ||
+                (IsDateOnly(leftUnderlyingType) && IsDate(rightUnderlyingType)))
 #endif
             {
                 left = this.CreateDateBinaryExpression(left);
@@ -141,20 +142,25 @@ namespace Community.OData.Linq.OData.Query.Expressions
 
 #if !NET6_0_OR_GREATER
             if ((IsDateOrOffset(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
+                (IsDateOrOffset(leftUnderlyingType) && IsTimeSpan(rightUnderlyingType)) ||
                 (IsTimeOfDay(leftUnderlyingType) && IsDateOrOffset(rightUnderlyingType)) ||
-                (IsTimeSpan(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
-                (IsTimeOfDay(leftUnderlyingType) && IsTimeSpan(rightUnderlyingType)))
+                (IsTimeOfDay(leftUnderlyingType) && IsTimeSpan(rightUnderlyingType)) ||
+                (IsTimeSpan(leftUnderlyingType) && IsDateOrOffset(rightUnderlyingType)) ||
+                (IsTimeSpan(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)))
 
 #else
             if ((IsDateOrOffset(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
+                (IsDateOrOffset(leftUnderlyingType) && IsTimeSpan(rightUnderlyingType)) ||
+                (IsDateOrOffset(leftUnderlyingType) && IsTimeOnly(rightUnderlyingType)) ||
                 (IsTimeOfDay(leftUnderlyingType) && IsDateOrOffset(rightUnderlyingType)) ||
-                (IsTimeSpan(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
                 (IsTimeOfDay(leftUnderlyingType) && IsTimeSpan(rightUnderlyingType)) ||
-                (IsTimeOnly(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
                 (IsTimeOfDay(leftUnderlyingType) && IsTimeOnly(rightUnderlyingType)) ||
+                (IsTimeSpan(leftUnderlyingType) && IsDateOrOffset(rightUnderlyingType)) ||
+                (IsTimeSpan(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
                 (IsTimeSpan(leftUnderlyingType) && IsTimeOnly(rightUnderlyingType)) ||
-                (IsTimeOnly(leftUnderlyingType) && IsTimeSpan(rightUnderlyingType))
-                )
+                (IsTimeOnly(leftUnderlyingType) && IsDateOrOffset(rightUnderlyingType)) ||
+                (IsTimeOnly(leftUnderlyingType) && IsTimeOfDay(rightUnderlyingType)) ||
+                (IsTimeOnly(leftUnderlyingType) && IsTimeSpan(rightUnderlyingType)))
 #endif
             {
                 left = this.CreateTimeBinaryExpression(left);
