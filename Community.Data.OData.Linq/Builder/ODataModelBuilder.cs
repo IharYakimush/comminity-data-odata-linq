@@ -141,6 +141,11 @@ namespace Community.OData.Linq.Builder
         }
 
         /// <summary>
+        /// Gets/Sets the ability to allow recursion of complex types
+        /// </summary>
+        public bool AllowRecursiveLoopOfComplexTypes { get; set; }
+
+        /// <summary>
         /// Gets or sets the navigation property binding options.
         /// </summary>
         public NavigationPropertyBindingOption BindingOptions { get; set; }

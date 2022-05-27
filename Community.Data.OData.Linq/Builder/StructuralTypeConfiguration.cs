@@ -383,9 +383,9 @@ namespace Community.OData.Linq.Builder
                 throw Error.Argument("propertyInfo", SRResources.PropertyDoesNotBelongToType, propertyInfo.Name, this.ClrType.FullName);
             }
 
-            if (propertyInfo.PropertyType == this.ClrType)
+            if (propertyInfo.PropertyType == this.ClrType && ModelBuilder?.AllowRecursiveLoopOfComplexTypes != true)
             {
-                //throw Error.Argument("propertyInfo", SRResources.RecursiveComplexTypesNotAllowed, this.ClrType.FullName, propertyInfo.Name);
+                throw Error.Argument("propertyInfo", SRResources.RecursiveComplexTypesNotAllowed, this.ClrType.FullName, propertyInfo.Name);
             }
 
             this.ValidatePropertyNotAlreadyDefinedInBaseTypes(propertyInfo);

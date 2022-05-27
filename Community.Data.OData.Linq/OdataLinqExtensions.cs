@@ -54,13 +54,16 @@
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
 
+            ODataSettings settings = new ODataSettings();
+            configuration?.Invoke(settings);
+
             if (edmModel == null)
             {
                 edmModel = Models.GetOrAdd(typeof(T), t =>
                 {
                     ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
                     builder.AddEntityType(t);
-                    builder.AddEntitySet(t.Name, new EntityTypeConfiguration(new ODataModelBuilder(), t));
+                    builder.AddEntitySet(t.Name, new EntityTypeConfiguration(new ODataModelBuilder { AllowRecursiveLoopOfComplexTypes = settings.AllowRecursiveLoopOfComplexTypes }, t));
                     return builder.GetEdmModel();
                 });
             }
@@ -71,9 +74,6 @@
                     throw new ArgumentException("Provided Entity Model have no IEdmEntityContainer", nameof(edmModel));
                 }
             }
-
-            ODataSettings settings = new ODataSettings();
-            configuration?.Invoke(settings);
 
             int settingsHash = HashCode.Combine(
                 settings.QuerySettings, 
