@@ -385,7 +385,7 @@ namespace Community.OData.Linq.Builder
 
             if (propertyInfo.PropertyType == this.ClrType)
             {
-                throw Error.Argument("propertyInfo", SRResources.RecursiveComplexTypesNotAllowed, this.ClrType.FullName, propertyInfo.Name);
+                //throw Error.Argument("propertyInfo", SRResources.RecursiveComplexTypesNotAllowed, this.ClrType.FullName, propertyInfo.Name);
             }
 
             this.ValidatePropertyNotAlreadyDefinedInBaseTypes(propertyInfo);
