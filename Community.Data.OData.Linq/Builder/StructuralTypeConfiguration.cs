@@ -383,7 +383,7 @@ namespace Community.OData.Linq.Builder
                 throw Error.Argument("propertyInfo", SRResources.PropertyDoesNotBelongToType, propertyInfo.Name, this.ClrType.FullName);
             }
 
-            if (propertyInfo.PropertyType == this.ClrType && ModelBuilder?.AllowRecursiveLoopOfComplexTypes != true)
+            if (propertyInfo.PropertyType == this.ClrType && ModelBuilder?.ODataSettings?.AllowRecursiveLoopOfComplexTypes != true)
             {
                 throw Error.Argument("propertyInfo", SRResources.RecursiveComplexTypesNotAllowed, this.ClrType.FullName, propertyInfo.Name);
             }

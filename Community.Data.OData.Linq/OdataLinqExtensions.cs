@@ -62,8 +62,9 @@
                 edmModel = Models.GetOrAdd(typeof(T), t =>
                 {
                     ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+                    builder.ODataSettings = settings;
                     builder.AddEntityType(t);
-                    builder.AddEntitySet(t.Name, new EntityTypeConfiguration(new ODataModelBuilder { AllowRecursiveLoopOfComplexTypes = settings.AllowRecursiveLoopOfComplexTypes }, t));
+                    builder.AddEntitySet(t.Name, new EntityTypeConfiguration(builder, t));
                     return builder.GetEdmModel();
                 });
             }
