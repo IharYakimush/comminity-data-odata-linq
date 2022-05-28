@@ -79,7 +79,8 @@
                 settings.QuerySettings, 
                 settings.DefaultQuerySettings, 
                 settings.ParserSettings.MaximumExpansionCount, 
-                settings.ParserSettings.MaximumExpansionDepth);
+                settings.ParserSettings.MaximumExpansionDepth,
+                settings.AllowRecursiveLoopOfComplexTypes);
 
             ServiceContainer baseContainer = Containers.GetOrAdd(settingsHash, i =>
             {
