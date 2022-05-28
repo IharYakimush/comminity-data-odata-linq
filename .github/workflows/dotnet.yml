@@ -11,7 +11,13 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    steps:
+    steps:    
+    - name: Set Timezone
+      uses: szenius/set-timezone@v1.0
+      with:
+        timezoneLinux: "Asia/Singapore"
+        timezoneMacos: "Asia/Singapore"
+        timezoneWindows: "Singapore Standard Time"
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
@@ -20,6 +26,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --configuration Debug
     - name: Test
-      run: dotnet test Community.Data.OData.Linq.xTests --no-build --verbosity normal
+      run: dotnet test Community.Data.OData.Linq.xTests --no-build --verbosity normal --configuration Debug
