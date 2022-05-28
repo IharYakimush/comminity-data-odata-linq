@@ -1,11 +1,9 @@
-﻿// Recursive loop of complex types
+﻿// Issue 33 : Recursive loop of complex types
+
 namespace Community.OData.Linq.xTests.Issues33
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Linq;
-
     using Xunit;
 
     public class RecursiveComplexType
@@ -27,7 +25,7 @@ namespace Community.OData.Linq.xTests.Issues33
         {
             // arrange
 
-            var queryable = new List<ListItem>()
+            var queryable = new[]
             {
                 new ListItem { Id = 1, RecursiveComplexType = new() },
                 new ListItem { Id = 2, RecursiveComplexType = new() }
@@ -47,7 +45,7 @@ namespace Community.OData.Linq.xTests.Issues33
         {
             // arrange
 
-            var queryable = new List<ListItem>()
+            var queryable = new[]
             {
                 new ListItem { Id = 1, RecursiveComplexType = new() },
                 new ListItem { Id = 2, RecursiveComplexType = new() }
@@ -72,7 +70,7 @@ namespace Community.OData.Linq.xTests.Issues33
         {
             // arrange
 
-            var queryable = new List<ListItem>()
+            var queryable = new[]
             {
                 new ListItem { Id = 1, RecursiveComplexType = new() },
                 new ListItem { Id = 2, RecursiveComplexType = new() }
