@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:    
-    - uses: szenius/set-timezone@v1.0
     - name: Set Timezone
+      uses: szenius/set-timezone@v1.0
       with:
         timezoneLinux: "Asia/Singapore"
         timezoneMacos: "Asia/Singapore"
