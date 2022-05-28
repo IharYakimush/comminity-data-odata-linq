@@ -11,7 +11,13 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    steps:
+    steps:    
+    - uses: szenius/set-timezone@v1.0
+    - name: Set Timezone
+      with:
+        timezoneLinux: "Asia/Singapore"
+        timezoneMacos: "Asia/Singapore"
+        timezoneWindows: "Singapore Standard Time"
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
