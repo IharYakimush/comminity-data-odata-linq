@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		build.ps1 = build.ps1
 		docker-compose.yml = docker-compose.yml
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		LICENSE = LICENSE
 		localEnv.ps1 = localEnv.ps1
 		pack.ps1 = pack.ps1
@@ -32,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.OData.Linq.SolrNe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comminuty.OData.CosmosDbTests", "Comminuty.OData.CosmosDbTests\Comminuty.OData.CosmosDbTests.csproj", "{893FED48-4BB6-436A-A55B-E9C0F0B4B9E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmark", "Benchmark\Benchmark.csproj", "{3E18F5C4-832E-49DC-BF5B-37777F8FC0A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmark", "Benchmark\Benchmark.csproj", "{3E18F5C4-832E-49DC-BF5B-37777F8FC0A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

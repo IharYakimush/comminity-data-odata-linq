@@ -20,6 +20,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --configuration Debug
     - name: Test
-      run: dotnet test Community.Data.OData.Linq.xTests --no-build --verbosity normal
+      run: dotnet test Community.Data.OData.Linq.xTests --no-build --verbosity normal --configuration Debug
