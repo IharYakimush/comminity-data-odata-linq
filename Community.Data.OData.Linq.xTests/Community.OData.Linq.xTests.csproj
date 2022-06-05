@@ -10,7 +10,7 @@
     <ApplicationIcon />
 
     <OutputType>Library</OutputType>
-
+	<LangVersion>9.0</LangVersion>
     <StartupObject />
   </PropertyGroup>
 
