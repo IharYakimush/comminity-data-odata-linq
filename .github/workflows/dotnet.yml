@@ -2,7 +2,7 @@ name: .NET
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, master ]
   pull_request:
     branches: [ develop ]
 
@@ -35,3 +35,29 @@ jobs:
       run: dotnet build --no-restore --configuration Debug
     - name: Test 3.1
       run: dotnet test Community.Data.OData.Linq.xTests --no-build --verbosity normal --configuration Debug
+  nuget:
+    runs-on: ubuntu-latest    
+    if: ${{ github.event_name != 'pull_request' }}
+    needs: build
+    steps:        
+    - uses: actions/checkout@v3
+    - name: Setup net6.0
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore --configuration Release    
+    - name: Pack Rc
+      run: dotnet pack -c Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:VersionPrefix=${{ github.run_number }}-rc -o .\nupkgrc
+      if: github.ref == 'refs/heads/develop'
+    - name: Pack
+      run: dotnet pack -c Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:VersionPrefix=${{ github.run_number }} -o .\nupkg
+      if: github.ref == 'refs/heads/master'
+    - name: Push Rc
+      run: dotnet nuget push /nupkgrc/*.nupkg --api-key ${{ secrets.ODATA_NUGET_KEY }}
+      if: github.ref == 'refs/heads/develop'
+    - name: Push
+      run: dotnet nuget push /nupkg/*.nupkg --api-key ${{ secrets.ODATA_NUGET_KEY }}
+      if: github.ref == 'refs/heads/master'

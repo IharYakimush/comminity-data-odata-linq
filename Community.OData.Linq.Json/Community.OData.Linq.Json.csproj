@@ -4,23 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>sgn.snk</AssemblyOriginatorKeyFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Authors>IharYakimush</Authors>
-    <PackageLicenseUrl></PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
-    <RepositoryType></RepositoryType>
     <PackageTags>odata filter linq json</PackageTags>
 	<PackageReleaseNotes>Significant improvement in query initialization performance. Support ToArrayAsync(), ToListAsync(), and all other provider specific methods. More integration tests for Entity Framework and CosmosDb SQL API. Breaking Changes: net4.5 not suported anymore. Obsolete methods removed (.SelectExpandJsonToken() and .SelectExpandJson()). Setting for default timezone in case of converting DateTimeOffset to DateTime</PackageReleaseNotes>
 	<Description>Json serialization for SelectExpand result</Description>
-	<Company />
-	<RepositoryUrl></RepositoryUrl>
-	<Version>2.1.0</Version>
-	<NeutralLanguage>en</NeutralLanguage>
-	<AssemblyVersion>2.1.0.0</AssemblyVersion>
-	<FileVersion>2.1.0.0</FileVersion>
-	<PackageReadmeFile>README.md</PackageReadmeFile>
-	<PackageLicenseExpression>MIT</PackageLicenseExpression>	      
+	<IsPackable>true</IsPackable>	      
   </PropertyGroup>
 
   <ItemGroup>
