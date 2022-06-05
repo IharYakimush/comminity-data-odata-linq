@@ -1078,6 +1078,12 @@ namespace Community.OData.Linq.OData.Query.Expressions
             {
                 property = ClrCanonicalFunctions.DateTimeProperties[ClrCanonicalFunctions.MillisecondFunctionName];
             }
+#if NET6_0_OR_GREATER
+            else if (IsTimeOnly(parameter.Type))
+            {
+                property = ClrCanonicalFunctions.TimeOnlyProperties[ClrCanonicalFunctions.MillisecondFunctionName];
+            }
+#endif
             else if (IsTimeSpan(parameter.Type))
             {
                 property = ClrCanonicalFunctions.TimeSpanProperties[ClrCanonicalFunctions.MillisecondFunctionName];
@@ -1114,6 +1120,13 @@ namespace Community.OData.Linq.OData.Query.Expressions
                 Contract.Assert(ClrCanonicalFunctions.DateTimeProperties.ContainsKey(node.Name));
                 property = ClrCanonicalFunctions.DateTimeProperties[node.Name];
             }
+#if NET6_0_OR_GREATER
+            else if (IsDateOnly(parameter.Type))
+            {
+                Contract.Assert(ClrCanonicalFunctions.DateOnlyProperties.ContainsKey(node.Name));
+                property = ClrCanonicalFunctions.DateOnlyProperties[node.Name];
+            }
+#endif
             else
             {
                 Contract.Assert(ClrCanonicalFunctions.DateTimeOffsetProperties.ContainsKey(node.Name));

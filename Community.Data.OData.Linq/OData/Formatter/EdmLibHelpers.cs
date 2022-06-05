@@ -77,6 +77,12 @@ namespace Community.OData.Linq.OData.Formatter
                 new KeyValuePair<Type, IEdmPrimitiveType>(typeof(char?), GetPrimitiveType(EdmPrimitiveTypeKind.String)),
                 new KeyValuePair<Type, IEdmPrimitiveType>(typeof(DateTime), GetPrimitiveType(EdmPrimitiveTypeKind.DateTimeOffset)),
                 new KeyValuePair<Type, IEdmPrimitiveType>(typeof(DateTime?), GetPrimitiveType(EdmPrimitiveTypeKind.DateTimeOffset)),
+#if NET6_0_OR_GREATER
+                new KeyValuePair<Type, IEdmPrimitiveType>(typeof(DateOnly), GetPrimitiveType(EdmPrimitiveTypeKind.Date)),
+                new KeyValuePair<Type, IEdmPrimitiveType>(typeof(DateOnly?), GetPrimitiveType(EdmPrimitiveTypeKind.Date)),
+                new KeyValuePair<Type, IEdmPrimitiveType>(typeof(TimeOnly), GetPrimitiveType(EdmPrimitiveTypeKind.TimeOfDay)),
+                new KeyValuePair<Type, IEdmPrimitiveType>(typeof(TimeOnly?), GetPrimitiveType(EdmPrimitiveTypeKind.TimeOfDay)),
+#endif
             }
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
