@@ -54,13 +54,17 @@
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
 
+            ODataSettings settings = new ODataSettings();
+            configuration?.Invoke(settings);
+
             if (edmModel == null)
             {
                 edmModel = Models.GetOrAdd(typeof(T), t =>
                 {
                     ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+                    builder.ODataSettings = settings;
                     builder.AddEntityType(t);
-                    builder.AddEntitySet(t.Name, new EntityTypeConfiguration(new ODataModelBuilder(), t));
+                    builder.AddEntitySet(t.Name, new EntityTypeConfiguration(builder, t));
                     return builder.GetEdmModel();
                 });
             }
@@ -72,14 +76,12 @@
                 }
             }
 
-            ODataSettings settings = new ODataSettings();
-            configuration?.Invoke(settings);
-
             int settingsHash = HashCode.Combine(
                 settings.QuerySettings, 
                 settings.DefaultQuerySettings, 
                 settings.ParserSettings.MaximumExpansionCount, 
-                settings.ParserSettings.MaximumExpansionDepth);
+                settings.ParserSettings.MaximumExpansionDepth,
+                settings.AllowRecursiveLoopOfComplexTypes);
 
             ServiceContainer baseContainer = Containers.GetOrAdd(settingsHash, i =>
             {
