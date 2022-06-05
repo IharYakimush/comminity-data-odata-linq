@@ -2,7 +2,7 @@ name: .NET
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, workflow ]
   pull_request:
     branches: [ develop ]
 
@@ -35,3 +35,28 @@ jobs:
       run: dotnet build --no-restore --configuration Debug
     - name: Test 3.1
       run: dotnet test Community.Data.OData.Linq.xTests --no-build --verbosity normal --configuration Debug
+  nuget-alpha:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/workflow'      
+    steps:        
+    - uses: actions/checkout@v3
+    - name: Setup net6.0
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build 6
+      run: dotnet build --no-restore --configuration Release    
+    - name: Pack Linq
+      run: dotnet pack .\Community.Data.OData.Linq\Community.OData.Linq.csproj -c Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -o .\nupkg
+    - name: Pack Json
+      run: dotnet pack .\Community.OData.Linq.Json\Community.OData.Linq.Json.csproj -c Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -o .\nupkg
+    - name: Pack AspNetCore
+      run: dotnet pack .\Community.OData.Linq.AspNetCore\Community.OData.Linq.AspNetCore.csproj -c Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -o .\nupkg
+    - name: Push Linq
+      run: echo ${{ github.run_number }}
+    - name: Push Json
+      run: echo ${{ secrets.ODATA_NUGET_KEY }}
+    - name: Push AspNetCore
+      run: echo ${{ github.run_number }}

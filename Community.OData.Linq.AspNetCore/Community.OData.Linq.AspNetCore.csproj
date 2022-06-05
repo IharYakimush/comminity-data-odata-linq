@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <AssemblyOriginatorKeyFile>sgn.snk</AssemblyOriginatorKeyFile>
     <Authors>IharYakimush</Authors>
@@ -14,10 +13,7 @@
 	<PackageReleaseNotes>Significant improvement in query initialization performance. Support ToArrayAsync(), ToListAsync(), and all other provider specific methods. More integration tests for Entity Framework and CosmosDb SQL API. Breaking Changes: net4.5 not suported anymore. Obsolete methods removed (.SelectExpandJsonToken() and .SelectExpandJson()). Setting for default timezone in case of converting DateTimeOffset to DateTime</PackageReleaseNotes>	  
 	<Company />
 	<RepositoryUrl></RepositoryUrl>
-	<Version>2.1.0</Version>
 	<NeutralLanguage>en</NeutralLanguage>
-	<AssemblyVersion>2.1.0.0</AssemblyVersion>
-	<FileVersion>2.1.0.0</FileVersion>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
