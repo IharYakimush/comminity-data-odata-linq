@@ -2,7 +2,7 @@ name: .NET
 
 on:
   push:
-    branches: [ develop, workflow ]
+    branches: [ develop, master ]
   pull_request:
     branches: [ develop ]
 
@@ -36,8 +36,9 @@ jobs:
     - name: Test 3.1
       run: dotnet test Community.Data.OData.Linq.xTests --no-build --verbosity normal --configuration Debug
   nuget-rc:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/workflow'      
+    runs-on: ubuntu-latest    
+    if: ${{ github.event_name != 'pull_request' }}
+    needs: build
     steps:        
     - uses: actions/checkout@v3
     - name: Setup net6.0
@@ -48,11 +49,15 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore --configuration Release    
-    - name: Pack 
-      run: dotnet pack -c Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:VersionPrefix=${{ github.run_number }}-rc -o .\nupkg    
-    - name: Push Linq
-      run: echo ${{ github.run_number }}
-    - name: Push Json
-      run: echo ${{ secrets.ODATA_NUGET_KEY }}
-    - name: Push AspNetCore
-      run: echo ${{ github.run_number }}
+    - name: Pack Rc
+      run: dotnet pack -c Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:VersionPrefix=${{ github.run_number }}-rc -o .\nupkgrc
+      if: github.ref == 'refs/heads/develop'
+    - name: Pack
+      run: dotnet pack -c Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:VersionPrefix=${{ github.run_number }} -o .\nupkg
+      if: github.ref == 'refs/heads/master'
+    - name: Push Rc
+      run: dotnet nuget push /nupkgrc/*.nupkg --api-key ${{ secrets.ODATA_NUGET_KEY }}
+      if: github.ref == 'refs/heads/develop'
+    - name: Push
+      run: dotnet nuget push /nupkg/*.nupkg --api-key ${{ secrets.ODATA_NUGET_KEY }}
+      if: github.ref == 'refs/heads/master'
