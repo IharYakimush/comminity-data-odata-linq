@@ -3,6 +3,13 @@
 		<VersionPrefix>0</VersionPrefix>
 		<Version>2.1.$(VersionPrefix)</Version>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<NeutralLanguage>en</NeutralLanguage>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/IharYakimush/comminity-data-odata-linq</PackageProjectUrl>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<Authors>IharYakimush</Authors>
+		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 </Project>
 
