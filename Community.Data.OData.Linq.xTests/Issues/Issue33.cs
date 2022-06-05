@@ -1,4 +1,4 @@
-﻿// Issue 33 : Recursive loop of complex types
+// Issue 33 : Recursive loop of complex types
 
 namespace Community.OData.Linq.xTests.Issues33
 {
@@ -25,10 +25,10 @@ namespace Community.OData.Linq.xTests.Issues33
         {
             // arrange
 
-            var queryable = new[]
+            var queryable = new ListItem[]
             {
-                new ListItem { Id = 1, RecursiveComplexType = new() },
-                new ListItem { Id = 2, RecursiveComplexType = new() }
+                new ListItem { Id = 1, RecursiveComplexType = new RecursiveComplexType() },
+                new ListItem { Id = 2, RecursiveComplexType = new RecursiveComplexType() }
             }.AsQueryable();
 
             // act
@@ -45,11 +45,10 @@ namespace Community.OData.Linq.xTests.Issues33
         {
             // arrange
 
-            var queryable = new[]
+            var queryable = new ListItem[]
             {
-                new ListItem { Id = 1, RecursiveComplexType = new() },
-                new ListItem { Id = 2, RecursiveComplexType = new() }
-
+                new ListItem { Id = 1, RecursiveComplexType = new RecursiveComplexType() },
+                new ListItem { Id = 2, RecursiveComplexType = new RecursiveComplexType() }
             }.AsQueryable();
 
             // act
@@ -70,11 +69,10 @@ namespace Community.OData.Linq.xTests.Issues33
         {
             // arrange
 
-            var queryable = new[]
+            var queryable = new ListItem[]
             {
-                new ListItem { Id = 1, RecursiveComplexType = new() },
-                new ListItem { Id = 2, RecursiveComplexType = new() }
-
+                new ListItem { Id = 1, RecursiveComplexType = new RecursiveComplexType() },
+                new ListItem { Id = 2, RecursiveComplexType = new RecursiveComplexType() }
             }.AsQueryable();
 
             ODataSettings.SetInitializer(x =>
