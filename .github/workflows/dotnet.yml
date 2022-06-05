@@ -50,14 +50,14 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release    
     - name: Pack Rc
-      run: dotnet pack -c Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:VersionPrefix=${{ github.run_number }}-rc -o .\nupkgrc
+      run: dotnet pack -c Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:VersionPrefix=${{ github.run_number }}-rc -o /nupkgrc
       if: github.ref == 'refs/heads/develop'
     - name: Pack
-      run: dotnet pack -c Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:VersionPrefix=${{ github.run_number }} -o .\nupkg
+      run: dotnet pack -c Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:VersionPrefix=${{ github.run_number }} -o /nupkg
       if: github.ref == 'refs/heads/master'
     - name: Push Rc
-      run: dotnet nuget push /nupkgrc/*.nupkg --api-key ${{ secrets.ODATA_NUGET_KEY }}
+      run: dotnet nuget push /nupkgrc/*.nupkg -k ${{ secrets.ODATA_NUGET_KEY }} -s https://api.nuget.org/v3/index.json
       if: github.ref == 'refs/heads/develop'
     - name: Push
-      run: dotnet nuget push /nupkg/*.nupkg --api-key ${{ secrets.ODATA_NUGET_KEY }}
+      run: dotnet nuget push /nupkg/*.nupkg -k ${{ secrets.ODATA_NUGET_KEY }} -s https://api.nuget.org/v3/index.json
       if: github.ref == 'refs/heads/master'
