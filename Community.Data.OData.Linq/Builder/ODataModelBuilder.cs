@@ -141,6 +141,11 @@ namespace Community.OData.Linq.Builder
         }
 
         /// <summary>
+        /// Gets/Sets the configured settings
+        /// </summary>
+        public ODataSettings ODataSettings { get; set; }
+
+        /// <summary>
         /// Gets or sets the navigation property binding options.
         /// </summary>
         public NavigationPropertyBindingOption BindingOptions { get; set; }
