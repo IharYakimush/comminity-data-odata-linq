@@ -1,4 +1,8 @@
 # Community.OData.Linq
+
+> [!IMPORTANT] 
+> The `Community.OData.Linq` is no longer maintained. If you need modern OData features try new [OData2Linq](https://www.nuget.org/packages/OData2Linq) package that supposed to replace this one.
+
 Use OData filter text query in linq expresson for any IQuerable. Support web and desktop applications.
 
 # Sample
